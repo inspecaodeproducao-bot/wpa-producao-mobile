@@ -1,0 +1,8 @@
+{
+  "name": "WPA de Produção",
+  "short_name": "WPA Produção",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR"
+}
