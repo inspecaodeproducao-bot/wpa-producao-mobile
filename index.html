@@ -1744,7 +1744,7 @@ async function abrirPdfOficialWPA(data,turno,btn){
     var j=await resp.json();
     if(!j.ok)throw new Error(j.erro||'Falha ao preparar PDF.');
     var r=j.resultado||{};
-    var base64=String(r.base64||'').replace(/^data:application\/pdf;base64,/i,'').replace(/\s/g,'');
+    var base64=String(r.pdfBase64||r.base64||'').replace(/^data:application\/pdf;base64,/i,'').replace(/\s/g,'');
     if(!base64)throw new Error('Conteúdo Base64 do PDF não retornado.');
     var binario=atob(base64);
     var bytes=new Uint8Array(binario.length);
