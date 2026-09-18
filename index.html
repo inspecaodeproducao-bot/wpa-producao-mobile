@@ -1744,7 +1744,10 @@ async function abrirPdfOficialWPA(data,turno,btn){
     if(!j.ok)throw new Error(j.erro||'Falha ao preparar PDF.');
     var r=j.resultado||{};
     if(!r.url)throw new Error('URL do PDF não retornada.');
-    window.open(r.url,'_blank','noopener');
+    var pdfUrl=String(r.url||'').trim();
+    if(!pdfUrl)throw new Error('URL do PDF não retornada.');
+    // V18.13.3 DEV-MOBILE: navegação direta evita o fallback da PWA para a planilha.
+    window.location.assign(pdfUrl);
     if(btn)btn.textContent='📄 PDF PREPARADO';
   }catch(e){
     alert('PDF não pôde ser aberto: '+(e&&e.message?e.message:e));
