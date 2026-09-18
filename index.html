@@ -1,0 +1,2193 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<title>Liberação de Produção V18.10 Oficial</title>
+<link rel="icon" type="image/png" href="ícone.png">
+<link rel="apple-touch-icon" href="ícone.png">
+<link rel="manifest" href="./manifest.webmanifest">
+
+<style>
+body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color:#f8fafc}.card{max-width:520px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241}h1{font-size:24px;margin:0 0 5px}.sub{color:#a8b3c2;margin-bottom:16px}.status{padding:11px;border-radius:9px;background:#0f141b;border:1px solid #334155;margin:12px 0;font-size:14px}label{font-weight:700;display:block;margin-top:12px}input,select{width:100%;box-sizing:border-box;padding:13px;margin-top:5px;border:1px solid #3b4758;border-radius:9px;font-size:17px;background:#0f141b;color:#f8fafc}button{width:100%;padding:14px;margin-top:12px;border:0;border-radius:10px;color:#fff;font-size:16px;font-weight:700;background:#2563eb}.green{background:#15803d}.gray{background:#475569}.orange{background:#c2410c}.red{background:#dc2626}button:disabled{opacity:.45}#resultado{display:none;margin-top:20px;text-align:center;border-top:1px solid #334155;padding-top:18px}.consulta{display:none;margin-top:20px;border-top:1px solid #334155;padding-top:18px}.result-card{background:#0f141b;border:1px solid #334155;border-radius:10px;padding:12px;margin-top:10px;text-align:left}.meta{color:#a8b3c2;font-size:13px;margin:5px 0}.scanner{display:none;margin-top:20px;border-top:1px solid #334155;padding-top:18px}#reader{width:100%;overflow:hidden;border-radius:10px;margin-top:12px;background:#0f141b}#preview{width:100%;max-width:384px;background:#fff;border-radius:6px;image-rendering:auto}.small{font-size:12px;color:#94a3b8;margin-top:10px;word-break:break-all}
+
+.report{display:none;margin-top:20px;border-top:1px solid #334155;padding-top:18px}
+.report-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
+.kpi{background:#0f141b;border:1px solid #334155;border-radius:10px;padding:12px;text-align:center}
+.kpi strong{display:block;font-size:24px}.kpi span{font-size:12px;color:#a8b3c2}
+.chart-card{background:#fff;color:#111;border-radius:12px;padding:12px;margin-top:12px}
+.chart-card h3{margin:0 0 10px;font-size:17px}
+.chart-wrap{position:relative;min-height:260px}
+.rank{margin:0;padding-left:24px}.rank li{padding:5px 0;border-bottom:1px solid #e5e7eb}
+.rank-itens{list-style:none;padding:0;margin:0}.rank-itens li{margin:7px 0}.rank-item-btn{width:100%;margin:0;padding:12px;background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe;text-align:left;display:flex;justify-content:space-between;gap:10px}.rank-item-btn:hover{background:#e0e7ff}.detalhe-item{display:none;background:#fff;color:#111;border-radius:12px;padding:12px;margin-top:12px}.detalhe-item h3{margin:0 0 6px}.detalhe-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:10px 0}.detalhe-kpis div{background:#f1f5f9;border-radius:8px;padding:9px;text-align:center}.detalhe-kpis strong{display:block;font-size:20px}.detalhe-kpis span{font-size:11px;color:#475569}.detalhe-voltar{background:#475569;margin-top:10px}
+.report-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.report-actions button{margin-top:10px}
+@media print{
+ body{background:#fff;color:#000;padding:0}
+ .card>h1,.card>.sub,.card>form,.card>#resultado,.card>.green,.card>.gray,.scanner,.consulta,#adminBox{display:none!important}
+ .card{max-width:none;border:0;background:#fff;padding:0}
+ #relatorio{display:block!important;border:0;margin:0;padding:0;color:#000}
+ #relatorio .sub,#relatorio .meta{color:#444}
+ #relatorio button,#statusRelatorio{display:none!important}
+ .chart-card,.kpi{break-inside:avoid;border:1px solid #bbb}
+ .report-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+.admin-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.admin-modal{width:min(420px,100%);background:#151b23;border:1px solid #334155;border-radius:16px;padding:20px;box-sizing:border-box}
+.admin-modal h3{margin:0 0 8px}.admin-modal .sub{margin-bottom:12px}
+.admin-modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.admin-home{display:none;max-width:520px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241;color:#f8fafc}
+.admin-tools{display:grid;gap:10px;margin:14px 0}
+.admin-section{display:none;margin-top:16px;border-top:1px solid #334155;padding-top:16px}
+.admin-back{background:#475569;color:#f8fafc;border:1px solid #64748b;margin-top:18px}
+
+.app-confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.74);z-index:10000;align-items:center;justify-content:center;padding:18px}
+.app-confirm{width:min(92vw,450px);background:#171c24;border:1px solid #334155;border-radius:20px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+.app-confirm h2{margin:0 0 18px;font-size:21px;color:#f8fafc}
+.app-confirm-msg{white-space:pre-line;line-height:1.6;color:#e5e7eb;font-size:17px;margin-bottom:20px}
+.app-confirm-actions{display:flex;gap:12px;justify-content:flex-end}
+.app-confirm-actions button{width:auto;min-width:115px;margin:0}
+
+.inspecao{display:none;margin-top:20px;border-top:1px solid #334155;padding-top:18px}
+.qr-resumo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 16px}
+.qr-dado{background:#0f141b;border:1px solid #334155;border-radius:10px;padding:10px}
+.qr-dado span{display:block;color:#94a3b8;font-size:11px;text-transform:uppercase}.qr-dado strong{font-size:18px}
+.opcoes{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.opcao{margin:0;padding:12px 8px;background:#263241;border:2px solid transparent}.opcao.ativa{background:#166534;border-color:#4ade80}
+.opcoes.tipo{grid-template-columns:repeat(3,1fr)}
+.opcoes.tipo .opcao{font-size:14px;padding:12px 4px;background:#5b4a22;border-color:#8b7436;color:#fff7d6}
+.opcoes.tipo .opcao.ativa{background:#166534;border-color:#4ade80;color:#fff}
+.situacoes{display:grid;gap:8px;margin-top:8px}.situacao{display:flex;align-items:center;gap:10px;background:#0f141b;border:1px solid #334155;border-radius:10px;padding:12px;font-weight:700}.situacao input{width:22px;height:22px;margin:0}
+#inspInfo{min-height:80px;width:100%;box-sizing:border-box;padding:13px;margin-top:5px;border:1px solid #3b4758;border-radius:9px;font-size:16px;background:#0f141b;color:#f8fafc;resize:vertical}
+.envio-ok{text-align:center;font-size:20px;font-weight:700;padding:20px}
+.fila-status{margin:12px 0;padding:10px 12px;border-radius:10px;background:#0f141b;border:1px solid #334155;font-size:13px;color:#cbd5e1}.fila-status.pendente{border-color:#d97706;background:#2a1d0b;color:#fde68a}.fila-status.ok{border-color:#15803d;color:#bbf7d0}.fila-status strong{font-size:15px}
+
+.alerta-reincidencia{display:none;margin:14px 0;padding:14px;border:2px solid #dc2626;border-radius:14px;background:#fee2e2;color:#7f1d1d}
+.alerta-reincidencia strong{display:block;font-size:19px;margin-bottom:6px}
+.alerta-reincidencia .small{color:#7f1d1d;line-height:1.45}
+
+.alerta-desvio{display:none;margin:14px 0;padding:14px;border:2px solid #16a34a;border-radius:14px;background:#dcfce7;color:#14532d}
+.alerta-desvio.amarelo{border-color:#ca8a04;background:#fef9c3;color:#713f12}
+.alerta-desvio.vermelho{border-color:#dc2626;background:#fee2e2;color:#7f1d1d}
+.alerta-desvio strong{display:block;font-size:19px;margin-bottom:6px}
+.alerta-desvio .desvio-card{padding:9px 0;border-top:1px solid currentColor}
+.alerta-desvio .desvio-card:first-of-type{border-top:0}
+.alerta-desvio .small{color:inherit;line-height:1.45}
+
+/* ADM TURNOS V18.2 */
+.turnos-home{display:none;max-width:520px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241;color:#f8fafc}
+.turnos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.turnos-grid button{margin-top:0}
+.turnos-table-wrap{overflow-x:auto;margin-top:12px}.turnos-table{width:100%;border-collapse:separate;border-spacing:5px;font-size:13px}.turnos-table th{color:#cbd5e1;padding:5px}.turnos-table td{padding:0;text-align:center}.turnos-maq{font-weight:800;white-space:nowrap;padding:9px!important}.turnos-cell{min-width:58px;padding:10px 6px!important;border-radius:8px;font-weight:800;cursor:pointer;border:1px solid #334155}.turnos-sp{background:#e5e7eb!important;color:#111827!important}.turnos-pf{background:#1e3a5f!important;color:#dbeafe!important;border-color:#60a5fa!important}.turnos-maq{touch-action:manipulation;user-select:none;-webkit-user-select:none;cursor:pointer}.turnos-zero{background:#7f1d1d;color:#fecaca}.turnos-um{background:#854d0e;color:#fef3c7}.turnos-ok{background:#14532d;color:#bbf7d0}.turnos-detail{display:none;margin-top:14px}.turnos-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:12px 0}.turnos-summary div{background:#0f141b;border:1px solid #334155;border-radius:9px;padding:9px;text-align:center}.turnos-summary strong{display:block;font-size:20px}.turnos-summary span{font-size:11px;color:#94a3b8}.turnos-alerta4h{display:none;margin:12px 0;padding:13px;border:2px solid #f59e0b;border-radius:12px;background:#451a03;color:#fde68a;font-weight:800;line-height:1.45}.turnos-alerta4h strong{display:block;font-size:17px;margin-bottom:4px}.turnos-atrasada{outline:3px solid #f59e0b!important;box-shadow:0 0 0 2px rgba(245,158,11,.25),0 0 14px rgba(245,158,11,.55);animation:turnosPulso 1.4s ease-in-out infinite}.turnos-atrasada::after{content:" ⚠"}@keyframes turnosPulso{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
+
+/* Modal SP interno — sem prompt/confirm do navegador */
+.sp-modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.76);z-index:10050;align-items:flex-end;justify-content:center;padding:16px;box-sizing:border-box;backdrop-filter:blur(3px)}
+.sp-modal{width:min(440px,100%);background:#151b23;border:1px solid #475569;border-radius:26px;padding:20px;box-sizing:border-box;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.sp-handle{width:70px;height:6px;border-radius:99px;background:#64748b;margin:0 auto 18px}.sp-title{font-size:28px;font-weight:900;margin:0}.sp-sub{font-size:18px;color:#94a3b8;margin:3px 0 18px}.sp-label{font-size:17px;font-weight:800;margin:10px 0}.sp-shifts{display:grid;gap:10px}.sp-shift{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;width:100%;text-align:left;background:#0f141b;border:2px solid #475569;border-radius:16px;padding:12px;color:#f8fafc;margin:0}.sp-shift.ativa{border-color:#3b82f6;background:#172033}.sp-num{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#2563eb;font-size:25px;font-weight:900}.sp-shift strong{font-size:18px;display:block}.sp-shift span{color:#b9c6d8;font-size:16px}.sp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.sp-actions button{margin:0}.sp-confirmar{background:#2563eb}.sp-confirmar.retirar{background:#dc2626}
+.status-tipo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.status-tipo button{background:#0f141b;border:1px solid #475569;color:#e5e7eb;padding:12px 8px;border-radius:12px;font-weight:800}.status-tipo button.ativa{border-color:#60a5fa;background:#172554;color:#dbeafe}
+@media(min-width:600px){.sp-modal-bg{align-items:center}}
+</style>
+<style>
+.btn-cadastrar-desvio{
+  width:100%;margin-top:16px;padding:17px 14px;border:0;border-radius:14px;
+  background:#76c7e8;color:#08202b;font-size:18px;font-weight:800;cursor:pointer;
+}
+.desvio-modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:9999;
+  align-items:center;justify-content:center;padding:18px;
+}
+.desvio-modal{
+  width:min(520px,100%);max-height:90vh;overflow:auto;background:#131b24;
+  border:1px solid #33465a;border-radius:18px;padding:20px;color:#fff;
+}
+.desvio-modal h2{margin:0 0 16px}
+.desvio-modal label{display:block;margin:13px 0 6px;font-weight:700}
+.desvio-modal input,.desvio-modal textarea{
+  width:100%;box-sizing:border-box;background:#0e151d;color:#fff;border:1px solid #3a4d61;
+  border-radius:12px;padding:13px;font-size:16px;
+}
+.desvio-modal textarea{min-height:100px;resize:vertical}
+.desvio-modal .dados-qr{background:#0e151d;border:1px solid #33465a;border-radius:12px;padding:12px;line-height:1.6}
+.desvio-modal .acoes{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.desvio-modal .salvar{background:#178b43;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:16px}
+.desvio-modal .cancelar{background:#52657b;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:16px}
+.desvio-card .desvio-acoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:10px}
+.desvio-card .desvio-acao{border:0;border-radius:9px;padding:10px 8px;font-weight:800;font-size:13px;cursor:pointer}
+.desvio-card .revalidar{background:#2563eb;color:#fff}
+.desvio-card .encerrar{background:#b91c1c;color:#fff}
+.desvio-modal .numero-fixo{font-size:22px;font-weight:900;background:#0e151d;border:1px solid #33465a;border-radius:12px;padding:12px}
+
+#msgCadastroDesvio{margin-top:12px;padding:10px;border-radius:10px;display:none}
+</style>
+
+</head><body><div class="card" id="areaComum">
+<h1 id="tituloApp">Liberação de Produção</h1><div class="sub">NIIMBOT B1 • 50 × 30 mm • QR Forms</div>
+<button class="green" type="button" onclick="conectarB1()">CONECTAR B1</button><div class="status" id="status">B1 ainda não conectada.</div><div class="fila-status" id="filaStatus">✓ Nenhuma inspeção pendente.</div>
+<form onsubmit="gerar(event)"><label>Item</label><input id="item" inputmode="numeric" required placeholder="Ex.: 869"><label>OP</label><input id="op" inputmode="numeric" required placeholder="Ex.: 577110"><label id="gatilhoTurnos">Linha</label><select id="linha" required onchange="atualizarMaquinas()"><option value="">Selecione a linha</option><option>Linha 1</option><option>Linha 2</option><option>Linha 3</option><option>Linha 4</option><option>Linha 5</option><option>LSR</option></select><label>Máquina</label><select id="maquina" required disabled><option value="">Primeiro selecione a linha</option></select><label>Setor</label><select id="setor" required><option value="">Selecione o setor</option><option>Vulcanização</option><option>Inspeção</option><option>LSR</option><option>Corte</option></select><button type="submit">GERAR ETIQUETA + QR</button><button class="gray" type="button" onclick="novoQR()">LIMPAR / NOVA ETIQUETA</button></form>
+<div id="resultado"><canvas id="preview" width="384" height="240"></canvas><button class="orange" id="btnPrint" type="button" onclick="imprimirB1()">IMPRIMIR NA B1</button><div class="small" id="linktxt"></div></div><button class="green" type="button" onclick="abrirLeitor()">📷 LER QR CODE</button><button type="button" id="btnDiarioVolantesVisual" onclick="abrirDiarioVolantesBasico()">📋 DIÁRIO DOS VOLANTES</button>
+<div class="scanner" id="scanner">
+  <h2>Leitor de QR Code</h2>
+  <div class="sub">Aponte a câmera para uma etiqueta de Liberação de Produção.</div>
+  <div id="reader"></div>
+  <div class="status" id="statusLeitor">Câmera aguardando início.</div>
+  <button class="gray" type="button" onclick="fecharLeitor()">FECHAR LEITOR</button>
+</div>
+<div class="inspecao" id="inspecao">
+  <h2>Inspeção Volante</h2>
+  <div class="sub">Dados da etiqueta já conferidos pelo QR.</div>
+  <div class="qr-resumo">
+    <div class="qr-dado"><span>Máquina</span><strong id="inspMaq">-</strong></div>
+    <div class="qr-dado"><span>OP</span><strong id="inspOP">-</strong></div>
+    <div class="qr-dado"><span>Item</span><strong id="inspItem">-</strong></div>
+    <div class="qr-dado"><span>Setor</span><strong id="inspSetor">-</strong></div>
+  </div>
+  <div class="alerta-reincidencia" id="alertaReincidencia">
+    <strong>🚨 ATENÇÃO — PROBLEMA REINCIDENTE</strong>
+    <div class="small" id="alertaReincidenciaTexto"></div>
+  </div>
+  <label>Volante responsável *</label>
+  <div class="opcoes" id="opcoesVolante"></div>
+  <label>Tipo de inspeção *</label>
+  <div class="opcoes tipo" id="opcoesTipo"></div>
+
+  <div class="alerta-desvio" id="alertaDesvio">
+    <strong id="alertaDesvioTitulo"></strong>
+    <div id="alertaDesvioConteudo"></div>
+  </div>
+  <label>Situação encontrada *</label>
+  <div class="situacoes" id="opcoesSituacao"></div>
+  <label>Informações <span class="small">(opcional)</span></label>
+  <textarea id="inspInfo" placeholder="Observações adicionais"></textarea>
+  <button type="button" class="btn-cadastrar-desvio" id="btnCadastrarDesvio">CADASTRAR DESVIO</button>
+<button class="green" id="btnEnviarInspecao" type="button" onclick="enviarInspecao()">ENVIAR INSPEÇÃO</button>
+  <button class="gray" type="button" onclick="cancelarInspecao()">CANCELAR / LER OUTRO QR</button>
+  <div class="status" id="statusInspecao">Preencha os campos obrigatórios.</div>
+</div>
+</div>
+<div class="admin-modal-bg" id="adminPinModal">
+  <div class="admin-modal">
+    <h3>Modo administrativo</h3>
+    <div class="sub">Digite o PIN para continuar.</div>
+    <input id="adminPinInput" type="password" inputmode="numeric" maxlength="4" placeholder="PIN">
+    <div class="admin-modal-actions">
+      <button class="gray" type="button" onclick="fecharPinAdmin()">CANCELAR</button>
+      <button type="button" onclick="confirmarPinAdmin()">ENTRAR</button>
+    </div>
+    <div class="status" id="adminPinStatus" style="display:none"></div>
+  </div>
+</div>
+
+
+
+<div class="admin-home" id="adminHome">
+  <h1>Área administrativa</h1>
+  <div class="sub">Liberação de Produção</div>
+  <div class="admin-tools" id="adminMenu">
+    <button class="green" type="button" onclick="mostrarFerramentaAdmin('consulta')">🔎 CONSULTA</button>
+    <button type="button" onclick="mostrarFerramentaAdmin('relatorio')">📊 RELATÓRIO</button>
+    <button class="orange" type="button" onclick="mostrarFerramentaAdmin('adminBox')">🛠️ CORREÇÃO</button>
+  </div>
+  <div class="admin-section" id="consulta"><h2>Consultar Produção</h2><div class="sub">Pesquise os registros enviados pelo formulário.</div>
+<label>OP</label><input id="qop" inputmode="numeric" placeholder="Ex.: 577110">
+<label>Item</label><input id="qitem" inputmode="numeric" placeholder="Ex.: 869">
+<label>Máquina</label><input id="qmaq" inputmode="numeric" placeholder="Ex.: 196">
+<label>Data</label><input id="qdata" type="date">
+<button type="button" onclick="consultarProducao()">PESQUISAR</button>
+<button class="gray" type="button" onclick="limparConsulta()">LIMPAR PESQUISA</button>
+<div class="status" id="statusConsulta">Informe um ou mais filtros e toque em PESQUISAR.</div><div id="listaConsulta"></div>
+<button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button></div>
+  <div class="admin-section" id="relatorio">
+  <h2>Relatório de Produção</h2>
+  <div class="sub">Resumo por período usando a data corrigida quando existir.</div>
+  <label>Período</label>
+  <select id="periodoRel" onchange="ajustarPeriodoRel()">
+    <option value="semana">Esta semana</option>
+    <option value="semanaAnterior">Semana anterior</option>
+    <option value="mes">Este mês</option>
+    <option value="mesAnterior">Mês anterior</option>
+    <option value="personalizado">Personalizado</option>
+  </select>
+  <div id="datasRel" style="display:none">
+    <label>De</label><input id="relInicio" type="date">
+    <label>Até</label><input id="relFim" type="date">
+  </div>
+  <button type="button" onclick="gerarRelatorio()">GERAR RELATÓRIO</button>
+  <div class="status" id="statusRelatorio">Selecione o período e toque em GERAR RELATÓRIO.</div>
+  <div id="conteudoRelatorio" style="display:none">
+    <div class="meta" id="periodoTexto"></div>
+    <div class="report-grid">
+      <div class="kpi"><strong id="kTotal">0</strong><span>Total de registros</span></div>
+      <div class="kpi"><strong id="kVoleios">0</strong><span>Voleios</span></div>
+      <div class="kpi"><strong id="kOK">0</strong><span>Peças OK</span></div>
+      <div class="kpi"><strong id="kNOK">0</strong><span>Peças NOK</span></div>
+    </div>
+    <div class="chart-card"><h3>Voleios por volante</h3><div class="chart-wrap"><canvas id="grafVolantes"></canvas></div></div>
+    <div class="chart-card"><h3>Registros por setor</h3><div class="chart-wrap"><canvas id="grafSetores"></canvas></div></div>
+    <div class="chart-card"><h3>Tipos de atividade</h3><div class="chart-wrap"><canvas id="grafTipos"></canvas></div></div>
+    <div class="chart-card"><h3>Top 10 problemas encontrados</h3><div class="chart-wrap"><canvas id="grafDefeitos"></canvas></div><ol class="rank" id="rankDefeitos"></ol></div>
+    <div class="chart-card" id="cardRankItens"><h3>🏆 Top 10 itens NOK</h3><div class="meta">Toque em um item para ver quais problemas mais ocorreram.</div><ol class="rank-itens" id="rankItensNOK"></ol></div>
+    <div class="detalhe-item" id="detalheItemNOK"><h3 id="detalheItemTitulo">Item</h3><div class="meta" id="detalheItemPeriodo"></div><div class="detalhe-kpis"><div><strong id="detTotal">0</strong><span>Inspeções</span></div><div><strong id="detNOK">0</strong><span>Com problema</span></div><div><strong id="detPct">0%</strong><span>% NOK</span></div></div><h3>Ranking dos problemas</h3><ol class="rank" id="rankProblemasItem"></ol><button class="detalhe-voltar" type="button" onclick="fecharDetalheItem()">← VOLTAR AO RELATÓRIO</button></div>
+    <div class="report-actions">
+      <button class="green" type="button" onclick="window.print()">🖨️ IMPRIMIR / PDF</button>
+      <button class="gray" type="button" onclick="compartilharRelatorio()">📤 COMPARTILHAR</button>
+    </div>
+  </div>
+  <button class="gray" type="button" onclick="fecharRelatorio()">FECHAR RELATÓRIO</button>
+  <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
+</div>
+  <div class="admin-section" id="adminBox">
+<h2>Correção administrativa</h2><div class="sub">O horário original é preservado.</div>
+<label>OP</label><input id="adminOP" inputmode="numeric">
+<label>Item</label><input id="adminItem" inputmode="numeric">
+<label>Máquina</label><input id="adminMaq" inputmode="numeric">
+<button type="button" onclick="buscarAdmin()">LOCALIZAR REGISTRO</button>
+<div id="adminResultado"></div>
+<button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
+</div>
+  <button class="red" id="btnSairAdmin" type="button" onclick="sairAdmin()">SAIR DA ÁREA ADMINISTRATIVA</button>
+</div>
+
+
+<div class="admin-modal-bg" id="turnosPinModal">
+  <div class="admin-modal">
+    <h3>ADM de Turnos</h3><div class="sub">Acesso restrito • PIN de 6 dígitos</div>
+    <input id="turnosPinInput" type="password" inputmode="numeric" maxlength="6" placeholder="PIN">
+    <div class="admin-modal-actions"><button class="gray" type="button" onclick="fecharLoginTurnos()">CANCELAR</button><button type="button" onclick="confirmarLoginTurnos()">ENTRAR</button></div>
+    <div class="status" id="turnosPinStatus" style="display:none"></div>
+  </div>
+</div>
+<div class="turnos-home" id="turnosHome">
+  <h1>ADM de Turnos</h1><div class="sub">Acompanhamento de inspeções por máquina</div>
+  <label>Data</label><input id="turnosData" type="date" onchange="carregarPainelTurnos()">
+  <label>Linha</label><select id="turnosLinha" onchange="carregarPainelTurnos()"></select>
+  <div class="status" id="turnosStatus">Selecione a data e a linha.</div>
+  <div class="turnos-alerta4h" id="turnosAlerta4h"></div>
+  <div class="turnos-summary" id="turnosResumo" style="display:none"><div><strong id="turnosMaqTotal">0</strong><span>Máquinas</span></div><div><strong id="turnosInspec">0</strong><span>Com inspeção</span></div><div><strong id="turnosSPTotal">0</strong><span>Em SP</span></div><div><strong id="turnosPFTotal">0</strong><span>Em PF</span></div><div><strong id="turnosSem">0</strong><span>Sem inspeção</span></div></div>
+  <div class="turnos-table-wrap" id="turnosTabela"></div>
+  <div class="turnos-detail" id="turnosDetalhe"></div>
+  <button class="red" type="button" onclick="sairTurnos()">SAIR DO ADM TURNOS</button>
+</div>
+
+
+<div class="sp-modal-bg" id="spModalBg" onclick="if(event.target===this)fecharModalSP()">
+  <div class="sp-modal" role="dialog" aria-modal="true" aria-labelledby="spModalTitulo">
+    <div class="sp-handle"></div>
+    <h2 class="sp-title" id="spModalTitulo">Máquina</h2>
+    <div class="sp-sub" id="spModalSub">Status da produção</div>
+    <div class="sp-label">O que deseja marcar?</div>
+    <div class="status-tipo"><button type="button" data-tipo="sp" onclick="selecionarTipoStatus('sp')">SP<br><small>Sem Programação</small></button><button type="button" data-tipo="pf" onclick="selecionarTipoStatus('pf')">PF<br><small>Produção Finalizada</small></button></div>
+    <div class="sp-label">Selecione o turno:</div>
+    <div class="sp-shifts">
+      <button class="sp-shift" type="button" data-turno="1" onclick="selecionarTurnoSP(1)"><span class="sp-num">1</span><span><strong>1º Turno</strong><span>06:00 – 13:50</span></span></button>
+      <button class="sp-shift" type="button" data-turno="2" onclick="selecionarTurnoSP(2)"><span class="sp-num">2</span><span><strong>2º Turno</strong><span>13:50 – 21:50</span></span></button>
+      <button class="sp-shift" type="button" data-turno="3" onclick="selecionarTurnoSP(3)"><span class="sp-num">3</span><span><strong>3º Turno</strong><span>21:50 – 05:45</span></span></button>
+    </div>
+    <div class="status" id="spModalStatus" style="display:none"></div>
+    <div class="sp-actions"><button class="gray" type="button" onclick="fecharModalSP()">CANCELAR</button><button class="sp-confirmar" id="spModalConfirmar" type="button" onclick="confirmarModalSP()">CONFIRMAR</button></div>
+  </div>
+</div>
+
+<div class="app-confirm-bg" id="confirmBg">
+  <div class="app-confirm" role="dialog" aria-modal="true">
+    <h2>CONFIRMAR DADOS</h2>
+    <div class="app-confirm-msg" id="confirmMsg"></div>
+    <div class="app-confirm-actions">
+      <button class="gray" type="button" id="confirmCancelar">CANCELAR</button>
+      <button type="button" id="confirmOk">CONFIRMAR</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="diarioVolantesBasico" style="display:none;position:fixed;inset:0;z-index:9998;background:#0b0f14;color:#f8fafc;overflow:auto;padding:18px;box-sizing:border-box">
+  <div style="max-width:520px;margin:auto;background:#151b23;border:1px solid #283140;border-radius:18px;padding:18px;box-sizing:border-box">
+    <h1 style="margin:0 0 8px;font-size:22px">📋 Diário dos Volantes</h1>
+    <div style="color:#aab5c4;font-size:13px;margin-bottom:18px">V18.13.0 • WPA + Diário dos Volantes Integrado</div>
+    <div style="display:grid;gap:12px">
+      <div>
+        <label for="diarioDataBasico">Data</label>
+        <input type="date" id="diarioDataBasico">
+      </div>
+      <div>
+        <label for="diarioTurnoBasico">Turno</label>
+        <select id="diarioTurnoBasico">
+          <option value="">Todos</option>
+          <option value="1">1º turno</option>
+          <option value="2">2º turno</option>
+          <option value="3">3º turno</option>
+        </select>
+      </div>
+      <div>
+        <label for="diarioVolanteBasico">Volante</label>
+        <select id="diarioVolanteBasico">
+          <option value="">Todos</option>
+          <option>Andreia</option>
+          <option>Alessandra</option>
+          <option>Danilo</option>
+          <option>Elaine</option>
+          <option>Marcelo</option>
+          <option>Mariana</option>
+        </select>
+      </div>
+      <button type="button" id="btnAtualizarDiarioBasico" onclick="carregarDiarioVolantesLeitura()">ATUALIZAR DIÁRIO</button>
+      <button type="button" id="btnPassagemTurnoLeitura" onclick="abrirPassagemTurnoLeitura()" style="background:#7c3aed">👀 PASSAGEM DE TURNO</button>
+      <button type="button" id="btnMeuTurnoLeitura" onclick="abrirMeuTurnoLeitura()" style="background:#0f766e">👤 MEU TURNO</button>
+      <button type="button" id="btnCentralEncerramento" onclick="abrirCentralEncerramento()" style="background:#334155">🏁 CENTRAL DE ENCERRAMENTO</button>
+      <div id="diarioIndicadorPassagemConfirmada" style="display:none;padding:10px;border:1px solid #166534;background:#0f1f18;border-radius:10px;color:#dcfce7;font-size:12px;line-height:1.45"></div>
+      <div id="diarioStatusLeitura" style="padding:12px;border:1px dashed #475569;border-radius:12px;text-align:center;color:#cbd5e1;font-size:13px">
+        Selecione os filtros e toque em ATUALIZAR DIÁRIO.
+      </div>
+      <div id="diarioResumoLeitura" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px"></div>
+      <div id="diarioListaLeitura" style="display:grid;gap:9px"></div>
+    </div>
+    <button type="button" style="margin-top:18px;background:#52657b" onclick="fecharDiarioVolantesBasico()">← VOLTAR</button>
+  </div>
+</div>
+
+
+<div id="centralEncerramento" style="display:none;position:fixed;inset:0;z-index:10004;background:#0b0f14;color:#f8fafc;overflow:auto;padding:18px;box-sizing:border-box">
+  <div style="max-width:520px;margin:auto;background:#151b23;border:1px solid #283140;border-radius:18px;padding:18px;box-sizing:border-box">
+    <h2 style="margin:0 0 6px;font-size:21px">🏁 Central de Encerramento</h2>
+    <div id="centralEncerramentoSub" style="color:#aab5c4;font-size:12px;margin-bottom:14px">V18.13.0 • Fechamentos oficiais + PDF</div>
+    <div id="centralEncerramentoStatus" style="padding:10px;border:1px dashed #475569;border-radius:10px;text-align:center;color:#cbd5e1;font-size:13px;margin-bottom:10px"></div>
+    <div id="centralEncerramentoLista" style="display:grid;gap:9px"></div>
+    <button type="button" style="margin-top:18px;background:#52657b" onclick="fecharCentralEncerramento()">← VOLTAR AO DIÁRIO</button>
+  </div>
+</div>
+
+<div id="meuTurnoLeitura" style="display:none;position:fixed;inset:0;z-index:10005;background:#0b0f14;color:#f8fafc;overflow:auto;padding:18px;box-sizing:border-box">
+  <div style="max-width:520px;margin:auto;background:#151b23;border:1px solid #283140;border-radius:18px;padding:18px;box-sizing:border-box">
+    <h2 style="margin:0 0 6px;font-size:21px">👤 Meu Turno</h2>
+    <div id="meuTurnoSub" style="color:#aab5c4;font-size:12px;margin-bottom:14px">Somente leitura</div>
+    <div id="meuTurnoResumo" style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px"></div>
+    <div id="meuTurnoStatus" style="padding:10px;border:1px dashed #475569;border-radius:10px;text-align:center;color:#cbd5e1;font-size:13px;margin-bottom:10px"></div>
+    <div id="meuTurnoMaquinasPendentes" style="display:none;padding:10px 12px;border:1px solid #92400e;background:#21170b;border-radius:10px;color:#fde68a;font-size:12px;margin-bottom:10px"></div>
+    <div id="meuTurnoLista" style="display:grid;gap:9px"></div>
+    <button type="button" id="btnPrepararEncerramento" style="margin-top:14px;background:#b45309" onclick="abrirPreEncerramento()">🏁 PREPARAR ENCERRAMENTO</button>
+    <button type="button" style="margin-top:18px;background:#52657b" onclick="fecharMeuTurnoLeitura()">← VOLTAR AO DIÁRIO</button>
+  </div>
+</div>
+
+
+<div id="preEncerramentoTurno" style="display:none;position:fixed;inset:0;z-index:10008;background:#0b0f14;color:#f8fafc;overflow:auto;padding:18px;box-sizing:border-box">
+  <div style="max-width:520px;margin:auto;background:#151b23;border:1px solid #283140;border-radius:18px;padding:18px;box-sizing:border-box">
+    <h2 style="margin:0 0 6px;font-size:21px">🏁 Pré-Encerramento do Turno</h2>
+    <div style="color:#aab5c4;font-size:12px;margin-bottom:14px">V18.12.25 • Validação + Encerramento Real</div>
+    <div id="preEncerramentoResumo" style="display:grid;gap:9px"></div>
+    <div id="preEncerramentoValidacao" style="margin-top:14px;padding:12px;border:1px solid #475569;border-radius:10px;font-size:13px;font-weight:800;line-height:1.45"></div>
+    <div style="margin-top:14px;padding:10px 12px;border:1px solid #475569;border-radius:10px;color:#cbd5e1;font-size:12px">🔒 O fechamento só será liberado quando não houver pendências abertas.</div>
+    <div id="preEncerramentoAcao" style="display:none;margin-top:14px">
+      <label for="preEncerramentoObs" style="font-size:12px;color:#cbd5e1">Observação geral (opcional)</label>
+      <textarea id="preEncerramentoObs" rows="3" style="width:100%;box-sizing:border-box;margin-top:6px"></textarea>
+      <button type="button" id="btnFecharTurnoReal" style="margin-top:10px;background:#166534" onclick="fecharTurnoRealWPA()">🔒 FECHAR TURNO</button>
+    </div>
+    <div id="preEncerramentoRetorno" style="display:none;margin-top:12px;padding:12px;border-radius:10px;font-size:12px;font-weight:800"></div>
+    <button type="button" style="margin-top:16px;background:#52657b" onclick="fecharPreEncerramento()">← VOLTAR AO MEU TURNO</button>
+  </div>
+</div>
+
+<div id="passagemTurnoLeitura" style="display:none;position:fixed;inset:0;z-index:10010;background:#0b0f14;color:#f8fafc;overflow:auto;padding:18px;box-sizing:border-box">
+  <div style="max-width:520px;margin:auto;background:#151b23;border:1px solid #283140;border-radius:18px;padding:18px;box-sizing:border-box">
+    <h2 style="margin:0 0 6px;font-size:21px">👀 Passagem de Turno</h2>
+    <div id="passagemTurnoSub" style="color:#aab5c4;font-size:12px;margin-bottom:14px">Somente leitura • ocorrências destinadas à passagem</div>
+    <div id="passagemTurnoResumo" style="padding:10px;border:1px dashed #475569;border-radius:10px;text-align:center;color:#cbd5e1;font-size:13px;margin-bottom:10px"></div>
+    <div id="passagemTurnoLista" style="display:grid;gap:9px"></div>
+    <div id="passagemComprovante" style="display:none;margin-top:16px;border:1px solid #166534;background:#0f1f18;border-radius:12px;padding:12px;color:#dcfce7"></div>
+    <div id="passagemCienciaVisual" style="margin-top:16px;border-top:1px solid #334155;padding-top:16px">
+      <h3 style="margin:0 0 12px;font-size:17px">✍️ Ciência da Passagem</h3>
+      <label for="passagemVolanteRecebedor">Volante que está recebendo</label>
+      <select id="passagemVolanteRecebedor">
+        <option value="">Selecione</option>
+        <option>Andreia</option><option>Alessandra</option><option>Danilo</option>
+        <option>Elaine</option><option>Marcelo</option><option>Mariana</option>
+      </select>
+      <div style="margin-top:10px;color:#aab5c4;font-size:12px">A confirmação será registrada oficialmente na planilha Confirmação Passagem.</div>
+      <button type="button" id="btnCienciaPassagemVisual" onclick="confirmarCienciaPassagemReal()" style="margin-top:12px;background:#16a34a">LI E ESTOU CIENTE</button>
+      <div id="passagemCienciaMsg" style="display:none;margin-top:10px;padding:10px;border:1px dashed #475569;border-radius:10px;text-align:center;font-size:12px;color:#cbd5e1"></div>
+    </div>
+    <button type="button" style="margin-top:18px;background:#52657b" onclick="fecharPassagemTurnoLeitura()">← VOLTAR AO DIÁRIO</button>
+  </div>
+</div>
+
+
+<div id="detalheDiarioLeitura" style="display:none;position:fixed;inset:0;z-index:10020;background:rgba(5,8,12,.88);padding:16px;box-sizing:border-box;overflow:auto">
+  <div style="max-width:520px;margin:20px auto;background:#151b23;border:1px solid #334155;border-radius:18px;padding:18px;color:#f8fafc;box-sizing:border-box">
+    <h2 style="margin:0 0 14px;font-size:20px">📋 Detalhes do Registro</h2>
+    <div id="detalheDiarioConteudo" style="display:grid;gap:8px"></div>
+
+    <div id="acaoPendenciaDiario" style="display:none;margin-top:16px;border-top:1px solid #334155;padding-top:16px">
+      <h3 style="margin:0 0 12px;font-size:17px">🔧 Acompanhar Pendência</h3>
+
+      <label for="pendRespDiario">Responsável</label>
+      <select id="pendRespDiario">
+        <option value="">Selecione</option>
+        <option>Andreia</option><option>Alessandra</option><option>Danilo</option>
+        <option>Elaine</option><option>Marcelo</option><option>Mariana</option>
+      </select>
+
+      <label for="pendTurnoDiario" style="display:block;margin-top:10px">Turno</label>
+      <select id="pendTurnoDiario">
+        <option value="">Selecione</option>
+        <option value="1">1º turno</option>
+        <option value="2">2º turno</option>
+        <option value="3">3º turno</option>
+      </select>
+
+      <label for="pendAcaoDiario" style="display:block;margin-top:10px">Ação realizada</label>
+      <textarea id="pendAcaoDiario" rows="3" style="width:100%;box-sizing:border-box;background:#0f141b;color:#f8fafc;border:1px solid #475569;border-radius:10px;padding:10px"></textarea>
+
+      <label for="pendObsDiario" style="display:block;margin-top:10px">Observação</label>
+      <textarea id="pendObsDiario" rows="2" style="width:100%;box-sizing:border-box;background:#0f141b;color:#f8fafc;border:1px solid #475569;border-radius:10px;padding:10px"></textarea>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+        <button type="button" onclick="salvarAcompanhamentoDiario('Em acompanhamento')" style="margin:0;background:#b7791f">EM ACOMPANHAMENTO</button>
+        <button type="button" onclick="salvarAcompanhamentoDiario('Resolvido')" style="margin:0;background:#16833a">RESOLVIDO</button>
+      </div>
+      <div id="pendStatusDiario" style="font-size:12px;color:#cbd5e1;margin-top:9px;text-align:center"></div>
+    </div>
+
+    <button type="button" onclick="fecharDetalheDiarioLeitura()" style="margin-top:18px;background:#52657b">← VOLTAR AO DIÁRIO</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/niimbot-web-bluetooth@2.4.0/src/niimbot.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+function confirmarNoApp(msg){
+  return new Promise(resolve=>{
+    confirmMsg.textContent=msg;
+    confirmBg.style.display='flex';
+    const fechar=(valor)=>{
+      confirmBg.style.display='none';
+      confirmOk.onclick=null;
+      confirmCancelar.onclick=null;
+      resolve(valor);
+    };
+    confirmOk.onclick=()=>fechar(true);
+    confirmCancelar.onclick=()=>fechar(false);
+  });
+}
+
+// Listas locais de segurança: mantêm a produção funcionando se a configuração online não carregar.
+let VOLANTES=['Andreia','Alessandra','Danilo','Elaine','Marcelo','Mariana'];
+let PROBLEMAS=['Bolhas','Cavidade Amassada','Cortes','Crua','Deformações','Falha de Material','Falha no Corte','Falha no Ponto de Injeção','Fora de Medida','Fragmentos','Furada','Furo Obstruído','Manchas','Material Contaminado','Dureza NOK'];
+let MAQUINAS={"Linha 1":["168","186","234","235","495","494","202","203","491","197","198","254","255","016","023","024","027"],"Linha 2":["076","086","100","101","135","178","179","180","128","129","134"],"Linha 3":["542","541","560","585","756","757","706","705","558","590","591"],"Linha 4":["555","532","531","535","708","707"],"Linha 5":["196","609","259","260","074","068","097","776","775","444","402"],"LSR":["253","252","184"]};
+const CONFIG_URL="https://script.google.com/macros/s/AKfycbzx4ARht-l8X7SGU1piU2ghbwSoCErXS2Ia7azEgsfJNn5XxXB8I13fH7XxTsrV9vo/exec";
+async function carregarConfiguracao(){
+  try{
+    const r=await fetch(CONFIG_URL+'?acao=config&_='+Date.now(),{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    if(!j.ok||!Array.isArray(j.maquinas)||!j.maquinas.length) throw new Error(j.erro||'Configuração vazia');
+    const novo={};
+    [...j.maquinas].sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0)).forEach(x=>{
+      const l=String(x.linha||'').trim(),m=String(x.maquina||'').trim();
+      if(!l||!m)return;
+      if(!novo[l])novo[l]=[];
+      novo[l].push(m);
+    });
+    if(Object.keys(novo).length) MAQUINAS=novo;
+    if(Array.isArray(j.volantes)&&j.volantes.length){
+      const novosVolantes=[...j.volantes]
+        .sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0))
+        .map(x=>String(x.nome||'').trim())
+        .filter(Boolean);
+      if(novosVolantes.length) VOLANTES=novosVolantes;
+    }
+    if(Array.isArray(j.problemas)&&j.problemas.length){
+      const novosProblemas=[...j.problemas]
+        .sort((a,b)=>(Number(a.ordem)||0)-(Number(b.ordem)||0))
+        .map(x=>String(x.nome||'').trim())
+        .filter(Boolean);
+      if(novosProblemas.length) PROBLEMAS=novosProblemas;
+    }
+    // Se uma linha já estiver selecionada, atualiza o combo sem exigir recarregar a tela.
+    if(linha.value) atualizarMaquinas();
+    console.log('Configuração de máquinas, volantes e problemas carregada da planilha.');
+  }catch(e){
+    console.warn('Usando lista local de segurança:',e);
+  }
+}
+carregarConfiguracao();
+const FORM="https://docs.google.com/forms/d/e/1FAIpQLScvw1a_FnQeHpqHGH6PFyGK5ORrK6Zf9KYf94RKULwCjcoD_Q/viewform";
+const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=351583205&single=true&output=csv";
+const SP_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=735510297&single=true&output=csv";
+const PF_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=1712938767&single=true&output=csv";
+function csvAtualizado(url){return url+(url.includes('?')?'&':'?')+'_lp='+Date.now();}
+const MODEL={name_prefixes:["B1"],task:"b1",dpi:203,density:3,label_type:1,speed:1};
+const SIZE={w_px:384,h_px:240,offset_y_px:4};
+let conectado=false, etiquetaURL="";
+function atualizarMaquinas(){const l=linha.value,s=maquina;s.innerHTML="";if(!l){s.disabled=true;s.innerHTML='<option value="">Primeiro selecione a linha</option>';return}s.disabled=false;s.innerHTML='<option value="">Selecione a máquina</option>';MAQUINAS[l].forEach(m=>s.add(new Option(m,m)))}
+function setStatus(t){document.getElementById('status').textContent=t}
+async function conectarB1(){try{if(!window.Niimbot||!Niimbot.isSupported())throw new Error('Web Bluetooth não disponível. Abra pelo Chrome em uma página HTTPS.');setStatus('Procurando B1...');const p=await Niimbot.identify(MODEL);if(!p||p.modelId!==4096)throw new Error('A impressora encontrada não foi identificada como B1 (id 4096).');conectado=true;setStatus('✓ B1 conectada — id '+p.modelId+' • protocolo '+(p.protocolVersion??'detectado'));}catch(e){conectado=false;setStatus('Erro: '+e.message)}}
+async function gerar(e){e.preventDefault();const it=item.value.trim(),o=op.value.trim(),m=maquina.value.trim(),s=setor.value.trim();const p=new URLSearchParams({usp:'pp_url','entry.1859001491':m,'entry.161521641':o,'entry.725397250':it,setor:s});const url=FORM+'?'+p.toString();if(!await confirmarNoApp('OP: '+o+'\nItem: '+it+'\nMáquina: '+m+'\nSetor: '+s))return;desenharEtiqueta(url,o,it,m);linktxt.textContent=url;resultado.style.display='block';resultado.scrollIntoView({behavior:'smooth'});}
+function desenharEtiqueta(url,o,it,m){
+ const c=preview,x=c.getContext('2d');
+ x.imageSmoothingEnabled=false;
+ x.fillStyle='#fff';x.fillRect(0,0,384,240);
+ // Área textual refinada: maior contraste e hierarquia, sem alterar o QR aprovado.
+ x.fillStyle='#000';x.textBaseline='top';
+ x.font='bold 17px Arial';x.fillText('LIBERAÇÃO',10,13);x.fillText('DE PRODUÇÃO',10,34);
+ x.fillRect(10,60,158,2);
+ x.font='bold 20px Arial';x.fillText('OP:',10,76);x.font='bold 21px Arial';x.fillText(o,48,75);
+ x.font='bold 20px Arial';x.fillText('ITEM:',10,113);x.font='bold 21px Arial';x.fillText(it,70,112);
+ x.font='bold 20px Arial';x.fillText('MÁQ.:',10,150);x.font='bold 21px Arial';x.fillText(m,70,149);
+ 
+ // QR aprovado no teste físico: dimensões e quiet zone preservadas.
+ const holder=document.createElement('div');holder.style.position='fixed';holder.style.left='-9999px';document.body.appendChild(holder);
+ new QRCode(holder,{text:url,width:192,height:192,correctLevel:QRCode.CorrectLevel.L});
+ setTimeout(()=>{const q=holder.querySelector('canvas')||holder.querySelector('img');const draw=()=>{
+   x.fillStyle='#fff';x.fillRect(180,16,200,208);
+   x.drawImage(q,184,24,192,192);
+   etiquetaURL=c.toDataURL('image/png');holder.remove();
+ };if(q.tagName==='IMG'&&!q.complete)q.onload=draw;else draw()},100)
+}
+async function imprimirB1(){try{if(!etiquetaURL)throw new Error('Gere a etiqueta primeiro.');btnPrint.disabled=true;setStatus('Enviando etiqueta para a B1...');if(!conectado){const p=await Niimbot.identify(MODEL);if(!p||p.modelId!==4096)throw new Error('B1 não identificada.');conectado=true}await Niimbot.printImage(etiquetaURL,{model:MODEL,size:SIZE,copies:1,density:3,onProgress:s=>setStatus('B1: '+s)});setStatus('✓ Etiqueta impressa na B1.');}catch(e){conectado=false;setStatus('Erro ao imprimir: '+e.message)}finally{btnPrint.disabled=false}}
+function novoQR(){item.value='';op.value='';linha.value='';maquina.innerHTML='<option value="">Primeiro selecione a linha</option>';maquina.disabled=true;setor.value='';resultado.style.display='none';etiquetaURL='';item.focus();window.scrollTo({top:0,behavior:'smooth'})}
+
+
+let qrScanner=null, qrLendo=false;
+async function abrirLeitor(){
+  scanner.style.display='block';
+  scanner.scrollIntoView({behavior:'smooth'});
+  statusLeitor.textContent='Abrindo câmera...';
+  try{
+    if(!window.Html5Qrcode) throw new Error('Leitor QR não carregou. Verifique a internet.');
+    if(!qrScanner) qrScanner=new Html5Qrcode("reader");
+    if(qrLendo) return;
+    await qrScanner.start(
+      {facingMode:{exact:"environment"}},
+      {fps:12,qrbox:(vw,vh)=>{const lado=Math.floor(Math.min(vw,vh)*0.78);return {width:lado,height:lado};},aspectRatio:1.0,disableFlip:false},
+      qrLido,
+      ()=>{}
+    );
+    qrLendo=true;
+    try{
+      const video=document.querySelector('#reader video');
+      const track=video?.srcObject?.getVideoTracks?.()[0];
+      if(track){
+        const caps=track.getCapabilities?track.getCapabilities():{};
+        const adv=[];
+        if(Array.isArray(caps.focusMode)&&caps.focusMode.includes('continuous'))adv.push({focusMode:'continuous'});
+        if(caps.zoom&&typeof caps.zoom.min==='number'){const z=Math.min(Math.max(1.25,caps.zoom.min),caps.zoom.max);adv.push({zoom:z});}
+        if(adv.length)await track.applyConstraints({advanced:adv});
+      }
+    }catch(e){}
+    statusLeitor.textContent='Câmera ativa — centralize o QR e aguarde o foco.';
+  }catch(e){
+    statusLeitor.textContent='Erro ao abrir câmera: '+e.message;
+  }
+}
+async function pararLeitor(){
+  if(qrScanner&&qrLendo){
+    try{await qrScanner.stop()}catch(e){}
+    qrLendo=false;
+  }
+}
+async function fecharLeitor(){
+  await pararLeitor();
+  scanner.style.display='none';
+}
+async function qrLido(texto){
+  await pararLeitor();
+  try{
+    const u=new URL(texto);
+    const m=u.searchParams.get('entry.1859001491')||'';
+    const o=u.searchParams.get('entry.161521641')||'';
+    const it=u.searchParams.get('entry.725397250')||'';
+    const st=u.searchParams.get('setor')||u.searchParams.get('entry.705084022')||'';
+    if(!it||!o||!m) throw new Error('Este QR não contém dados completos de Liberação de Produção.');
+    if(navigator.vibrate) navigator.vibrate(100);
+    scanner.style.display='none';
+    abrirInspecao({maquina:m,op:o,item:it,setor:st});
+  }catch(e){
+    statusLeitor.textContent='QR não reconhecido: '+e.message;
+    setTimeout(()=>abrirLeitor(),1200);
+  }
+}
+
+const TIPOS=['Voleio','Setup','Troca de OP'];
+let inspDados=null,inspVolante='',inspTipo='';
+function montarOpcoesInspecao(){
+  opcoesVolante.innerHTML=VOLANTES.map(v=>`<button type="button" class="opcao" data-v="${v}" onclick="selecionarVolante('${v}')">${v}</button>`).join('');
+  opcoesTipo.innerHTML=TIPOS.map(v=>`<button type="button" class="opcao" data-v="${v}" onclick="selecionarTipo('${v}')">${v}</button>`).join('');
+  const situacoes=['Peças OK',...PROBLEMAS];
+  opcoesSituacao.innerHTML=situacoes.map(v=>`<label class="situacao"><input type="checkbox" value="${v}"> <span>${v}</span></label>`).join('');
+  [...opcoesSituacao.querySelectorAll('input')].forEach(cb=>cb.addEventListener('change',()=>{
+    if(!cb.checked)return;
+    const todos=[...opcoesSituacao.querySelectorAll('input')];
+    if(cb.value==='Peças OK'){
+      todos.forEach(x=>{if(x!==cb)x.checked=false});
+    }else{
+      const ok=todos.find(x=>x.value==='Peças OK');
+      if(ok)ok.checked=false;
+    }
+  }));
+}
+function marcarBotao(container,valor){[...container.querySelectorAll('.opcao')].forEach(b=>b.classList.toggle('ativa',b.dataset.v===valor));}
+function selecionarVolante(v){inspVolante=v;localStorage.setItem('ultimoVolante',v);marcarBotao(opcoesVolante,v)}
+function selecionarTipo(v){inspTipo=v;marcarBotao(opcoesTipo,v)}
+async function verificarReincidenciaItem(d){
+  alertaReincidencia.style.display='none';
+  alertaReincidenciaTexto.textContent='';
+  try{
+    const x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});
+    if(!x.ok)return;
+    const a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));
+    const h=a.shift();
+    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),
+          I=col(h,['Item']),M=col(h,['Máquina','Maquina']),
+          V=col(h,['Volante responsável','Responsável']),
+          SI=col(h,['Situação encontrada','Situação']);
+    const val=(r,i)=>i>=0?(r[i]??''):'';
+    const dataEfetiva=r=>String(val(r,DC)).trim()||val(r,D);
+    const canon=new Map(PROBLEMAS.map(p=>[norm(p),p]));
+    const registros=a.filter(r=>norm(val(r,I))===norm(d.item)).map((r,idx)=>{
+      const raw=String(val(r,SI)||'');
+      const partes=raw.split(/[|,]/).map(s=>s.trim()).filter(Boolean);
+      const probs=partes.map(s=>canon.get(norm(s))).filter(Boolean);
+      const ok=partes.some(s=>norm(s)==='pecas ok');
+      // Compatibilidade com registros antigos: qualquer situação não-OK também conta
+      // para não perder o histórico entre turnos.
+      const problematico=!ok && (probs.length>0 || partes.length>0);
+      return {idx,data:dataEfetiva(r),maquina:val(r,M),volante:val(r,V),raw,probs,ok,problematico};
+    });
+    // A planilha é cronológica; percorremos do registro mais recente para trás.
+    registros.reverse();
+    let seq=[];
+    for(const r of registros){
+      if(r.ok)break;
+      if(r.problematico)seq.push(r);
+      else break;
+    }
+    if(seq.length<2)return;
+    const nomes=[];
+    seq.forEach(r=>{
+      const ps=r.probs.length?r.probs:r.raw.split(/[|,]/).map(s=>s.trim()).filter(Boolean);
+      ps.forEach(p=>{if(p && !nomes.some(n=>norm(n)===norm(p)))nomes.push(p)});
+    });
+    const ult=seq[0];
+    alertaReincidenciaTexto.innerHTML=
+      `<b>Item ${esc(d.item)}</b> possui <b>${seq.length} inspeções consecutivas com problema</b>.<br>`+
+      `Problema(s): <b>${esc(nomes.join(', ')||'Situação NOK')}</b>.<br>`+
+      `Último registro: ${esc(ult.data||'-')} • Máquina ${esc(ult.maquina||'-')} • Volante ${esc(ult.volante||'-')}.`;
+    alertaReincidencia.style.display='block';
+    if(navigator.vibrate)navigator.vibrate([180,100,180]);
+  }catch(e){
+    console.warn('Não foi possível verificar reincidência:',e);
+  }
+}
+async function abrirInspecao(d){
+  inspDados=d;inspMaq.textContent=d.maquina;inspOP.textContent=d.op;inspItem.textContent=d.item;inspSetor.textContent=d.setor||'-';
+  montarOpcoesInspecao();inspVolante=localStorage.getItem('ultimoVolante')||'';inspTipo='';
+  if(VOLANTES.includes(inspVolante))marcarBotao(opcoesVolante,inspVolante);else inspVolante='';
+  inspInfo.value='';statusInspecao.textContent='Preencha os campos obrigatórios.';btnEnviarInspecao.disabled=false;
+  alertaReincidencia.style.display='none';
+  inspecao.style.display='block';inspecao.scrollIntoView({behavior:'smooth'});
+  verificarReincidenciaItem(d);
+ verificarDesviosItem(d);
+}
+function cancelarInspecao(){inspecao.style.display='none';inspDados=null;abrirLeitor()}
+const FILA_KEY='lp_fila_inspecoes_v18';
+let sincronizandoFila=false;
+function lerFila(){try{const x=JSON.parse(localStorage.getItem(FILA_KEY)||'[]');return Array.isArray(x)?x:[]}catch(e){return []}}
+function salvarFila(f){localStorage.setItem(FILA_KEY,JSON.stringify(f));atualizarStatusFila()}
+function criarIdFila(){return 'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function atualizarStatusFila(msg=''){
+  const el=document.getElementById('filaStatus');if(!el)return;
+  const n=lerFila().length;
+  el.className='fila-status '+(n?'pendente':'ok');
+  el.innerHTML=n?`⏳ <strong>${n} inspeção(ões) pendente(s)</strong>${msg?'<br>'+esc(msg):'<br>Envio automático quando a conexão estiver disponível.'}`:'✓ Nenhuma inspeção pendente.';
+}
+async function confirmarIdInspecao(id){
+  if(!id)return false;
+  const x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!x.ok)throw Error('Planilha indisponível');
+  const a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));
+  if(!a.length)return false;
+  const h=a.shift();
+  const ID=col(h,['ID Inspeção','ID Inspecao','idInspecao']);
+  if(ID<0)throw Error('Coluna ID Inspeção não encontrada');
+  return a.some(r=>norm(r[ID]??'')===norm(id));
+}
+async function confirmarItemFila(item,limiteMs=18000){
+  const inicio=Date.now();
+  while(Date.now()-inicio<limiteMs){
+    await new Promise(r=>setTimeout(r,1800));
+    try{if(await confirmarIdInspecao(item.id))return true}catch(e){}
+  }
+  return false;
+}
+function removerDaFila(id){salvarFila(lerFila().filter(x=>x.id!==id))}
+async function tentarEnviarItemFila(item,{aguardar=true}={}){
+  // Se já houve tentativa, primeiro consulta a planilha. Isso evita reenviar algo que
+  // chegou ao Google mas demorou para aparecer no CSV publicado.
+  if(item.tentado){
+    // REGRA V18.1: depois que um POST foi disparado, nunca o dispara automaticamente de novo.
+    // Enquanto o CSV publicado ainda não refletir a gravação, apenas aguardamos/consultamos.
+    // Isso elimina a duplicidade causada pelo atraso de atualização do CSV.
+    try{
+      if(await confirmarIdInspecao(item.id)){
+        removerDaFila(item.id);return 'confirmado';
+      }
+      return 'pendente';
+    }catch(e){return 'offline'}
+  }
+  try{
+    const b=new URLSearchParams({acao:'inspecao',idInspecao:item.id,...item.dados});
+    await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString()});
+    item.tentado=true;item.ultimaTentativa=Date.now();
+    const f=lerFila(),i=f.findIndex(x=>x.id===item.id);if(i>=0){f[i]=item;salvarFila(f)}
+  }catch(e){return 'offline'}
+  if(aguardar&&await confirmarItemFila(item)){removerDaFila(item.id);return 'confirmado'}
+  return 'pendente';
+}
+async function sincronizarFila(){
+  if(sincronizandoFila||!navigator.onLine)return;
+  sincronizandoFila=true;
+  try{
+    let fila=lerFila();
+    for(const item of fila){
+      const atual=lerFila().find(x=>x.id===item.id);if(!atual)continue;
+      const r=await tentarEnviarItemFila(atual,{aguardar:false});
+      if(r==='offline')break;
+      // V18.1: item já tentado fica somente em confirmação; não há novo POST automático.
+      // O idInspecao também já é enviado para permitir idempotência no servidor futuramente.
+    }
+  }finally{sincronizandoFila=false;atualizarStatusFila()}
+}
+function voltarInicioAposInspecao(){
+  inspecao.style.display='none';scanner.style.display='none';inspDados=null;inspVolante='';inspTipo='';inspInfo.value='';btnEnviarInspecao.disabled=false;statusInspecao.textContent='Preencha os campos obrigatórios.';window.scrollTo({top:0,behavior:'smooth'});
+}
+async function enviarInspecao(){
+  if(!inspDados)return;
+  const situacoes=[...opcoesSituacao.querySelectorAll('input:checked')].map(x=>x.value);
+  if(!inspVolante){statusInspecao.textContent='Selecione o volante responsável.';return}
+  if(!inspTipo){statusInspecao.textContent='Selecione o tipo de inspeção.';return}
+  if(!situacoes.length){statusInspecao.textContent='Selecione pelo menos uma situação encontrada.';return}
+  const dados={...inspDados,volante:inspVolante,tipo:inspTipo,situacoes:situacoes.join('|'),informacoes:inspInfo.value.trim()};
+  const itemFila={id:criarIdFila(),criadoEm:Date.now(),tentado:false,baseline:0,dados};
+  const fila=lerFila();fila.push(itemFila);salvarFila(fila); // primeiro salva no aparelho
+  btnEnviarInspecao.disabled=true;statusInspecao.textContent='Inspeção protegida no aparelho. Tentando enviar...';
+  const r=await tentarEnviarItemFila(itemFila,{aguardar:true});
+  if(r==='confirmado'){
+    statusInspecao.innerHTML='<div class="envio-ok">✓ Inspeção registrada</div>';
+    if(navigator.vibrate)navigator.vibrate([80,50,80]);
+    setTimeout(voltarInicioAposInspecao,1100);
+  }else{
+    statusInspecao.innerHTML='<div class="envio-ok">⏳ Inspeção salva como pendente</div><div class="small">Ela não será perdida. O aplicativo confirmará ou enviará automaticamente quando o Google estiver disponível.</div>';
+    atualizarStatusFila('Registro protegido no aparelho.');
+    if(navigator.vibrate)navigator.vibrate([120,70,120]);
+    setTimeout(voltarInicioAposInspecao,2200);
+  }
+}
+window.addEventListener('online',()=>setTimeout(sincronizarFila,1200));
+window.addEventListener('load',()=>{atualizarStatusFila();setTimeout(sincronizarFila,2500)});
+setInterval(sincronizarFila,15000);
+// Atualiza o relógio do alerta de 4h enquanto o ADM Turnos estiver aberto.
+setInterval(()=>{if(document.getElementById('turnosHome')?.style.display==='block')atualizarPainelTurnosSilencioso()},60000);
+
+
+
+// =========================
+function escDesvio(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function dataBRDesvio(v){
+  const m=String(v||'').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(!m)return null;
+  return new Date(Number(m[3]),Number(m[2])-1,Number(m[1]),23,59,59,999);
+}
+function classeValidadeDesvio(lista){
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  let pior='verde';
+  for(const d of lista){
+    const fim=dataBRDesvio(d.validade);
+    if(!fim)continue;
+    const dias=Math.floor((fim-hoje)/86400000);
+    if(dias<0)return 'vermelho';
+    if(dias<=5)pior='amarelo';
+  }
+  return pior;
+}
+async function verificarDesviosItem(d){
+  alertaDesvio.style.display='none';
+  alertaDesvio.classList.remove('amarelo','vermelho');
+  alertaDesvioConteudo.innerHTML='';
+  if(!d||!String(d.item||'').trim())return;
+  try{
+    const url=CONFIG_URL+'?acao=desvios&item='+encodeURIComponent(String(d.item).trim())+'&_='+Date.now();
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    if(!j.ok)throw new Error(j.erro||'Falha ao consultar desvios');
+    if(!j.temDesvio||!Array.isArray(j.desvios)||!j.desvios.length)return;
+
+    const classe=classeValidadeDesvio(j.desvios);
+    if(classe==='amarelo')alertaDesvio.classList.add('amarelo');
+    if(classe==='vermelho')alertaDesvio.classList.add('vermelho');
+    alertaDesvioTitulo.textContent = "";
+
+    desviosAtivosPorNumero=new Map(j.desvios.map(x=>[String(x.numero||'').trim(),x]));
+    alertaDesvioConteudo.innerHTML=j.desvios.map(x=>{
+      const vencido=classeValidadeDesvio([x])==='vermelho';
+      const situacao=vencido?'VENCIDO':'ATIVO';
+      return `
+      <div class="desvio-card">
+        <b>⚠️ DESVIO ${escDesvio(x.numero||'-')} ${situacao}</b><br>
+        <span class="small">
+          Registrado em: <b>${escDesvio(x.cadastradoEm||'-')}</b><br>
+          Validade: <b>${escDesvio(x.validade||'-')}</b><br>
+          ${x.maquina?`Máquina: <b>${escDesvio(x.maquina)}</b>`:''}
+          ${x.op?` • OP: <b>${escDesvio(x.op)}</b>`:''}<br>
+          Descrição: ${escDesvio(x.descricao||'-')}
+        </span>
+        <div class="desvio-acoes">
+          ${vencido?`<button type="button" class="desvio-acao revalidar" data-numero="${escDesvio(x.numero||'')}">REVALIDAR</button>`:''}
+          <button type="button" class="desvio-acao encerrar" data-numero="${escDesvio(x.numero||'')}">ENCERRAR</button>
+        </div>
+      </div>`;
+    }).join('');
+    alertaDesvio.style.display='block';
+    alertaDesvioConteudo.querySelectorAll('.desvio-acao.revalidar').forEach(btn=>{
+      btn.addEventListener('click',()=>abrirRevalidacaoDesvio(btn.dataset.numero));
+    });
+    alertaDesvioConteudo.querySelectorAll('.desvio-acao.encerrar').forEach(btn=>{
+      btn.addEventListener('click',()=>encerrarDesvioUI(btn.dataset.numero));
+    });
+    if(navigator.vibrate)navigator.vibrate([120,80,120]);
+  }catch(e){
+    console.warn('Não foi possível consultar desvios:',e);
+  }
+}
+
+
+let desvioGerenciadoNumero="";
+let desvioEncerrarNumero="";
+let desviosAtivosPorNumero=new Map();
+
+function msgGerenciarDesvio(t,ok){
+  const e=document.getElementById("msgGerenciarDesvio");
+  e.style.display="block";
+  e.style.marginTop="12px";
+  e.style.padding="10px";
+  e.style.borderRadius="10px";
+  e.style.background=ok?"#123d25":"#4b1f22";
+  e.textContent=t;
+}
+
+function abrirRevalidacaoDesvio(numero){
+  desvioGerenciadoNumero=String(numero||"").trim();
+  document.getElementById("gerDesvioNumero").textContent=desvioGerenciadoNumero||"-";
+  document.getElementById("gerDesvioValidade").value="";
+  document.getElementById("msgGerenciarDesvio").style.display="none";
+  document.getElementById("modalGerenciarDesvio").style.display="flex";
+}
+
+async function revalidarDesvioUI(){
+  const validadeIso=document.getElementById("gerDesvioValidade").value;
+  if(!desvioGerenciadoNumero||!validadeIso){
+    msgGerenciarDesvio("Selecione a nova validade.",false); return;
+  }
+  const [a,m,d]=validadeIso.split("-");
+  const validade=`${d}/${m}/${a}`;
+  const btn=document.getElementById("salvarRevalidacaoDesvio");
+  btn.disabled=true; btn.textContent="REVALIDANDO...";
+  try{
+    const body=new URLSearchParams({
+      acao:"revalidarDesvio",
+      numero:desvioGerenciadoNumero,
+      validade
+    });
+    await fetch(CONFIG_URL,{
+      method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
+      body
+    });
+    msgGerenciarDesvio("Revalidação enviada. Confirmando...",true);
+    setTimeout(async()=>{
+      await verificarDesviosItem(inspDados);
+      document.getElementById("modalGerenciarDesvio").style.display="none";
+    },1400);
+  }catch(e){
+    msgGerenciarDesvio("Não foi possível revalidar o desvio.",false);
+  }finally{
+    btn.disabled=false; btn.textContent="REVALIDAR";
+  }
+}
+
+function encerrarDesvioUI(numero){
+  numero=String(numero||"").trim();
+  if(!numero)return;
+  desvioEncerrarNumero=numero;
+  const x=desviosAtivosPorNumero.get(numero)||{};
+  document.getElementById("encDesvioNumero").textContent=numero||"-";
+  document.getElementById("encDesvioDados").innerHTML=
+    `<b>Item:</b> ${escDesvio(x.item||inspDados?.item||'-')}<br>`+
+    `<b>Máquina:</b> ${escDesvio(x.maquina||inspDados?.maquina||'-')}<br>`+
+    `<b>Validade:</b> ${escDesvio(x.validade||'-')}`;
+  document.getElementById("msgEncerrarDesvio").style.display="none";
+  document.getElementById("modalEncerrarDesvio").style.display="flex";
+}
+
+async function confirmarEncerrarDesvio(){
+  if(!desvioEncerrarNumero)return;
+  const btn=document.getElementById("confirmarEncerrarDesvio");
+  const msg=document.getElementById("msgEncerrarDesvio");
+  btn.disabled=true; btn.textContent="ENCERRANDO...";
+  try{
+    const body=new URLSearchParams({acao:"encerrarDesvio",numero:desvioEncerrarNumero});
+    await fetch(CONFIG_URL,{
+      method:"POST",mode:"no-cors",
+      headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},
+      body
+    });
+    msg.style.display="block"; msg.style.background="#123d25";
+    msg.textContent="Encerramento enviado. Confirmando...";
+    setTimeout(async()=>{
+      await verificarDesviosItem(inspDados);
+      document.getElementById("modalEncerrarDesvio").style.display="none";
+      desvioEncerrarNumero="";
+    },1400);
+  }catch(e){
+    msg.style.display="block"; msg.style.background="#4b1f22";
+    msg.textContent="Não foi possível encerrar o desvio.";
+  }finally{
+    btn.disabled=false; btn.textContent="ENCERRAR DESVIO";
+  }
+}
+
+// ADM TURNOS V18.2
+// Acesso oculto: 3 toques rápidos na palavra "Linha" do formulário principal.
+let turnosTap=0,turnosTapTimer=null;
+const gatilhoTurnos=document.getElementById('gatilhoTurnos');
+if(gatilhoTurnos){
+  gatilhoTurnos.addEventListener('click',()=>{
+    turnosTap++;clearTimeout(turnosTapTimer);
+    turnosTapTimer=setTimeout(()=>turnosTap=0,700);
+    if(turnosTap>=3){turnosTap=0;clearTimeout(turnosTapTimer);abrirLoginTurnos();}
+  });
+}
+// =========================
+let TURNOS_LINHAS=[],turnosFalhas=0,turnosBloqueadoAte=0,turnosRegistros=[],turnosSP=[],turnosPF=[];
+const TURNOS_LOCK_MS=5*60*1000;
+function hojeLocalISO(){const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
+function abrirLoginTurnos(){
+  if(Date.now()<turnosBloqueadoAte){const min=Math.ceil((turnosBloqueadoAte-Date.now())/60000);alert(`Acesso temporariamente bloqueado. Tente novamente em ${min} min.`);return}
+  turnosPinInput.value='';turnosPinStatus.style.display='none';turnosPinModal.style.display='flex';setTimeout(()=>turnosPinInput.focus(),100);
+}
+function fecharLoginTurnos(){turnosPinModal.style.display='none';turnosPinInput.value=''}
+async function confirmarLoginTurnos(){
+  if(Date.now()<turnosBloqueadoAte)return;
+  const pin=turnosPinInput.value.trim();
+  if(!/^\d{6}$/.test(pin)){turnosPinStatus.textContent='Digite os 6 dígitos do PIN.';turnosPinStatus.style.display='block';return}
+  turnosPinStatus.textContent='Validando acesso...';turnosPinStatus.style.display='block';
+  try{
+    const r=await fetch(CONFIG_URL+'?acao=loginTurnos&pin='+encodeURIComponent(pin),{cache:'no-store'});const j=await r.json();
+    if(!j.ok||!Array.isArray(j.linhas)){
+      turnosFalhas++;
+      if(turnosFalhas>=5){turnosBloqueadoAte=Date.now()+TURNOS_LOCK_MS;turnosFalhas=0;turnosPinStatus.textContent='5 tentativas incorretas. Acesso bloqueado neste aparelho por 5 minutos.';}
+      else turnosPinStatus.textContent=`PIN incorreto. ${5-turnosFalhas} tentativa(s) restante(s).`;
+      turnosPinInput.select();return;
+    }
+    turnosFalhas=0;TURNOS_LINHAS=j.linhas;fecharLoginTurnos();entrarTurnos();
+  }catch(e){turnosPinStatus.textContent='Não foi possível validar o acesso. Verifique a internet.'}
+}
+document.getElementById('turnosPinInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmarLoginTurnos()});
+function entrarTurnos(){
+  areaComum.style.display='none';adminHome.style.display='none';turnosHome.style.display='block';turnosData.value=hojeLocalISO();
+  turnosLinha.innerHTML=TURNOS_LINHAS.map(l=>`<option>${esc(l)}</option>`).join('');turnosDetalhe.style.display='none';carregarPainelTurnos();window.scrollTo({top:0});
+}
+function sairTurnos(){turnosHome.style.display='none';areaComum.style.display='block';TURNOS_LINHAS=[];turnosTabela.innerHTML='';turnosDetalhe.style.display='none';const a=document.getElementById('turnosAlerta4h');if(a){a.style.display='none';a.innerHTML=''}window.scrollTo({top:0})}
+function turnoFaixa(dataISO,n){
+  const [y,m,d]=dataISO.split('-').map(Number),base=new Date(y,m-1,d);let ini,fim;
+  if(n===1){ini=new Date(y,m-1,d,6,0);fim=new Date(y,m-1,d,13,50)}
+  else if(n===2){ini=new Date(y,m-1,d,13,50);fim=new Date(y,m-1,d,21,50)}
+  else{ini=new Date(y,m-1,d,21,50);fim=new Date(y,m-1,d+1,5,45)}
+  return {ini,fim};
+}
+function emTurno(dt,dataISO,n){const f=turnoFaixa(dataISO,n);return dt>=f.ini&&dt<f.fim}
+function alerta4hTurno(maq,dataISO,lin,n,regs){
+  const agora=new Date(),f=turnoFaixa(dataISO,n);
+  // O alerta só existe para o turno que está acontecendo agora.
+  if(agora<f.ini||agora>=f.fim)return null;
+  if(temSP(dataISO,lin,maq,n)||temPF(dataISO,lin,maq,n))return null;
+  const validos=regs.filter(r=>r.data>=f.ini&&r.data<f.fim).sort((a,b)=>b.data-a.data);
+  const referencia=validos.length?validos[0].data:f.ini;
+  const ms=agora-referencia;
+  if(ms<4*60*60*1000)return null;
+  const horas=Math.floor(ms/3600000),min=Math.floor((ms%3600000)/60000);
+  const z=v=>String(v).padStart(2,'0');
+  return {maq,n,horas,min,ultima:validos.length?`${z(referencia.getHours())}:${z(referencia.getMinutes())}`:'sem inspeção no turno'};
+}
+function dataISOparaBR(v){const a=String(v||'').split('-');return a.length===3?`${a[2]}/${a[1]}/${a[0]}`:v}
+function turnoSPKey(v){const x=String(v||'').trim().toLowerCase();if(x==='1'||x.startsWith('1'))return '1';if(x==='2'||x.startsWith('2'))return '2';if(x==='3'||x.startsWith('3'))return '3';return x}
+function turnoStatusKey(v){const x=String(v||'').trim().toLowerCase();if(x==='1'||x.startsWith('1'))return '1';if(x==='2'||x.startsWith('2'))return '2';if(x==='3'||x.startsWith('3'))return '3';return x}
+function turnoSPKey(v){return turnoStatusKey(v)}
+function temSP(dataISO,lin,maq,n){const d=dataISOparaBR(dataISO);return turnosSP.some(x=>x.data===d&&x.linha===lin&&x.maquina===maq&&turnoStatusKey(x.turno)===String(n)&&String(x.status).toUpperCase()==='SP')}
+function temPF(dataISO,lin,maq,n){const d=dataISOparaBR(dataISO);return turnosPF.some(x=>x.data===d&&x.linha===lin&&x.maquina===maq&&turnoStatusKey(x.turno)===String(n)&&String(x.status).toUpperCase()==='PF')}
+async function carregarStatusCSV(url,tipo){
+  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error(tipo+' indisponível');
+  let a=parseCSV(await r.text()).filter(r=>r.some(v=>String(v).trim()));if(!a.length)return [];
+  const h=a.shift(),D=col(h,['Data']),T=col(h,['Turno']),L=col(h,['Linha']),M=col(h,['Máquina','Maquina']),S=col(h,['Status']),v=(r,i)=>i>=0?String(r[i]??'').trim():'';
+  return a.map(r=>({data:v(r,D),turno:v(r,T),linha:v(r,L),maquina:v(r,M),status:v(r,S)}));
+}
+async function carregarSP(){try{turnosSP=await carregarStatusCSV(SP_CSV_URL,'SP')}catch(e){turnosSP=[]}}
+async function carregarPF(){try{turnosPF=await carregarStatusCSV(PF_CSV_URL,'PF')}catch(e){turnosPF=[]}}
+async function enviarStatus(tipo,maq,n,comando){
+  const b=new URLSearchParams({acao:tipo,data:dataISOparaBR(turnosData.value),turno:String(n),linha:turnosLinha.value,maquina:String(maq),comando});
+  await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString()});
+}
+async function enviarSP(maq,n,comando){return enviarStatus('sp',maq,n,comando)}
+let spPressTimer=null,spPressAtivo=false;
+function iniciarPressSP(maq){spPressAtivo=false;clearTimeout(spPressTimer);spPressTimer=setTimeout(()=>{spPressAtivo=true;abrirEscolhaSP(maq)},1800)}
+function cancelarPressSP(){clearTimeout(spPressTimer)}
+function bloquearClickAposSP(e){if(spPressAtivo){e.preventDefault();e.stopPropagation();spPressAtivo=false}}
+let spModalMaq='',spModalTurno=0,spModalTipo='';
+function abrirEscolhaSP(maq){
+  spModalMaq=String(maq);spModalTurno=0;spModalTipo='';
+  document.getElementById('spModalTitulo').textContent=`Máquina ${spModalMaq}`;
+  document.getElementById('spModalSub').textContent='Status da produção';
+  document.getElementById('spModalStatus').style.display='none';
+  document.querySelectorAll('.sp-shift,.status-tipo button').forEach(b=>b.classList.remove('ativa'));
+  const bt=document.getElementById('spModalConfirmar');bt.textContent='CONFIRMAR';bt.classList.remove('retirar');bt.disabled=true;
+  document.getElementById('spModalBg').style.display='flex';
+}
+function fecharModalSP(){document.getElementById('spModalBg').style.display='none';spModalMaq='';spModalTurno=0;spModalTipo=''}
+function selecionarTipoStatus(tipo){
+  spModalTipo=tipo;spModalTurno=0;
+  document.querySelectorAll('.status-tipo button').forEach(b=>b.classList.toggle('ativa',b.dataset.tipo===tipo));
+  document.querySelectorAll('.sp-shift').forEach(b=>b.classList.remove('ativa'));
+  document.getElementById('spModalSub').textContent=tipo==='sp'?'Sem Programação':'Produção Finalizada / Parada';
+  const bt=document.getElementById('spModalConfirmar');bt.disabled=true;bt.textContent='CONFIRMAR';bt.classList.remove('retirar');
+  const st=document.getElementById('spModalStatus');st.style.display='block';st.textContent=tipo==='sp'?'Agora selecione o turno que ficará como SP.':'Selecione o turno. PF preserva as inspeções já realizadas.';
+}
+function selecionarTurnoSP(n){
+  if(!spModalTipo){const st=document.getElementById('spModalStatus');st.style.display='block';st.textContent='Primeiro escolha SP ou PF.';return}
+  spModalTurno=n;document.querySelectorAll('.sp-shift').forEach(b=>b.classList.toggle('ativa',Number(b.dataset.turno)===n));
+  const tipo=spModalTipo,ja=tipo==='sp'?temSP(turnosData.value,turnosLinha.value,spModalMaq,n):temPF(turnosData.value,turnosLinha.value,spModalMaq,n);
+  const regs=turnosRegistros.filter(r=>r.maquina===spModalMaq&&emTurno(r.data,turnosData.value,n));
+  const bt=document.getElementById('spModalConfirmar'),st=document.getElementById('spModalStatus');st.style.display='block';
+  if(tipo==='pf'&&!ja&&regs.length===0){bt.disabled=true;bt.textContent='PF REQUER INSPEÇÃO';bt.classList.remove('retirar');st.textContent=`Máquina ${spModalMaq} • ${n}º turno ainda não possui inspeção. PF só pode fechar uma produção que já foi inspecionada.`;return}
+  bt.disabled=false;bt.textContent=ja?`RETIRAR ${tipo.toUpperCase()}`:`CONFIRMAR ${tipo.toUpperCase()}`;bt.classList.toggle('retirar',ja);
+  st.textContent=ja?`Este turno já está como ${tipo.toUpperCase()}. Toque em RETIRAR ${tipo.toUpperCase()} para reabrir.`:tipo==='sp'?`Máquina ${spModalMaq} • ${n}º turno será marcada como SP.`:`Máquina ${spModalMaq} • ${n}º turno será encerrada como PF, mantendo ${regs.length} inspeção(ões).`;
+}
+async function confirmarModalSP(){
+  if(!spModalMaq||!spModalTurno||!spModalTipo)return;
+  const maq=spModalMaq,n=spModalTurno,tipo=spModalTipo,ja=tipo==='sp'?temSP(turnosData.value,turnosLinha.value,maq,n):temPF(turnosData.value,turnosLinha.value,maq,n),bt=document.getElementById('spModalConfirmar');
+  bt.disabled=true;bt.textContent=ja?'RETIRANDO...':'MARCANDO...';turnosStatus.textContent=`${ja?'Retirando':'Marcando'} ${tipo.toUpperCase()}...`;
+  try{
+    await enviarStatus(tipo,maq,n,ja?'retirar':'marcar');
+    const d=dataISOparaBR(turnosData.value),lin=turnosLinha.value,arr=tipo==='sp'?turnosSP:turnosPF;
+    const novo=arr.filter(x=>!(x.data===d&&x.linha===lin&&x.maquina===String(maq)&&turnoStatusKey(x.turno)===String(n)));
+    if(!ja)novo.push({data:d,turno:String(n),linha:lin,maquina:String(maq),status:tipo.toUpperCase()});
+    if(tipo==='sp')turnosSP=novo;else turnosPF=novo;
+    fecharModalSP();await carregarPainelTurnos(true);
+    turnosStatus.textContent=`✓ Máquina ${maq}: ${tipo.toUpperCase()} ${ja?'retirado':'marcado'} no ${n}º turno.`;
+  }catch(e){bt.disabled=false;bt.textContent=ja?`RETIRAR ${tipo.toUpperCase()}`:`CONFIRMAR ${tipo.toUpperCase()}`;turnosStatus.textContent=`Erro ao atualizar ${tipo.toUpperCase()}: `+e.message}
+}
+async function carregarPainelTurnos(manterStatusLocal=false){
+  const data=turnosData.value,lin=turnosLinha.value;if(!data||!lin)return;
+  turnosStatus.textContent='Carregando inspeções...';turnosTabela.innerHTML='';turnosDetalhe.style.display='none';
+  try{
+    if(!manterStatusLocal)await Promise.all([carregarSP(),carregarPF()]);
+    const resp=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!resp.ok)throw Error('Planilha indisponível');
+    let a=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
+    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']);
+    const val=(r,i)=>i>=0?(r[i]??''):'';
+    // O CSV publicado pelo Google pode oscilar por alguns minutos após uma gravação.
+    // Nunca deixamos uma inspeção que já foi vista pelo ADM "sumir" durante a sessão:
+    // mesclamos a leitura nova com os registros já confirmados anteriormente no painel.
+    const novosRegistros=a.map(r=>({data:dataBRParaDate(String(val(r,DC)).trim()||val(r,D)),dataTxt:String(val(r,DC)).trim()||val(r,D),maquina:String(val(r,M)).trim(),op:val(r,O),item:val(r,I),tipo:val(r,T),volante:val(r,V),situacao:val(r,SI)})).filter(x=>x.data);
+    const chaveReg=r=>[r.data?.getTime?.()||0,r.maquina,r.op,r.item,r.tipo,r.volante,r.situacao].map(v=>String(v??'')).join('|');
+    const mesclados=new Map(turnosRegistros.map(r=>[chaveReg(r),r]));
+    novosRegistros.forEach(r=>mesclados.set(chaveReg(r),r));
+    turnosRegistros=[...mesclados.values()];
+    const maquinas=MAQUINAS[lin]||[],limparAutomatico=[],alertas4h=[];
+    const linhas=maquinas.map(maq=>{let cs=[];for(let n=1;n<=3;n++){const regs=turnosRegistros.filter(r=>r.maquina===maq&&emTurno(r.data,data,n));let sp=temSP(data,lin,maq,n),pf=temPF(data,lin,maq,n);if(regs.length&&sp){sp=false;limparAutomatico.push([maq,n])}const alerta=(!sp&&!pf)?alerta4hTurno(maq,data,lin,n,regs):null;if(alerta)alertas4h.push(alerta);const cls=(sp?'turnos-sp':pf?'turnos-pf':regs.length===0?'turnos-zero':regs.length===1?'turnos-um':'turnos-ok')+(alerta?' turnos-atrasada':'');const txt=sp?'SP':pf?`${regs.length} PF`:regs.length;cs.push(`<td class="turnos-cell ${cls}" data-maq="${esc(maq)}" data-turno="${n}" onclick="abrirDetalheTurno('${escJS(maq)}',${n})">${txt}</td>`)}return `<tr><td class="turnos-maq" title="Segure para SP ou PF" onpointerdown="iniciarPressSP('${escJS(maq)}')" onpointerup="cancelarPressSP()" onpointercancel="cancelarPressSP()" onpointerleave="cancelarPressSP()" onclick="bloquearClickAposSP(event)">${esc(maq)}</td>${cs.join('')}</tr>`}).join('');
+    const boxAlerta=document.getElementById('turnosAlerta4h');
+    if(alertas4h.length){
+      boxAlerta.innerHTML=`<strong>⚠ ATENÇÃO — mais de 4h sem inspeção</strong>`+alertas4h.map(a=>`Máquina ${esc(a.maq)} • ${a.n}º turno • ${a.ultima==='sem inspeção no turno'?a.ultima:`última ${esc(a.ultima)}`} • há ${a.horas}h${String(a.min).padStart(2,'0')}`).join('<br>');
+      boxAlerta.style.display='block';
+      if(navigator.vibrate)navigator.vibrate([180,100,180]);
+    }else{boxAlerta.style.display='none';boxAlerta.innerHTML='';}
+    if(limparAutomatico.length){const d=dataISOparaBR(data);limparAutomatico.forEach(([maq,n])=>{turnosSP=turnosSP.filter(x=>!(x.data===d&&x.linha===lin&&x.maquina===String(maq)&&turnoStatusKey(x.turno)===String(n)));enviarSP(maq,n,'retirar').catch(()=>{})})}
+    const maquinasCom=new Set(turnosRegistros.filter(r=>r.maquina&&[1,2,3].some(n=>emTurno(r.data,data,n))).map(r=>r.maquina));
+    const maquinasSP=new Set(),maquinasPF=new Set();maquinas.forEach(maq=>{for(let n=1;n<=3;n++){if(temSP(data,lin,maq,n)&&!turnosRegistros.some(r=>r.maquina===maq&&emTurno(r.data,data,n)))maquinasSP.add(maq);if(temPF(data,lin,maq,n))maquinasPF.add(maq)}});
+    const maquinasSem=maquinas.filter(maq=>!maquinasCom.has(maq)&&!maquinasSP.has(maq)&&!maquinasPF.has(maq)).length;
+    turnosMaqTotal.textContent=maquinas.length;turnosInspec.textContent=maquinasCom.size;turnosSPTotal.textContent=maquinasSP.size;turnosPFTotal.textContent=maquinasPF.size;turnosSem.textContent=maquinasSem;turnosResumo.style.display='grid';
+    turnosTabela.innerHTML=`<table class="turnos-table"><thead><tr><th>Máq.</th><th>1º<br>06:00</th><th>2º<br>13:50</th><th>3º<br>21:50</th></tr></thead><tbody>${linhas}</tbody></table>`;
+    turnosStatus.textContent=`${lin} • ${data.split('-').reverse().join('/')} • toque na quantidade para ver registros • segure a máquina para SP/PF.`;
+  }catch(e){turnosStatus.textContent='Erro: '+e.message}
+}
+// Atualização silenciosa do ADM Turnos: mantém scroll, seleção e detalhes abertos.
+// Atualiza dados/contadores/células/alertas sem reconstruir a tela inteira.
+async function atualizarPainelTurnosSilencioso(){
+  const data=turnosData.value,lin=turnosLinha.value;
+  if(!data||!lin||turnosHome.style.display!=='block')return;
+  try{
+    const [resp]=await Promise.all([
+      fetch(csvAtualizado(CSV_URL),{cache:'no-store'}),
+      carregarSP(),carregarPF()
+    ]);
+    if(!resp.ok)return;
+    let a=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));
+    if(!a.length)return;
+    const h=a.shift(),D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']);
+    const val=(r,i)=>i>=0?(r[i]??''):'';
+    const novos=a.map(r=>({data:dataBRParaDate(String(val(r,DC)).trim()||val(r,D)),dataTxt:String(val(r,DC)).trim()||val(r,D),maquina:String(val(r,M)).trim(),op:val(r,O),item:val(r,I),tipo:val(r,T),volante:val(r,V),situacao:val(r,SI)})).filter(x=>x.data);
+    const chave=r=>[r.data?.getTime?.()||0,r.maquina,r.op,r.item,r.tipo,r.volante,r.situacao].map(v=>String(v??'')).join('|');
+    const mapa=new Map(turnosRegistros.map(r=>[chave(r),r]));
+    novos.forEach(r=>mapa.set(chave(r),r));
+    turnosRegistros=[...mapa.values()];
+
+    const maquinas=MAQUINAS[lin]||[],alertas=[];
+    maquinas.forEach(maq=>{
+      for(let n=1;n<=3;n++){
+        const regs=turnosRegistros.filter(r=>r.maquina===maq&&emTurno(r.data,data,n));
+        const sp=temSP(data,lin,maq,n),pf=temPF(data,lin,maq,n);
+        const al=(!sp&&!pf)?alerta4hTurno(maq,data,lin,n,regs):null;
+        if(al)alertas.push(al);
+        const cell=turnosTabela.querySelector(`.turnos-cell[data-maq="${CSS.escape(String(maq))}"][data-turno="${n}"]`);
+        if(cell){
+          cell.classList.remove('turnos-sp','turnos-pf','turnos-zero','turnos-um','turnos-ok','turnos-atrasada');
+          cell.classList.add(sp?'turnos-sp':pf?'turnos-pf':regs.length===0?'turnos-zero':regs.length===1?'turnos-um':'turnos-ok');
+          if(al)cell.classList.add('turnos-atrasada');
+          cell.textContent=sp?'SP':pf?`${regs.length} PF`:String(regs.length);
+        }
+      }
+    });
+    const box=document.getElementById('turnosAlerta4h');
+    if(alertas.length){
+      box.innerHTML=`<strong>⚠ ATENÇÃO — mais de 4h sem inspeção</strong>`+alertas.map(a=>`Máquina ${esc(a.maq)} • ${a.n}º turno • ${a.ultima==='sem inspeção no turno'?a.ultima:`última ${esc(a.ultima)}`} • há ${a.horas}h${String(a.min).padStart(2,'0')}`).join('<br>');
+      box.style.display='block';
+    }else{box.style.display='none';box.innerHTML=''}
+    const maquinasCom=new Set(turnosRegistros.filter(r=>r.maquina&&[1,2,3].some(n=>emTurno(r.data,data,n))).map(r=>r.maquina));
+    const maquinasSP=new Set(),maquinasPF=new Set();
+    maquinas.forEach(maq=>{for(let n=1;n<=3;n++){if(temSP(data,lin,maq,n)&&!turnosRegistros.some(r=>r.maquina===maq&&emTurno(r.data,data,n)))maquinasSP.add(maq);if(temPF(data,lin,maq,n))maquinasPF.add(maq)}});
+    turnosMaqTotal.textContent=maquinas.length;turnosInspec.textContent=maquinasCom.size;turnosSPTotal.textContent=maquinasSP.size;turnosPFTotal.textContent=maquinasPF.size;turnosSem.textContent=maquinas.filter(maq=>!maquinasCom.has(maq)&&!maquinasSP.has(maq)&&!maquinasPF.has(maq)).length;
+  }catch(e){/* atualização silenciosa: mantém a tela atual em caso de falha */}
+}
+function abrirDetalheTurno(maq,n){
+  const data=turnosData.value,regs=turnosRegistros.filter(r=>r.maquina===maq&&emTurno(r.data,data,n)).sort((a,b)=>a.data-b.data);
+  const nome=n===1?'1º Turno':n===2?'2º Turno':'3º Turno';
+  turnosDetalhe.innerHTML=`<div class="result-card"><strong>Máquina ${esc(maq)} • ${nome}</strong><div class="meta">${esc(data.split('-').reverse().join('/'))} • ${regs.length} inspeção(ões)</div>${regs.length?regs.map(r=>`<div class="result-card"><strong>${esc(r.dataTxt)}</strong><div>OP ${esc(r.op||'-')} • Item ${esc(r.item||'-')}</div><div class="meta">${esc(r.tipo||'-')} • ${esc(r.volante||'-')}</div><div>${esc(r.situacao||'-')}</div></div>`).join(''):'<div class="status">Nenhuma inspeção neste turno.</div>'}<button class="gray" type="button" onclick="turnosDetalhe.style.display='none'">FECHAR DETALHE</button></div>`;
+  turnosDetalhe.style.display='block';turnosDetalhe.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+const ADMIN_SCRIPT_URL=CONFIG_URL;
+let adminTap=0,adminTimer=null,adminRegistro=null;
+document.getElementById('tituloApp').addEventListener('click',()=>{
+ adminTap++;clearTimeout(adminTimer);adminTimer=setTimeout(()=>adminTap=0,500);
+ if(adminTap>=2){adminTap=0;abrirPinAdmin();}
+});
+function abrirPinAdmin(){
+ adminPinInput.value='';adminPinStatus.style.display='none';
+ adminPinModal.style.display='flex';
+ setTimeout(()=>adminPinInput.focus(),100);
+}
+function fecharPinAdmin(){adminPinModal.style.display='none';adminPinInput.value=''}
+function confirmarPinAdmin(){
+ if(adminPinInput.value==='2580'){
+   fecharPinAdmin();entrarAdmin();
+ }else{
+   adminPinStatus.textContent='PIN incorreto.';adminPinStatus.style.display='block';adminPinInput.select();
+ }
+}
+document.getElementById('adminPinInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmarPinAdmin();});
+function fecharAdmin(){voltarMenuAdmin()}
+async function buscarAdmin(){
+ const opv=adminOP.value.trim(),itv=adminItem.value.trim(),mqv=adminMaq.value.trim();
+ if(!opv&&!itv&&!mqv){adminResultado.innerHTML='<div class="status">Informe OP, Item ou Máquina.</div>';return}
+ adminResultado.innerHTML='<div class="status">Localizando...</div>';
+ try{
+  const x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'}),a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim())),h=a.shift();
+  const D=col(h,['Carimbo de data/hora','Data']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),v=(r,i)=>i>=0?(r[i]??''):'';
+  const z=a.map((r,i)=>({r,linha:i+2})).filter(x=>(!opv||norm(v(x.r,O))===norm(opv))&&(!itv||norm(v(x.r,I))===norm(itv))&&(!mqv||norm(v(x.r,M))===norm(mqv))).reverse()[0];
+  if(!z){adminResultado.innerHTML='<div class="status">Nenhum registro encontrado.</div>';return}
+  adminRegistro={linha:z.linha,original:v(z.r,D),op:v(z.r,O),item:v(z.r,I),maquina:v(z.r,M)};
+  adminResultado.innerHTML=`<div class="result-card"><strong>Registro localizado</strong><div class="meta">Original: ${esc(v(z.r,D))}</div><div>OP ${esc(v(z.r,O))} • Item ${esc(v(z.r,I))} • Máquina ${esc(v(z.r,M))}</div><label>Nova data/hora</label><input id="adminNovaData" type="datetime-local"><label>Motivo</label><input id="adminMotivo" placeholder="Motivo da correção"><button class="orange" type="button" onclick="salvarAdmin()">SALVAR CORREÇÃO</button><div class="status" id="adminStatus">Aguardando.</div></div>`;
+ }catch(e){adminResultado.innerHTML='<div class="status">Erro: '+esc(e.message)+'</div>'}
+}
+async function salvarAdmin(){
+ const nova=adminNovaData.value,motivo=adminMotivo.value.trim();
+ if(!nova||!motivo){adminStatus.textContent='Informe nova data/hora e motivo.';return}
+ if(!ADMIN_SCRIPT_URL){adminStatus.textContent='Estrutura pronta. Falta conectar o Apps Script.';return}
+ try{
+  adminStatus.textContent='Enviando correção...';
+  const b=new URLSearchParams({...adminRegistro,novaDataHora:nova,motivo});
+  await fetch(ADMIN_SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+    body:b.toString()
+  });
+  adminStatus.textContent='✓ Correção enviada. Confira a planilha.';
+}catch(e){
+  adminStatus.textContent='Erro ao enviar: '+e.message;
+}
+}
+function abrirConsulta(){consulta.style.display=consulta.style.display==='block'?'none':'block';if(consulta.style.display==='block')consulta.scrollIntoView({behavior:'smooth'})}
+function parseCSV(t){let a=[],r=[],f='',q=false;for(let i=0;i<t.length;i++){let c=t[i];if(q){if(c=='"'&&t[i+1]=='"'){f+='"';i++}else if(c=='"')q=false;else f+=c}else if(c=='"')q=true;else if(c==','){r.push(f);f=''}else if(c=='\n'){r.push(f.replace(/\r$/,''));a.push(r);r=[];f=''}else f+=c}if(f||r.length){r.push(f);a.push(r)}return a}
+function norm(s){return String(s??'').trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+function col(h,n){let x=h.map(norm);for(let z of n){let i=x.findIndex(v=>v===norm(z));if(i>=0)return i}for(let z of n){let i=x.findIndex(v=>v.startsWith(norm(z)));if(i>=0)return i}return -1}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function iso(v){let m=String(v||'').match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?`${m[3]}-${m[2]}-${m[1]}`:''}
+async function consultarProducao(){statusConsulta.textContent='Consultando planilha...';listaConsulta.innerHTML='';try{let x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!x.ok)throw Error('Não foi possível acessar a planilha.');let a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));let h=a.shift();let D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),S=col(h,['Setor']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']),OB=col(h,['Observações','Observacao']);let v=(r,i)=>i>=0?(r[i]??''):'';let dataEfetiva=r=>String(v(r,DC)).trim()||v(r,D);let z=a.filter(r=>(!qop.value||norm(v(r,O)).includes(norm(qop.value)))&&(!qitem.value||norm(v(r,I)).includes(norm(qitem.value)))&&(!qmaq.value||norm(v(r,M)).includes(norm(qmaq.value)))&&(!qdata.value||iso(dataEfetiva(r))===qdata.value)).reverse();statusConsulta.textContent=z.length?z.length+' registro(s) encontrado(s).':'Nenhum registro encontrado.';listaConsulta.innerHTML=z.slice(0,100).map(r=>`<div class="result-card"><strong>OP ${esc(v(r,O)||'-')}</strong> • Item ${esc(v(r,I)||'-')} • Máquina ${esc(v(r,M)||'-')}<div class="meta">${esc(dataEfetiva(r))}${v(r,DC)?' <strong>(corrigida)</strong>':''}${v(r,S)?' • '+esc(v(r,S)):''}</div>${v(r,T)?'<div><strong>Tipo:</strong> '+esc(v(r,T))+'</div>':''}${v(r,V)?'<div><strong>Volante:</strong> '+esc(v(r,V))+'</div>':''}${v(r,SI)?'<div><strong>Situação:</strong> '+esc(v(r,SI))+'</div>':''}${v(r,OB)?'<div><strong>Observações:</strong> '+esc(v(r,OB))+'</div>':''}</div>`).join('')}catch(e){statusConsulta.textContent='Erro na consulta: '+e.message}}
+function limparConsulta(){qop.value='';qitem.value='';qmaq.value='';qdata.value='';listaConsulta.innerHTML='';statusConsulta.textContent='Informe um ou mais filtros e toque em PESQUISAR.'}
+
+let chartsRel={};
+let dadosRankingItens={};
+let periodoRankingItens='';
+
+function abrirRelatorio(){
+  relatorio.style.display=relatorio.style.display==='block'?'none':'block';
+  if(relatorio.style.display==='block'){ajustarPeriodoRel();relatorio.scrollIntoView({behavior:'smooth'});}
+}
+function fecharRelatorio(){relatorio.style.display='none'}
+function ajustarPeriodoRel(){datasRel.style.display=periodoRel.value==='personalizado'?'block':'none'}
+
+function dataBRParaDate(s){
+  const m=String(s||'').match(/(\d{2})\/(\d{2})\/(\d{4})(?:\s+(\d{2}):(\d{2})(?::(\d{2}))?)?/);
+  if(!m)return null;
+  return new Date(+m[3],+m[2]-1,+m[1],+(m[4]||0),+(m[5]||0),+(m[6]||0));
+}
+function inicioDia(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0)}
+function fimDia(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate(),23,59,59,999)}
+function addDias(d,n){let x=new Date(d);x.setDate(x.getDate()+n);return x}
+function faixaRelatorio(){
+  const hoje=inicioDia(new Date()), p=periodoRel.value; let ini,fim;
+  if(p==='semana'||p==='semanaAnterior'){
+    const dow=(hoje.getDay()+6)%7; ini=addDias(hoje,-dow);
+    if(p==='semanaAnterior')ini=addDias(ini,-7);
+    fim=fimDia(addDias(ini,6));
+  }else if(p==='mes'||p==='mesAnterior'){
+    let y=hoje.getFullYear(),m=hoje.getMonth()+(p==='mesAnterior'?-1:0);
+    ini=new Date(y,m,1);fim=fimDia(new Date(y,m+1,0));
+  }else{
+    if(!relInicio.value||!relFim.value)throw Error('Informe as datas inicial e final.');
+    ini=inicioDia(new Date(relInicio.value+'T00:00:00'));fim=fimDia(new Date(relFim.value+'T00:00:00'));
+  }
+  return {ini,fim};
+}
+function fmtData(d){return d.toLocaleDateString('pt-BR')}
+function contar(arr){const o={};arr.filter(Boolean).forEach(x=>o[x]=(o[x]||0)+1);return o}
+function ordenar(o){return Object.entries(o).sort((a,b)=>b[1]-a[1])}
+function destruirChart(id){if(chartsRel[id]){chartsRel[id].destroy();delete chartsRel[id]}}
+function criarChart(id,type,labels,data,label){
+  destruirChart(id);
+  const ctx=document.getElementById(id);
+  chartsRel[id]=new Chart(ctx,{type,data:{labels,datasets:[{label,data}]},options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:type==='pie',position:'bottom'},tooltip:{callbacks:{
+      label:c=>{const total=c.dataset.data.reduce((a,b)=>a+b,0);const pct=total?((c.raw/total)*100).toFixed(1):0;return type==='pie'?`${c.label}: ${c.raw} (${pct}%)`:`${c.raw}`;}
+    }}},
+    scales:type==='pie'?{}:{y:{beginAtZero:true,ticks:{precision:0}}}
+  }});
+}
+async function gerarRelatorio(){
+  statusRelatorio.textContent='Montando relatório...';conteudoRelatorio.style.display='none';
+  try{
+    if(!window.Chart)throw Error('Biblioteca de gráficos não carregou.');
+    const {ini,fim}=faixaRelatorio();
+    const resp=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!resp.ok)throw Error('Não foi possível acessar a planilha.');
+    let a=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
+    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),S=col(h,['Setor']),
+          T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),
+          SI=col(h,['Situação encontrada','Situação']),I=col(h,['Item']);
+    const val=(r,i)=>i>=0?(r[i]??''):'';
+    const dados=a.map(r=>({r,data:dataBRParaDate(String(val(r,DC)).trim()||val(r,D))}))
+                 .filter(x=>x.data&&x.data>=ini&&x.data<=fim);
+    const rows=dados.map(x=>x.r);
+    const tipos=rows.map(r=>String(val(r,T)).trim()), voleios=rows.filter(r=>norm(val(r,T))==='voleio');
+    const sit=rows.map(r=>String(val(r,SI)).trim());
+    const problemaCanonico=new Map(PROBLEMAS.map(p=>[norm(p),p]));
+    const problemasPorRegistro=sit.map(s=>
+      String(s).split(/[|,]/).map(x=>x.trim()).filter(Boolean)
+        .map(x=>problemaCanonico.get(norm(x))).filter(Boolean)
+    );
+    kTotal.textContent=rows.length;kVoleios.textContent=voleios.length;
+    kOK.textContent=sit.filter(x=>norm(x).includes('pecas ok')).length;
+    kNOK.textContent=problemasPorRegistro.filter(x=>x.length>0).length;
+    periodoTexto.textContent=`Período: ${fmtData(ini)} a ${fmtData(fim)}`;
+
+    let z=ordenar(contar(voleios.map(r=>String(val(r,V)).trim())));
+    criarChart('grafVolantes','pie',z.map(x=>x[0]),z.map(x=>x[1]),'Voleios');
+
+    z=ordenar(contar(rows.map(r=>String(val(r,S)).trim())));
+    criarChart('grafSetores','pie',z.map(x=>x[0]),z.map(x=>x[1]),'Registros');
+
+    z=ordenar(contar(tipos));
+    criarChart('grafTipos','bar',z.map(x=>x[0]),z.map(x=>x[1]),'Registros');
+
+    const defeitos=problemasPorRegistro.flat();
+    z=ordenar(contar(defeitos)).slice(0,10);
+    criarChart('grafDefeitos','bar',z.map(x=>x[0]),z.map(x=>x[1]),'Ocorrências');
+    rankDefeitos.innerHTML=z.map(([n,q])=>`<li><strong>${esc(n)}</strong> — ${q}</li>`).join('');
+
+    // Ranking de itens: cada inspeção NOK conta uma vez para o item, independentemente do nº de problemas marcados.
+    dadosRankingItens={};
+    rows.forEach((r,idx)=>{
+      const itemNome=String(val(r,I)).trim();
+      if(!itemNome)return;
+      if(!dadosRankingItens[itemNome])dadosRankingItens[itemNome]={total:0,nok:0,problemas:{}};
+      const d=dadosRankingItens[itemNome]; d.total++;
+      const probs=problemasPorRegistro[idx]||[];
+      if(probs.length){d.nok++;probs.forEach(p=>d.problemas[p]=(d.problemas[p]||0)+1);}
+    });
+    periodoRankingItens=periodoTexto.textContent;
+    const topItens=Object.entries(dadosRankingItens).filter(([,d])=>d.nok>0).sort((a,b)=>b[1].nok-a[1].nok||String(a[0]).localeCompare(String(b[0]))).slice(0,10);
+    rankItensNOK.innerHTML=topItens.length?topItens.map(([item,d],i)=>`<li><button class="rank-item-btn" type="button" onclick="abrirDetalheItem('${escJS(item)}')"><span><strong>${i+1}º • Item ${esc(item)}</strong></span><span>${d.nok} NOK</span></button></li>`).join(''):'<li class="meta">Nenhum item com problema no período.</li>';
+    detalheItemNOK.style.display='none';
+    cardRankItens.style.display='block';
+
+    conteudoRelatorio.style.display='block';
+    statusRelatorio.textContent=rows.length?`${rows.length} registro(s) no período.`:'Nenhum registro no período.';
+  }catch(e){statusRelatorio.textContent='Erro no relatório: '+e.message}
+}
+function escJS(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ')}
+function abrirDetalheItem(item){
+  const d=dadosRankingItens[item];if(!d)return;
+  detalheItemTitulo.textContent='Item '+item+' — problemas encontrados';
+  detalheItemPeriodo.textContent=periodoRankingItens;
+  detTotal.textContent=d.total;detNOK.textContent=d.nok;detPct.textContent=d.total?((d.nok/d.total)*100).toFixed(1)+'%':'0%';
+  const z=ordenar(d.problemas);
+  rankProblemasItem.innerHTML=z.length?z.map(([n,q])=>`<li><strong>${esc(n)}</strong> — ${q}</li>`).join(''):'<li>Nenhum problema encontrado.</li>';
+  cardRankItens.style.display='none';detalheItemNOK.style.display='block';detalheItemNOK.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function fecharDetalheItem(){detalheItemNOK.style.display='none';cardRankItens.style.display='block';cardRankItens.scrollIntoView({behavior:'smooth',block:'start'});}
+
+async function compartilharRelatorio(){
+  const btn=[...document.querySelectorAll('button')].find(b=>b.getAttribute('onclick')==='compartilharRelatorio()');
+  const antigo=btn?.textContent||'';
+  try{
+    if(!window.jspdf?.jsPDF)throw Error('Gerador de PDF não carregou. Verifique a internet.');
+    if(btn){btn.disabled=true;btn.textContent='⏳ GERANDO PDF...';}
+    const {jsPDF}=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+    const W=210,H=297,M=12,CW=W-M*2;
+    const preto=[24,31,41], verde=[21,128,61], cinza=[90,100,115];
+    const txt=(t,x,y,size=10,style='normal',cor=preto)=>{pdf.setFont('helvetica',style);pdf.setFontSize(size);pdf.setTextColor(...cor);pdf.text(String(t??''),x,y);};
+    const linha=()=>{pdf.setDrawColor(210,215,220);pdf.line(M,44,W-M,44);};
+    const cabecalho=()=>{
+      pdf.setFillColor(15,82,72);pdf.roundedRect(M,10,CW,22,2,2,'F');
+      pdf.setTextColor(255,255,255);pdf.setFont('helvetica','bold');pdf.setFontSize(16);pdf.text('RELATÓRIO DE PRODUÇÃO',M+6,19);
+      pdf.setFontSize(9);pdf.setFont('helvetica','normal');pdf.text(periodoTexto.textContent||'',M+6,26);
+      pdf.setFont('helvetica','normal');pdf.setFontSize(8);pdf.setTextColor(...cinza);pdf.text('Liberação de Produção',W-M,38,{align:'right'});
+      linha();
+    };
+    cabecalho();
+    // KPIs
+    const cards=[['TOTAL',kTotal.textContent],['VOLEIOS',kVoleios.textContent],['PEÇAS OK',kOK.textContent],['PEÇAS NOK',kNOK.textContent]];
+    const gap=3,cw=(CW-gap*3)/4;
+    cards.forEach(([lab,val],i)=>{const x=M+i*(cw+gap);pdf.setFillColor(244,246,248);pdf.setDrawColor(215,220,225);pdf.roundedRect(x,50,cw,24,2,2,'FD');pdf.setFont('helvetica','bold');pdf.setFontSize(16);pdf.setTextColor(...preto);pdf.text(String(val),x+cw/2,61,{align:'center'});pdf.setFontSize(7);pdf.setTextColor(...cinza);pdf.text(lab,x+cw/2,69,{align:'center'});});
+    let y=82;
+    const addChart=(id,titulo)=>{
+      const canvas=document.getElementById(id);if(!canvas)return;
+      txt(titulo,M,y,11,'bold',preto);y+=4;
+      const img=canvas.toDataURL('image/png',1.0);const h=58;
+      pdf.setDrawColor(225,228,232);pdf.roundedRect(M,y,CW,h,2,2,'S');pdf.addImage(img,'PNG',M+2,y+2,CW-4,h-4,undefined,'FAST');y+=h+9;
+    };
+    addChart('grafVolantes','Voleios por volante');
+    addChart('grafSetores','Registros por setor');
+    addChart('grafTipos','Tipos de atividade');
+    if(y>220){pdf.addPage();cabecalho();y=52;}
+    addChart('grafDefeitos','Top 10 problemas encontrados');
+    // Rankings em página própria para legibilidade
+    pdf.addPage();cabecalho();y=54;
+    txt('RANKINGS DO PERÍODO',M,y,13,'bold',verde);y+=9;
+    txt('Problemas encontrados',M,y,11,'bold',preto);y+=7;
+    const probs=[...rankDefeitos.querySelectorAll('li')].map(li=>li.textContent.trim()).filter(Boolean);
+    if(!probs.length){txt('Nenhum problema encontrado no período.',M,y,9,'normal',cinza);y+=7;}
+    else probs.forEach((v,i)=>{txt(`${i+1}. ${v}`,M,y,9);y+=6;});
+    y+=5;txt('Top 10 itens NOK',M,y,11,'bold',preto);y+=7;
+    const itens=[...rankItensNOK.querySelectorAll('li')].map(li=>li.textContent.replace(/\s+/g,' ').trim()).filter(Boolean);
+    if(!itens.length){txt('Nenhum item NOK no período.',M,y,9,'normal',cinza);y+=7;}
+    else itens.forEach((v,i)=>{const linhas=pdf.splitTextToSize(`${i+1}. ${v}`,CW);txt(linhas,M,y,9);y+=5*linhas.length+2;});
+    const paginas=pdf.getNumberOfPages();
+    for(let p=1;p<=paginas;p++){pdf.setPage(p);pdf.setFont('helvetica','normal');pdf.setFontSize(8);pdf.setTextColor(...cinza);pdf.text(`Página ${p} de ${paginas}`,W-M,H-8,{align:'right'});}
+    const nome='relatorio_producao_'+new Date().toISOString().slice(0,10)+'.pdf';
+    const blob=pdf.output('blob');const file=new File([blob],nome,{type:'application/pdf'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:'Relatório de Produção',text:periodoTexto.textContent||'',files:[file]});
+    }else{
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+      statusRelatorio.textContent='✓ PDF completo gerado. O aparelho não permite compartilhar arquivo diretamente; o PDF foi salvo para você enviar.';
+    }
+  }catch(e){
+    if(e?.name!=='AbortError')statusRelatorio.textContent='Erro ao gerar/compartilhar PDF: '+e.message;
+  }finally{if(btn){btn.disabled=false;btn.textContent=antigo||'📤 COMPARTILHAR';}}
+}
+
+
+function entrarAdmin(){
+  areaComum.style.display='none';
+  adminHome.style.display='block';
+  adminMenu.style.display='grid';
+  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function mostrarFerramentaAdmin(id){
+  adminMenu.style.display='none';
+  ['consulta','relatorio','adminBox'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function voltarMenuAdmin(){
+  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  adminMenu.style.display='grid';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function sairAdmin(){
+  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  adminHome.style.display='none';
+  areaComum.style.display='block';
+  adminResultado.innerHTML='';adminRegistro=null;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+</script>
+
+<div class="desvio-modal-bg" id="modalGerenciarDesvio">
+  <div class="desvio-modal">
+    <h2>REVALIDAR DESVIO</h2>
+    <label>Nº do desvio</label>
+    <div class="numero-fixo" id="gerDesvioNumero">-</div>
+
+    <label for="gerDesvioValidade">Nova validade *</label>
+    <input id="gerDesvioValidade" type="date">
+
+    <div id="msgGerenciarDesvio"></div>
+    <div class="acoes">
+      <button type="button" class="cancelar" id="cancelarGerenciarDesvio">CANCELAR</button>
+      <button type="button" class="salvar" id="salvarRevalidacaoDesvio">REVALIDAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="desvio-modal-bg" id="modalEncerrarDesvio">
+  <div class="desvio-modal">
+    <h2>ENCERRAR DESVIO</h2>
+    <label>Nº do desvio</label>
+    <div class="numero-fixo" id="encDesvioNumero">-</div>
+    <div class="dados-qr" id="encDesvioDados" style="margin-top:12px"></div>
+    <div style="margin-top:14px;padding:12px;border-radius:12px;background:#4b1f22;font-weight:700">Esta ação encerrará o desvio e ele deixará de aparecer como ativo.</div>
+    <div id="msgEncerrarDesvio" style="display:none;margin-top:12px;padding:10px;border-radius:10px"></div>
+    <div class="acoes">
+      <button type="button" class="cancelar" id="cancelarEncerrarDesvio">CANCELAR</button>
+      <button type="button" class="salvar" id="confirmarEncerrarDesvio" style="background:#b91c1c">ENCERRAR DESVIO</button>
+    </div>
+  </div>
+</div>
+
+<div class="desvio-modal-bg" id="modalCadastroDesvio">
+  <div class="desvio-modal">
+    <h2>CADASTRAR DESVIO</h2>
+    <div class="dados-qr" id="dadosQrDesvio"></div>
+
+    <label for="desvioNumero">Nº do desvio *</label>
+    <input id="desvioNumero" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="Digite 12326 → 123/26" autocomplete="off">
+
+    <label for="desvioValidade">Validade *</label>
+    <input id="desvioValidade" type="date">
+
+    <label for="desvioDescricao">Descrição / motivo *</label>
+    <textarea id="desvioDescricao" placeholder="Descreva o motivo do desvio"></textarea>
+
+    <label for="desvioResponsavel">Responsável *</label>
+    <input id="desvioResponsavel" placeholder="Nome de quem abriu/autorizou o desvio" autocomplete="off">
+
+    <label>Cadastrado por</label>
+    <div class="dados-qr" id="desvioCadastradoPor">Selecione o volante responsável na inspeção.</div>
+
+    <div id="msgCadastroDesvio"></div>
+    <div class="acoes">
+      <button type="button" class="cancelar" id="cancelarCadastroDesvio">CANCELAR</button>
+      <button type="button" class="salvar" id="salvarCadastroDesvio">SALVAR DESVIO</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  function textoCampo(rotulo){
+    const els=[...document.querySelectorAll("body *")];
+    const lab=els.find(e=>e.children.length===0 && e.textContent.trim().toUpperCase()===rotulo);
+    if(!lab) return "";
+    const box=lab.parentElement;
+    if(!box) return "";
+    const txt=box.innerText.split(/\n/).map(x=>x.trim()).filter(Boolean);
+    return txt.length>1?txt[txt.length-1]:"";
+  }
+  function dadosAtuais(){
+    // Usa diretamente os dados já validados pelo QR na inspeção.
+    // Evita capturar textos de outros elementos da página.
+    if (typeof inspDados === "object" && inspDados) {
+      return {
+        maquina: String(inspDados.maquina || "").trim(),
+        op: String(inspDados.op || "").trim(),
+        item: String(inspDados.item || "").trim()
+      };
+    }
+    return {maquina:"", op:"", item:""};
+  }
+  function msg(t,ok){
+    const e=$("msgCadastroDesvio");
+    e.style.display="block";
+    e.style.background=ok?"#123d25":"#4b1f22";
+    e.textContent=t;
+  }
+  $("cancelarGerenciarDesvio").addEventListener("click",()=>{
+    $("modalGerenciarDesvio").style.display="none";
+  });
+  $("salvarRevalidacaoDesvio").addEventListener("click",revalidarDesvioUI);
+  $("cancelarEncerrarDesvio").addEventListener("click",()=>{
+    $("modalEncerrarDesvio").style.display="none";
+    desvioEncerrarNumero="";
+  });
+  $("confirmarEncerrarDesvio").addEventListener("click",confirmarEncerrarDesvio);
+
+  // Padroniza automaticamente o número: 00126 -> 001/26
+  $("desvioNumero").addEventListener("input",()=>{
+    const el=$("desvioNumero");
+    const digitos=el.value.replace(/\D/g,"").slice(0,5);
+    el.value=digitos.length>3?digitos.slice(0,3)+"/"+digitos.slice(3):digitos;
+  });
+  $("btnCadastrarDesvio").addEventListener("click",()=>{
+    const d=dadosAtuais();
+    if(!d.item){ alert("Leia um QR antes de cadastrar o desvio."); return; }
+    if(!inspVolante){ alert("Selecione o volante responsável antes de cadastrar o desvio."); return; }
+    $("dadosQrDesvio").innerHTML=
+      "<b>Item:</b> "+d.item+" &nbsp; • &nbsp; <b>Máquina:</b> "+(d.maquina||"-")+
+      " &nbsp; • &nbsp; <b>OP:</b> "+(d.op||"-");
+    $("desvioCadastradoPor").innerHTML="<b>"+String(inspVolante)+"</b>";
+    $("msgCadastroDesvio").style.display="none";
+    $("modalCadastroDesvio").style.display="flex";
+  });
+  $("cancelarCadastroDesvio").addEventListener("click",()=>{
+    $("modalCadastroDesvio").style.display="none";
+  });
+  $("salvarCadastroDesvio").addEventListener("click",async()=>{
+    const d=dadosAtuais();
+    const numero=$("desvioNumero").value.trim();
+    if(!/^\d{3}\/\d{2}$/.test(numero)){
+      msg("Informe o Nº do desvio com 5 dígitos. Ex.: 00126 vira 001/26.",false); return;
+    }
+    const validadeIso=$("desvioValidade").value;
+    const descricao=$("desvioDescricao").value.trim();
+    const responsavel=$("desvioResponsavel").value.trim();
+    const cadastradoPor=String(inspVolante||"").trim();
+    if(!cadastradoPor){
+      msg("Selecione o volante responsável na inspeção antes de cadastrar o desvio.",false); return;
+    }
+    if(!numero||!validadeIso||!descricao||!responsavel){
+      msg("Preencha Nº do desvio, validade, descrição e responsável.",false); return;
+    }
+    const [a,m,dia]=validadeIso.split("-");
+    const validade=`${dia}/${m}/${a}`;
+    const btn=$("salvarCadastroDesvio");
+    btn.disabled=true; btn.textContent="SALVANDO...";
+    try{
+      const body=new URLSearchParams({
+        acao:"cadastrarDesvio",numero,item:d.item,maquina:d.maquina,op:d.op,
+        validade,descricao,responsavel,cadastradoPor
+      });
+      await fetch(CONFIG_URL,{method:"POST",mode:"no-cors",
+        headers:{"Content-Type":"application/x-www-form-urlencoded;charset=UTF-8"},body});
+      msg("Desvio enviado. Aguarde a gravação e confira o alerta.",true);
+      setTimeout(async()=>{
+        try{
+          await verificarDesviosItem(d);
+          $("modalCadastroDesvio").style.display="none";
+        }catch(e){}
+      },1400);
+    }catch(e){
+      msg("Não foi possível enviar o desvio.",false);
+    }finally{
+      btn.disabled=false; btn.textContent="SALVAR DESVIO";
+    }
+  });
+})();
+</script>
+
+
+<script>
+function abrirDiarioVolantesBasico(){
+  var tela=document.getElementById('diarioVolantesBasico');
+  var data=document.getElementById('diarioDataBasico');
+  if(data && !data.value){
+    var agora=new Date();
+    var local=new Date(agora.getTime()-agora.getTimezoneOffset()*60000);
+    data.value=local.toISOString().slice(0,10);
+  }
+  if(tela)tela.style.display='block';
+}
+function fecharDiarioVolantesBasico(){
+  var tela=document.getElementById('diarioVolantesBasico');
+  if(tela)tela.style.display='none';
+}
+function corStatusDiario_(status){
+  var s=String(status||'').toLowerCase().trim();
+  if(s==='pendente')return '#dc2626';
+  if(s==='em acompanhamento')return '#f59e0b';
+  if(s==='resolvido')return '#16a34a';
+  if(s==='informativo')return '#2563eb';
+  return '#475569';
+}
+async function carregarDiarioVolantesLeitura(){
+  carregarIndicadorPassagemConfirmadaDiario_();
+  var dataEl=document.getElementById('diarioDataBasico');
+  var turnoEl=document.getElementById('diarioTurnoBasico');
+  var volanteEl=document.getElementById('diarioVolanteBasico');
+  var statusEl=document.getElementById('diarioStatusLeitura');
+  var listaEl=document.getElementById('diarioListaLeitura');
+  var resumoEl=document.getElementById('diarioResumoLeitura');
+  if(!dataEl||!statusEl||!listaEl)return;
+
+  statusEl.textContent='Carregando registros...';
+  listaEl.innerHTML='';
+  resumoEl.innerHTML='';
+
+  try{
+    var url=CONFIG_URL+'?acao=diarioVolantes&data='+encodeURIComponent(dataEl.value)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var json=await resp.json();
+    if(!json.ok)throw new Error(json.erro||'Falha ao consultar o Diário.');
+
+    var regs=Array.isArray(json.registros)?json.registros:[];
+    var turno=turnoEl?String(turnoEl.value||''):'';
+    var volante=volanteEl?String(volanteEl.value||''):'';
+
+    regs=regs.filter(function(r){
+      var rt=String(r.turno||'').trim();
+      var rv=String(r.volante||'').trim();
+      var okTurno=!turno || rt.charAt(0)===turno;
+      var okVolante=!volante || rv===volante;
+      return okTurno&&okVolante;
+    });
+
+    var pend=regs.filter(function(r){var s=String(r.status||'').toLowerCase(); return s==='pendente' || s==='em acompanhamento';}).length;
+    var resol=regs.filter(function(r){return String(r.status||'').toLowerCase()==='resolvido';}).length;
+    var info=regs.filter(function(r){return String(r.status||'').toLowerCase()==='informativo';}).length;
+    var nums=[['Total',regs.length],['Pend.',pend],['Resol.',resol],['Info.',info]];
+    resumoEl.innerHTML=nums.map(function(x){
+      return '<div style="background:#0f141b;border:1px solid #334155;border-radius:9px;padding:8px 3px;text-align:center"><b style="display:block;font-size:18px">'+x[1]+'</b><span style="font-size:10px;color:#94a3b8">'+x[0]+'</span></div>';
+    }).join('');
+
+    if(!regs.length){
+      statusEl.textContent='Nenhum registro encontrado para os filtros selecionados.';
+      return;
+    }
+
+    statusEl.textContent=regs.length+' registro(s) encontrado(s).';
+    window.__diarioRegsLeitura=regs;
+    listaEl.innerHTML=regs.map(function(r,i){
+      var titulo=(r.hora||'--:--')+' • '+(r.maquina||'-')+' • OP '+(r.op||'-');
+      var linha2=(r.item||'-')+' • '+(r.volante||'-')+' • '+(r.turno||'-');
+      var situacao=r.situacao||r.tipo||r.descricao||'';
+      var st=r.status||'';
+      var cor=corStatusDiario_(st);
+      return '<button type="button" onclick="abrirDetalheDiarioLeitura('+i+')" style="display:block;width:100%;margin:0;background:#0f141b;border:1px solid #334155;border-left:6px solid '+cor+';border-radius:11px;padding:11px;color:#f8fafc;text-align:left">'+
+        '<div style="font-weight:800">'+escDiario_(titulo)+'</div>'+
+        '<div style="font-size:12px;color:#aab5c4;margin-top:3px">'+escDiario_(linha2)+'</div>'+
+        (situacao?'<div style="font-size:13px;margin-top:7px">'+escDiario_(situacao)+'</div>':'')+
+        (st?'<div style="font-size:11px;font-weight:800;margin-top:7px">'+escDiario_(st)+'</div>':'')+
+        '<div style="font-size:10px;color:#94a3b8;margin-top:7px">TOQUE PARA VER DETALHES</div>'+
+      '</button>';
+    }).join('');
+  }catch(e){
+    statusEl.textContent='Erro ao carregar Diário: '+(e&&e.message?e.message:e);
+  }
+}
+
+
+async function abrirCentralEncerramento(){
+  var tela=document.getElementById('centralEncerramento'),status=document.getElementById('centralEncerramentoStatus'),lista=document.getElementById('centralEncerramentoLista'),sub=document.getElementById('centralEncerramentoSub');
+  var data=(document.getElementById('diarioDataBasico')||{}).value||'';
+  if(!data){alert('Selecione a Data antes de abrir a Central de Encerramento.');return;}
+  if(tela)tela.style.display='block';
+  if(sub)sub.textContent='V18.13.0 • '+data.split('-').reverse().join('/')+' • Fechamentos oficiais + PDF';
+  if(status)status.textContent='Consultando histórico de fechamento...';
+  if(lista)lista.innerHTML='';
+  try{
+    var url=CONFIG_URL+'?acao=centralEncerramentoDiario&data='+encodeURIComponent(data)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'}),j=await resp.json();
+    if(!j.ok)throw new Error(j.erro||'Falha ao consultar a Central.');
+    var fs=Array.isArray(j.fechamentos)?j.fechamentos:[];
+    if(status)status.textContent=fs.length?fs.length+' turno(s) fechado(s) nesta data.':'Nenhum turno fechado nesta data.';
+    if(lista)lista.innerHTML=fs.map(function(f){
+      return '<div style="padding:12px;border:1px solid #166534;border-left:4px solid #22c55e;background:#0f1f18;border-radius:10px">'+
+        '<div style="font-size:14px;font-weight:900">✅ '+escDiario_(f.turno)+'º TURNO • FECHADO</div>'+
+        '<div style="font-size:12px;color:#dcfce7;margin-top:5px">Volante: <b>'+escDiario_(f.volante||'-')+'</b></div>'+
+        '<div style="font-size:12px;color:#cbd5e1;margin-top:3px">Fechado em: '+escDiario_(f.dataHora||'-')+'</div>'+
+        '<div style="font-size:12px;color:#cbd5e1;margin-top:3px">Pendências no fechamento: '+escDiario_(String(f.pendencias==null?0:f.pendencias))+'</div>'+
+        (f.observacao?'<div style="font-size:12px;color:#cbd5e1;margin-top:6px">Obs.: '+escDiario_(f.observacao)+'</div>':'')+
+        '<button type="button" style="margin-top:10px;background:#166534" onclick="abrirPdfOficialWPA(\''+escDiario_(data)+'\',\''+escDiario_(f.turno)+'\',this)">📄 ABRIR PDF OFICIAL</button>'+
+      '</div>';
+    }).join('');
+  }catch(e){
+    if(status)status.textContent='Erro ao consultar Central: '+(e&&e.message?e.message:e);
+  }
+}
+async function abrirPdfOficialWPA(data,turno,btn){
+  var original=btn?btn.textContent:'📄 ABRIR PDF OFICIAL';
+  var pdfUrl='';
+  try{
+    if(btn){btn.disabled=true;btn.textContent='PREPARANDO PDF...';}
+    var body=new URLSearchParams();
+    body.set('acao','prepararPdfFechamentoDiarioMobile');body.set('data',data);body.set('turno',turno);
+    var resp=await fetch(CONFIG_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
+    var j=await resp.json();
+    if(!j.ok)throw new Error(j.erro||'Falha ao preparar PDF.');
+    var r=j.resultado||{};
+    var base64=String(r.pdfBase64||r.base64||'').replace(/^data:application\/pdf;base64,/i,'').replace(/\s/g,'');
+    if(!base64)throw new Error('Conteúdo Base64 do PDF não retornado.');
+    var binario=atob(base64);
+    var bytes=new Uint8Array(binario.length);
+    for(var i=0;i<binario.length;i++)bytes[i]=binario.charCodeAt(i);
+    var mimeType=String(r.mimeType||'application/pdf');
+    var nomeArquivo=String(r.nomeArquivo||r.fileName||'fechamento_diario_'+data+'_turno_'+turno+'.pdf');
+    var blob=new Blob([bytes],{type:mimeType});
+    pdfUrl=URL.createObjectURL(blob);
+    var link=document.createElement('a');
+    link.href=pdfUrl;
+    link.download=nomeArquivo;
+    link.rel='noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function(){URL.revokeObjectURL(pdfUrl);},60000);
+    if(btn)btn.textContent='📄 PDF BAIXADO';
+  }catch(e){
+    if(pdfUrl)URL.revokeObjectURL(pdfUrl);
+    alert('PDF não pôde ser gerado: '+(e&&e.message?e.message:e));
+    if(btn)btn.textContent=original;
+  }finally{
+    if(btn)btn.disabled=false;
+  }
+}
+
+function fecharCentralEncerramento(){var tela=document.getElementById('centralEncerramento');if(tela)tela.style.display='none';}
+
+async function abrirMeuTurnoLeitura(){
+  var tela=document.getElementById('meuTurnoLeitura');
+  var sub=document.getElementById('meuTurnoSub');
+  var status=document.getElementById('meuTurnoStatus');
+  var lista=document.getElementById('meuTurnoLista');
+  var resumo=document.getElementById('meuTurnoResumo');
+  var maquinasPend=document.getElementById('meuTurnoMaquinasPendentes');
+  var dataEl=document.getElementById('diarioDataBasico');
+  var turnoEl=document.getElementById('diarioTurnoBasico');
+  var volanteEl=document.getElementById('diarioVolanteBasico');
+  var data=dataEl?String(dataEl.value||'').trim():'';
+  var turno=turnoEl?String(turnoEl.value||'').trim():'';
+  var volante=volanteEl?String(volanteEl.value||'').trim():'';
+  if(tela)tela.style.display='block';
+  if(!data || !/^[123]$/.test(turno) || !volante){
+    if(sub)sub.textContent='Somente leitura';
+    if(resumo)resumo.innerHTML='';
+    if(maquinasPend){maquinasPend.style.display='none';maquinasPend.innerHTML='';}
+    if(lista)lista.innerHTML='';
+    if(status)status.textContent='Selecione Data, um Turno específico e um Volante no Diário.';
+    return;
+  }
+  if(sub)sub.textContent='Somente leitura • '+data.split('-').reverse().join('/')+' • '+turno+'º turno • '+volante;
+  if(status)status.textContent='Carregando registros do meu turno...';
+  if(lista)lista.innerHTML='';
+  if(resumo)resumo.innerHTML='';
+  if(maquinasPend){maquinasPend.style.display='none';maquinasPend.innerHTML='';}
+  try{
+    var url=CONFIG_URL+'?acao=diarioVolantes&data='+encodeURIComponent(data)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var json=await resp.json();
+    if(!json.ok)throw new Error(json.erro||'Falha ao consultar o Diário.');
+    var regs=(Array.isArray(json.registros)?json.registros:[]).filter(function(r){
+      return String(r.turno||'').trim().charAt(0)===turno && String(r.volante||'').trim()===volante;
+    });
+    var pend=regs.filter(function(r){var x=String(r.status||'').toLowerCase();return x==='pendente'||x==='em acompanhamento';}).length;
+    var resol=regs.filter(function(r){return String(r.status||'').toLowerCase()==='resolvido';}).length;
+    var info=regs.filter(function(r){return String(r.status||'').toLowerCase()==='informativo';}).length;
+    var nums=[['Total',regs.length],['Pend.',pend],['Resol.',resol],['Info.',info]];
+    if(resumo)resumo.innerHTML=nums.map(function(x){return '<div style="background:#0f141b;border:1px solid #334155;border-radius:9px;padding:8px 3px;text-align:center"><b style="display:block;font-size:18px">'+x[1]+'</b><span style="font-size:10px;color:#94a3b8">'+x[0]+'</span></div>';}).join('');
+    var maquinasAbertas=[];
+    regs.forEach(function(r){var st=String(r.status||'').toLowerCase();if(st==='pendente'||st==='em acompanhamento'){var m=String(r.maquina||'').trim();if(m&&maquinasAbertas.indexOf(m)<0)maquinasAbertas.push(m);}});
+    if(maquinasPend){if(maquinasAbertas.length){maquinasPend.style.display='block';maquinasPend.innerHTML='<b>⚠ Máquinas com pendência aberta:</b> '+maquinasAbertas.map(escDiario_).join(' • ');}else{maquinasPend.style.display='block';maquinasPend.innerHTML='<b>✓ Nenhuma máquina com pendência aberta neste recorte.</b>';}}
+    window.__wpaMeuTurnoAtual={data:data,turno:turno,volante:volante,registros:regs.slice()};
+    if(!regs.length){if(status)status.textContent='Nenhum registro encontrado para este volante neste turno.';return;}
+    if(status)status.textContent=regs.length+' registro(s) do meu turno.';
+    if(lista)lista.innerHTML=regs.map(function(r){
+      var cor=corStatusDiario_(r.status||'');
+      var titulo=(r.hora||'--:--')+' • '+(r.maquina||'-')+' • OP '+(r.op||'-');
+      var situacao=r.situacao||r.tipo||r.descricao||'';
+      return '<div style="background:#0f141b;border:1px solid #334155;border-left:6px solid '+cor+';border-radius:11px;padding:11px;color:#f8fafc">'+
+        '<div style="font-weight:800">'+escDiario_(titulo)+'</div>'+
+        '<div style="font-size:12px;color:#aab5c4;margin-top:3px">'+escDiario_(r.item||'-')+' • '+escDiario_(r.volante||'-')+' • '+escDiario_(r.turno||'-')+'</div>'+
+        (situacao?'<div style="font-size:13px;margin-top:7px">'+escDiario_(situacao)+'</div>':'')+
+        (r.status?'<div style="font-size:11px;font-weight:800;margin-top:7px">'+escDiario_(r.status)+'</div>':'')+
+      '</div>';
+    }).join('');
+  }catch(e){if(status)status.textContent='Erro ao carregar Meu Turno: '+(e&&e.message?e.message:e);}
+}
+function abrirPreEncerramento(){
+  var tela=document.getElementById('preEncerramentoTurno'),box=document.getElementById('preEncerramentoResumo'),snap=window.__wpaMeuTurnoAtual;
+  if(!tela||!box)return;
+  if(!snap||!Array.isArray(snap.registros)){alert('Abra/atualize MEU TURNO antes de preparar o encerramento.');return;}
+  var regs=snap.registros;
+  var abertas=regs.filter(function(r){var s=String(r.status||'').toLowerCase();return s==='pendente'||s==='em acompanhamento';});
+  var resol=regs.filter(function(r){return String(r.status||'').toLowerCase()==='resolvido';}).length;
+  var info=regs.filter(function(r){return String(r.status||'').toLowerCase()==='informativo';}).length;
+  var maquinas=[]; abertas.forEach(function(r){var m=String(r.maquina||'').trim();if(m&&maquinas.indexOf(m)<0)maquinas.push(m);});
+  var dataBr=String(snap.data||'').split('-').reverse().join('/');
+  function linha(rotulo,valor){return '<div style="padding:11px 12px;border:1px solid #334155;border-radius:10px;background:#0f141b"><div style="font-size:11px;color:#94a3b8">'+rotulo+'</div><div style="font-size:15px;font-weight:800;margin-top:3px">'+escDiario_(valor)+'</div></div>';}
+  box.innerHTML=linha('Data',dataBr)+linha('Turno',snap.turno+'º turno')+linha('Volante',snap.volante)+linha('Total de registros',String(regs.length))+linha('Pendências abertas',String(abertas.length))+linha('Resolvidos',String(resol))+linha('Informativos',String(info))+linha('Máquinas com pendência aberta',maquinas.length?maquinas.join(', '):'Nenhuma');
+  var validacao=document.getElementById('preEncerramentoValidacao');
+  var acaoFechar=document.getElementById('preEncerramentoAcao');
+  if(acaoFechar)acaoFechar.style.display='none';
+  var retornoFechar=document.getElementById('preEncerramentoRetorno');
+  if(retornoFechar){retornoFechar.style.display='none';retornoFechar.textContent='';}
+  if(validacao){
+    if(abertas.length>0){
+      validacao.style.borderColor='#92400e';
+      validacao.style.background='#21170b';
+      validacao.style.color='#fde68a';
+      validacao.innerHTML='⚠️ COM PENDÊNCIAS<br><span style="font-size:12px;font-weight:600">Existem '+abertas.length+' pendência(s) aberta(s). Máquinas: '+escDiario_(maquinas.join(', ')||'-')+'. Revise antes do encerramento.</span>';
+    }else{
+      validacao.style.borderColor='#166534';
+      validacao.style.background='#0f1f18';
+      validacao.style.color='#dcfce7';
+      validacao.innerHTML='✅ PRONTO PARA ENCERRAR<br><span style="font-size:12px;font-weight:600">Nenhuma pendência aberta encontrada no Meu Turno.</span>';
+      var acao=document.getElementById('preEncerramentoAcao');
+      if(acao)acao.style.display='block';
+    }
+  }
+  tela.style.display='block';
+  atualizarEstadoFechamentoWPA_(snap, abertas);
+}
+async function atualizarEstadoFechamentoWPA_(snap, abertas){
+  var btn=document.getElementById('btnFecharTurnoReal'),acao=document.getElementById('preEncerramentoAcao'),retorno=document.getElementById('preEncerramentoRetorno');
+  if(!btn||!acao)return;
+  btn.disabled=false; btn.textContent='🔒 FECHAR TURNO';
+  if(retorno){retorno.style.display='none';retorno.textContent='';}
+  if(abertas&&abertas.length){acao.style.display='none';return;}
+  acao.style.display='block'; btn.disabled=true; btn.textContent='CONSULTANDO FECHAMENTO...';
+  try{
+    var url=CONFIG_URL+'?acao=estadoFechamentoDiario&data='+encodeURIComponent(snap.data)+'&turno='+encodeURIComponent(snap.turno)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'}),j=await resp.json();
+    if(!j.ok)throw new Error(j.erro||'Falha ao consultar fechamento.');
+    if(j.fechado){
+      btn.disabled=true;btn.textContent='☑ TURNO FECHADO';
+      if(retorno){var f=j.fechamento||{};retorno.style.display='block';retorno.style.border='1px solid #166534';retorno.style.background='#0f1f18';retorno.style.color='#dcfce7';retorno.textContent='✅ Fechamento já registrado'+(f.volante?' por '+f.volante:'')+(f.dataHora?' em '+f.dataHora:'')+'.';}
+    }else{btn.disabled=false;btn.textContent='🔒 FECHAR TURNO';}
+  }catch(e){
+    btn.disabled=true;btn.textContent='⚠️ CONSULTA INDISPONÍVEL';
+    if(retorno){retorno.style.display='block';retorno.style.border='1px solid #991b1b';retorno.style.background='#241010';retorno.style.color='#fecaca';retorno.textContent='❌ Não foi possível confirmar o estado do fechamento: '+(e&&e.message?e.message:e);}
+  }
+}
+
+async function fecharTurnoRealWPA(){
+  var snap=window.__wpaMeuTurnoAtual;
+  var retorno=document.getElementById('preEncerramentoRetorno');
+  var btn=document.getElementById('btnFecharTurnoReal');
+  if(!snap||!Array.isArray(snap.registros)){alert('Atualize MEU TURNO antes de fechar.');return;}
+  var abertas=snap.registros.filter(function(r){var s=String(r.status||'').toLowerCase();return s==='pendente'||s==='em acompanhamento';});
+  if(abertas.length){alert('Fechamento bloqueado: existem pendências abertas.');return;}
+  if(!confirm('CONFIRMAR ENCERRAMENTO REAL?\\n\\n'+snap.data.split('-').reverse().join('/')+' • '+snap.turno+'º turno • '+snap.volante+'\\n\\nEsta ação gravará o fechamento oficial.'))return;
+  try{
+    if(btn){btn.disabled=true;btn.textContent='FECHANDO...';}
+    if(retorno){retorno.style.display='block';retorno.style.border='1px solid #475569';retorno.textContent='Validando e gravando fechamento oficial...';}
+    var body=new URLSearchParams();
+    body.set('acao','fecharTurnoDiario'); body.set('data',snap.data); body.set('turno',snap.turno);
+    body.set('volante',snap.volante); body.set('pendencias','0');
+    body.set('observacao',(document.getElementById('preEncerramentoObs')||{}).value||'');
+    body.set('encerramento','Bom trabalho!');
+    var resp=await fetch(CONFIG_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
+    var j=await resp.json();
+    if(!j.ok)throw new Error(j.erro||'Falha no fechamento.');
+    var r=j.resultado||{};
+    if(retorno){retorno.style.borderColor='#166534';retorno.style.background='#0f1f18';retorno.style.color='#dcfce7';retorno.textContent='✅ '+(r.mensagem||'Turno fechado com sucesso.');}
+    if(btn){btn.textContent='✅ TURNO FECHADO';btn.disabled=true;}
+  }catch(e){
+    if(retorno){retorno.style.display='block';retorno.style.borderColor='#991b1b';retorno.style.background='#241010';retorno.style.color='#fecaca';retorno.textContent='❌ '+(e&&e.message?e.message:e);}
+    if(btn){btn.disabled=false;btn.textContent='🔒 FECHAR TURNO';}
+  }
+}
+function fecharPreEncerramento(){var tela=document.getElementById('preEncerramentoTurno');if(tela)tela.style.display='none';}
+function fecharMeuTurnoLeitura(){var tela=document.getElementById('meuTurnoLeitura');if(tela)tela.style.display='none';}
+
+async function carregarIndicadorPassagemConfirmadaDiario_(){
+  var box=document.getElementById('diarioIndicadorPassagemConfirmada');
+  var dataEl=document.getElementById('diarioDataBasico');
+  var turnoEl=document.getElementById('diarioTurnoBasico');
+  if(!box)return;
+  var data=dataEl?String(dataEl.value||'').trim():'';
+  var turno=turnoEl?String(turnoEl.value||'').trim():'';
+  box.style.display='none';
+  box.innerHTML='';
+  if(!data || !/^[123]$/.test(turno))return;
+  try{
+    var url=CONFIG_URL+'?acao=confirmacaoPassagemDiario&data='+encodeURIComponent(data)+'&turnoOrigem='+encodeURIComponent(turno)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var j=await resp.json();
+    if(!j||!j.ok)return;
+    var arr=Array.isArray(j.confirmacoes)?j.confirmacoes:[];
+    if(!arr.length)return;
+    var c=arr[0]||{};
+    box.style.display='block';
+    box.innerHTML='<b>✅ PASSAGEM CONFIRMADA</b><br>'+escDiario_(c.volanteRecebedor||'-')+' • '+escDiario_(c.passagem||'-')+' • '+Number(c.quantidade||0)+' ocorrência(s) • '+escDiario_(c.status||'Confirmado')+'<br><span style="font-size:11px;color:#86efac">🕒 '+escDiario_(c.dataHora||'-')+' • ID '+escDiario_(c.id||'-')+'</span>';
+  }catch(e){
+    box.style.display='none';
+    box.innerHTML='';
+  }
+}
+
+function abrirPassagemTurnoLeitura(){
+  var modal=document.getElementById('passagemTurnoLeitura');
+  var lista=document.getElementById('passagemTurnoLista');
+  var resumo=document.getElementById('passagemTurnoResumo');
+  var sub=document.getElementById('passagemTurnoSub');
+  if(!modal||!lista||!resumo)return;
+  var regs=(window.__diarioRegsLeitura||[]).filter(function(r){
+    return String(r.pendencia||'').toLowerCase().trim()==='sim';
+  });
+  var data=document.getElementById('diarioDataBasico');
+  var turno=document.getElementById('diarioTurnoBasico');
+  if(sub)sub.textContent='Somente leitura • '+(data&&data.value?data.value:'data selecionada')+(turno&&turno.value?' • '+turno.value+'º turno':' • todos os turnos');
+  resumo.textContent=regs.length?regs.length+' ocorrência(s) histórica(s) destinada(s) à passagem.':'Nenhuma ocorrência destinada à passagem nos registros carregados.';
+  lista.innerHTML=regs.map(function(r){
+    var cor=corStatusDiario_(r.status);
+    return '<div style="background:#0f141b;border:1px solid #334155;border-left:6px solid '+cor+';border-radius:11px;padding:11px;color:#f8fafc">'+
+      '<div style="font-weight:800">'+escDiario_((r.hora||'--:--')+' • '+(r.maquina||'-')+' • OP '+(r.op||'-'))+'</div>'+
+      '<div style="font-size:12px;color:#aab5c4;margin-top:3px">'+escDiario_((r.item||'-')+' • '+(r.volante||'-')+' • '+(r.turno||'-'))+'</div>'+
+      '<div style="font-size:13px;margin-top:8px"><b>Situação:</b> '+escDiario_(r.situacao||'-')+'</div>'+
+      '<div style="font-size:13px;margin-top:5px"><b>Descrição:</b> '+escDiario_(r.descricao||'-')+'</div>'+
+      '<div style="font-size:13px;margin-top:5px"><b>Ação tomada:</b> '+escDiario_(r.acao||'-')+'</div>'+
+      '<div style="font-size:11px;font-weight:800;margin-top:8px">'+escDiario_(r.status||'')+'</div>'+
+    '</div>';
+  }).join('');
+  modal.style.display='block';
+  carregarComprovantePassagem_();
+}
+
+function definirBloqueioCienciaPassagem_(confirmada, confirmacao){
+  var area=document.getElementById('passagemCienciaVisual');
+  var sel=document.getElementById('passagemVolanteRecebedor');
+  var btn=document.getElementById('btnCienciaPassagemVisual');
+  var msg=document.getElementById('passagemCienciaMsg');
+  if(!area)return;
+  if(confirmada){
+    if(sel){
+      var nome=confirmacao&&confirmacao.volanteRecebedor?String(confirmacao.volanteRecebedor):'';
+      if(nome)sel.value=nome;
+      sel.disabled=true;
+    }
+    if(btn){btn.disabled=true;btn.style.display='none';}
+    if(msg){
+      msg.style.display='block';
+      msg.style.borderColor='#166534';
+      msg.style.color='#bbf7d0';
+      msg.textContent='🔒 Ciência já registrada. Nova confirmação bloqueada.';
+    }
+  }else{
+    if(sel){sel.disabled=false;}
+    if(btn){btn.disabled=false;btn.style.display='block';btn.textContent='LI E ESTOU CIENTE';btn.style.background='#16a34a';}
+    if(msg){msg.style.display='none';msg.textContent='';msg.style.borderColor='#475569';msg.style.color='#cbd5e1';}
+  }
+}
+
+async function carregarComprovantePassagem_(){
+  var box=document.getElementById('passagemComprovante');
+  var dataEl=document.getElementById('diarioDataBasico');
+  var turnoEl=document.getElementById('diarioTurnoBasico');
+  if(!box)return;
+  var data=dataEl?String(dataEl.value||'').trim():'';
+  var turno=turnoEl?String(turnoEl.value||'').trim():'';
+  box.style.display='none';box.innerHTML='';
+  definirBloqueioCienciaPassagem_(false,null);
+  if(!data || !/^[123]$/.test(turno))return;
+  try{
+    var url=CONFIG_URL+'?acao=confirmacaoPassagemDiario&data='+encodeURIComponent(data)+'&turnoOrigem='+encodeURIComponent(turno)+'&_='+Date.now();
+    var resp=await fetch(url,{cache:'no-store'});
+    if(!resp.ok)throw new Error('HTTP '+resp.status);
+    var j=await resp.json();
+    if(!j||!j.ok)throw new Error((j&&j.erro)||'Falha ao consultar confirmação.');
+    var arr=Array.isArray(j.confirmacoes)?j.confirmacoes:[];
+    if(!arr.length){definirBloqueioCienciaPassagem_(false,null);return;}
+    definirBloqueioCienciaPassagem_(true,arr[0]);
+    box.style.display='block';
+    box.innerHTML='<div style="font-weight:900;margin-bottom:8px">✅ PASSAGEM CONFIRMADA</div>'+arr.map(function(c){
+      return '<div style="font-size:13px;line-height:1.55"><b>'+escDiario_(c.volanteRecebedor||'-')+'</b> • '+escDiario_(c.passagem||'-')+' • <b>'+Number(c.quantidade||0)+' ocorrência(s)</b> • '+escDiario_(c.status||'Confirmado')+'<br><span style="color:#86efac;font-size:11px">ID '+escDiario_(c.id||'-')+'</span></div>';
+    }).join('<div style="border-top:1px solid #166534;margin:9px 0"></div>');
+  }catch(e){
+    box.style.display='block';box.style.borderColor='#7f1d1d';box.style.color='#fecaca';
+    box.textContent='Não foi possível consultar o comprovante: '+(e&&e.message?e.message:e);
+  }
+}
+
+async function confirmarCienciaPassagemReal(){
+  var sel=document.getElementById('passagemVolanteRecebedor');
+  var msg=document.getElementById('passagemCienciaMsg');
+  var btn=document.getElementById('btnCienciaPassagemVisual');
+  var nome=sel?String(sel.value||'').trim():'';
+  if(!msg)return;
+  msg.style.display='block';
+  if(!nome){ msg.textContent='Selecione o volante que está recebendo a passagem.'; return; }
+  var regs=(window.__diarioRegsLeitura||[]).filter(function(r){
+    return String(r.pendencia||'').toLowerCase().trim()==='sim';
+  });
+  if(!regs.length){ msg.textContent='Nenhuma ocorrência destinada à passagem.'; return; }
+  var dataEl=document.getElementById('diarioDataBasico');
+  var turnoEl=document.getElementById('diarioTurnoBasico');
+  var data=dataEl?String(dataEl.value||'').trim():'';
+  var turno=turnoEl?String(turnoEl.value||'').trim():'';
+  if(!/^[123]$/.test(turno)){ msg.textContent='Selecione um turno específico antes de confirmar a passagem.'; return; }
+  var grupos=[];
+  regs.forEach(function(r){ var g=String(r.grupo||'').trim(); if(g&&grupos.indexOf(g)<0)grupos.push(g); });
+  var grupo=grupos.length?grupos.join(' / '):'Todos';
+  try{
+    if(btn){btn.disabled=true;btn.textContent='CONFIRMANDO...';}
+    msg.textContent='Registrando ciência da passagem...';
+    var body=new URLSearchParams();
+    body.set('acao','confirmarPassagemDiario');
+    body.set('data',data);
+    body.set('turnoOrigem',turno);
+    body.set('volanteRecebedor',nome);
+    body.set('quantidade',String(regs.length));
+    body.set('grupo',grupo);
+    body.set('observacao','Confirmação realizada pelo WPA - Diário dos Volantes');
+    var resp=await fetch(CONFIG_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
+    var j=await resp.json();
+    if(!j||!j.ok)throw new Error((j&&j.erro)||'Falha ao confirmar passagem.');
+    msg.style.borderColor='#16a34a';
+    msg.style.color='#bbf7d0';
+    msg.textContent=(j.duplicado?'JÁ CONFIRMADO • ':'CONFIRMADO • ')+nome+' • '+(j.passagem||'')+' • LI E ESTOU CIENTE • '+Number(j.quantidade||regs.length)+' ocorrência(s)';
+    if(btn){btn.textContent='✓ LI E ESTOU CIENTE';btn.style.background='#15803d';}
+    await carregarComprovantePassagem_();
+  }catch(e){
+    msg.style.borderColor='#dc2626';msg.style.color='#fecaca';
+    msg.textContent='Erro ao confirmar passagem: '+(e&&e.message?e.message:e);
+    if(btn){btn.disabled=false;btn.textContent='LI E ESTOU CIENTE';}
+  }
+}
+function fecharPassagemTurnoLeitura(){
+  var modal=document.getElementById('passagemTurnoLeitura');
+  if(modal)modal.style.display='none';
+}
+
+function escDiario_(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function abrirDetalheDiarioLeitura(i){
+  var regs=window.__diarioRegsLeitura||[];
+  var r=regs[i];
+  var box=document.getElementById('detalheDiarioConteudo');
+  var modal=document.getElementById('detalheDiarioLeitura');
+  if(!r||!box||!modal)return;
+
+  var campos=[
+    ['Data',r.data],['Hora',r.hora],['Turno',r.turno],['Volante',r.volante],
+    ['Grupo / Linhas',r.grupo],['Linha',r.linha],['Máquina',r.maquina],
+    ['OP',r.op],['Item',r.item],['Tipo de registro',r.tipo],
+    ['Situação',r.situacao],['Descrição / Acontecimento',r.descricao],
+    ['Ação tomada',r.acao],['Pendência próximo turno',r.pendencia],
+    ['Status',r.status],['Nº Desvio',r.desvio],['Medição / Ensaio',r.medicao],
+    ['Resultado',r.resultado],['1ª vez operador no item?',r.primeiraVez],
+    ['Operador',r.operador],['Identificado p/ Inspeção?',r.identificadoInspecao]
+  ];
+
+  if(r.pendenciaId)campos.push(['ID da Pendência',r.pendenciaId]);
+  if(r.ultimoAcompanhamento){
+    campos.push(['Último responsável',r.ultimoAcompanhamento.responsavel]);
+    campos.push(['Última ação',r.ultimoAcompanhamento.acao]);
+    campos.push(['Última observação',r.ultimoAcompanhamento.observacao]);
+  }
+
+  box.innerHTML=campos.filter(function(x){
+    return String(x[1]==null?'':x[1]).trim()!=='';
+  }).map(function(x){
+    return '<div style="background:#0f141b;border:1px solid #283747;border-radius:10px;padding:9px">'+
+      '<div style="font-size:10px;color:#94a3b8;text-transform:uppercase;font-weight:800">'+escDiario_(x[0])+'</div>'+
+      '<div style="font-size:14px;margin-top:3px;white-space:pre-wrap">'+escDiario_(x[1])+'</div>'+
+    '</div>';
+  }).join('');
+
+  window.__diarioRegistroAberto=r;
+  var modalCard=modal.firstElementChild;
+  if(modalCard)modalCard.style.borderLeft='6px solid '+corStatusDiario_(r.status);
+  var area=document.getElementById('acaoPendenciaDiario');
+  var msg=document.getElementById('pendStatusDiario');
+  if(msg)msg.textContent='';
+  if(area){
+    area.style.display=(String(r.status||'').toLowerCase()==='pendente' && r.pendenciaId)?'block':'none';
+  }
+  modal.style.display='block';
+}
+function fecharDetalheDiarioLeitura(){
+  var modal=document.getElementById('detalheDiarioLeitura');
+  if(modal)modal.style.display='none';
+}
+
+async function salvarAcompanhamentoDiario(novoStatus){
+  var r=window.__diarioRegistroAberto;
+  var respEl=document.getElementById('pendRespDiario');
+  var turnoEl=document.getElementById('pendTurnoDiario');
+  var acaoEl=document.getElementById('pendAcaoDiario');
+  var obsEl=document.getElementById('pendObsDiario');
+  var msg=document.getElementById('pendStatusDiario');
+
+  if(!r||!r.pendenciaId)return;
+  var responsavel=respEl?respEl.value.trim():'';
+  var turno=turnoEl?turnoEl.value.trim():'';
+  var acaoTomada=acaoEl?acaoEl.value.trim():'';
+  var observacao=obsEl?obsEl.value.trim():'';
+
+  if(!responsavel||!turno||!acaoTomada){
+    if(msg)msg.textContent='Preencha Responsável, Turno e Ação realizada.';
+    return;
+  }
+
+  if(msg)msg.textContent='Salvando...';
+
+  try{
+    var body=new URLSearchParams();
+    body.set('acao','acompanharPendenciaDiario');
+    body.set('id',r.pendenciaId);
+    body.set('responsavel',responsavel);
+    body.set('turno',turno);
+    body.set('acaoTomada',acaoTomada);
+    body.set('observacao',observacao);
+    body.set('status',novoStatus);
+
+    var resp=await fetch(CONFIG_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:body.toString()
+    });
+    var json=await resp.json();
+    if(!json.ok)throw new Error(json.erro||'Falha ao atualizar pendência.');
+
+    if(msg)msg.textContent='Salvo: '+novoStatus+'.';
+    fecharDetalheDiarioLeitura();
+    await carregarDiarioVolantesLeitura();
+  }catch(e){
+    if(msg)msg.textContent='Erro: '+(e&&e.message?e.message:e);
+  }
+}
+
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js');
+}
+</script>
+</body></html>
