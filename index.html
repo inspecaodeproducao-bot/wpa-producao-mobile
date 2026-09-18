@@ -1735,22 +1735,36 @@ async function abrirCentralEncerramento(){
 }
 async function abrirPdfOficialWPA(data,turno,btn){
   var original=btn?btn.textContent:'📄 ABRIR PDF OFICIAL';
+  var pdfUrl='';
   try{
     if(btn){btn.disabled=true;btn.textContent='PREPARANDO PDF...';}
     var body=new URLSearchParams();
-    body.set('acao','prepararPdfFechamentoDiario');body.set('data',data);body.set('turno',turno);
+    body.set('acao','prepararPdfFechamentoDiarioMobile');body.set('data',data);body.set('turno',turno);
     var resp=await fetch(CONFIG_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:body.toString()});
     var j=await resp.json();
     if(!j.ok)throw new Error(j.erro||'Falha ao preparar PDF.');
     var r=j.resultado||{};
-    if(!r.url)throw new Error('URL do PDF não retornada.');
-    var pdfUrl=String(r.url||'').trim();
-    if(!pdfUrl)throw new Error('URL do PDF não retornada.');
-    // V18.13.3 DEV-MOBILE: navegação direta evita o fallback da PWA para a planilha.
-    window.location.assign(pdfUrl);
-    if(btn)btn.textContent='📄 PDF PREPARADO';
+    var base64=String(r.base64||'').replace(/^data:application\/pdf;base64,/i,'').replace(/\s/g,'');
+    if(!base64)throw new Error('Conteúdo Base64 do PDF não retornado.');
+    var binario=atob(base64);
+    var bytes=new Uint8Array(binario.length);
+    for(var i=0;i<binario.length;i++)bytes[i]=binario.charCodeAt(i);
+    var mimeType=String(r.mimeType||'application/pdf');
+    var nomeArquivo=String(r.nomeArquivo||r.fileName||'fechamento_diario_'+data+'_turno_'+turno+'.pdf');
+    var blob=new Blob([bytes],{type:mimeType});
+    pdfUrl=URL.createObjectURL(blob);
+    var link=document.createElement('a');
+    link.href=pdfUrl;
+    link.download=nomeArquivo;
+    link.rel='noopener';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(function(){URL.revokeObjectURL(pdfUrl);},60000);
+    if(btn)btn.textContent='📄 PDF BAIXADO';
   }catch(e){
-    alert('PDF não pôde ser aberto: '+(e&&e.message?e.message:e));
+    if(pdfUrl)URL.revokeObjectURL(pdfUrl);
+    alert('PDF não pôde ser gerado: '+(e&&e.message?e.message:e));
     if(btn)btn.textContent=original;
   }finally{
     if(btn)btn.disabled=false;
