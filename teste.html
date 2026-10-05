@@ -3,102 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
+<meta name="robots" content="noindex,nofollow">
 <title>WPA — Ambiente de Teste 36H</title>
-
 <style>
-body{
-  font-family:Arial,sans-serif;
-  background:#0b0f14;
-  color:#f8fafc;
-  margin:0;
-  padding:16px
-}
-
-.card{
-  max-width:520px;
-  margin:auto;
-  background:#151b23;
-  padding:20px;
-  border-radius:16px;
-  border:1px solid #263241
-}
-
-h1{
-  font-size:24px;
-  margin:0 0 8px
-}
-
-.sub{
-  color:#a8b3c2
-}
-
-.alert{
-  margin:16px 0;
-  padding:16px;
-  border-radius:12px;
-  border:2px solid #f59e0b;
-  background:#451a03;
-  color:#fde68a;
-  font-weight:800;
-  line-height:1.5
-}
-
-.status{
-  margin-top:12px;
-  padding:12px;
-  border-radius:10px;
-  background:#0f141b;
-  border:1px solid #334155
-}
-
-.info{
-  margin-top:12px;
-  padding:12px;
-  border-radius:10px;
-  background:#0f141b;
-  border:1px solid #334155;
-  line-height:1.6
-}
+body{font-family:Arial,sans-serif;background:#0b0f14;color:#f8fafc;margin:0;padding:16px}
+.card{max-width:560px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241}
+h1{font-size:24px;margin:0 0 8px}.sub{color:#a8b3c2}
+.alert{margin:16px 0;padding:16px;border-radius:12px;border:2px solid #f59e0b;background:#451a03;color:#fde68a;font-weight:800;line-height:1.5}
+.status{margin-top:12px;padding:12px;border-radius:10px;background:#0f141b;border:1px solid #334155;line-height:1.5}
+.ok{border-color:#15803d}.err{border-color:#dc2626}
+.info{margin-top:12px;padding:12px;border-radius:10px;background:#0f141b;border:1px solid #334155;line-height:1.6}
+button{margin-top:12px;padding:12px 16px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
+input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #475569;background:#0f141b;color:#fff;margin-top:8px}
+.small{font-size:12px;color:#94a3b8;margin-top:10px;word-break:break-all}
 </style>
-
 </head>
-
 <body>
-
 <div class="card">
-
 <h1>WPA de Produção</h1>
-
-<div class="sub">
-Ambiente de homologação
-</div>
+<div class="sub">Ambiente de homologação</div>
 
 <div class="alert">
-⚠️ AMBIENTE DE TESTE — 36 HORAS
-<br>
-Registros temporários e isolados da produção oficial.
+⚠️ AMBIENTE DE TESTE — 36 HORAS<br>
+<span style="font-weight:600">Registros temporários e isolados da produção oficial.</span>
 </div>
 
+<label for="token"><strong>Token da sessão</strong></label>
+<input id="token" autocomplete="off" placeholder="Cole aqui o token de teste 36H">
+
+<button id="validar">VALIDAR SESSÃO</button>
+
 <div id="status" class="status">
-Ambiente de teste carregado.
+Informe um token ou abra esta página com <code>?token=SEU_TOKEN</code>.
 </div>
 
 <div class="info">
-
-<strong>REGRAS DO AMBIENTE</strong>
-
-<br><br>
-
+<strong>REGRAS DO AMBIENTE</strong><br><br>
 • Validade da sessão: 36 horas<br>
 • Registros isolados por sessão<br>
 • Registros vencidos deixam de aparecer<br>
-• Nenhuma gravação deve atingir a produção oficial<br>
-• Este ambiente será utilizado para homologação
-
+• Nenhuma gravação deve atingir a produção oficial
 </div>
 
+<div class="small">Backend: Sandbox WPA 36H</div>
 </div>
 
+<script>
+const API_URL = 'https://script.google.com/macros/s/AKfycbzcbKg8jKY08gK0e7_Vl7OyRoWee2TCKnm0kSxMA_JjusgzcK4D8hbMj-5KYAgM2rk/exec';
+
+const tokenInput = document.getElementById('token');
+const statusEl = document.getElementById('status');
+
+const tokenUrl = new URLSearchParams(location.search).get('token') || '';
+if (tokenUrl) tokenInput.value = tokenUrl;
+
+async function validar() {
+  const token = tokenInput.value.trim();
+
+  if (!token) {
+    statusEl.className = 'status err';
+    statusEl.textContent = '❌ Token não informado.';
+    return;
+  }
+
+  statusEl.className = 'status';
+  statusEl.textContent = '⏳ Validando sessão 36H...';
+
+  try {
+    const url =
+      API_URL +
+      '?modo=teste&acao=testePing&token=' +
+      encodeURIComponent(token) +
+      '&_=' + Date.now();
+
+    const resp = await fetch(url, {
+      method: 'GET',
+      cache: 'no-store'
+    });
+
+    const data = await resp.json();
+
+    if (!data.ok) {
+      throw new Error(data.erro || 'Sessão inválida.');
+    }
+
+    const expira = data.expiraEm
+      ? new Date(data.expiraEm).toLocaleString('pt-BR')
+      : 'não informado';
+
+    statusEl.className = 'status ok';
+    statusEl.innerHTML =
+      '<strong>✅ SESSÃO VÁLIDA</strong><br>' +
+      'Ambiente: TESTE<br>' +
+      'Validade: 36 horas<br>' +
+      'Expira em: ' + expira;
+  } catch (err) {
+    statusEl.className = 'status err';
+    statusEl.textContent =
+      '❌ Não foi possível validar a sessão: ' + err.message;
+  }
+}
+
+document.getElementById('validar').addEventListener('click', validar);
+
+if (tokenUrl) {
+  validar();
+}
+</script>
 </body>
 </html>
