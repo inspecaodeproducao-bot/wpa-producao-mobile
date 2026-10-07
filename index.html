@@ -186,6 +186,7 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
   <div class="admin-tools" id="adminMenu">
     <button class="green" type="button" onclick="mostrarFerramentaAdmin('consulta')">🔎 CONSULTA</button>
     <button type="button" onclick="mostrarFerramentaAdmin('relatorio')">📊 RELATÓRIO</button>
+    <button class="green" type="button" onclick="mostrarFerramentaAdmin('relatorioReal')">🎯 RELATÓRIO REAL</button>
     <button class="orange" type="button" onclick="mostrarFerramentaAdmin('adminBox')">🛠️ CORREÇÃO</button>
   </div>
   <div class="admin-section" id="consulta"><h2>Consultar Produção</h2><div class="sub">Pesquise os registros enviados pelo formulário.</div>
@@ -234,6 +235,24 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
     </div>
   </div>
   <button class="gray" type="button" onclick="fecharRelatorio()">FECHAR RELATÓRIO</button>
+  <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
+</div>
+  <div class="admin-section" id="relatorioReal">
+  <h2>🎯 Relatório Real</h2>
+  <div class="sub">Cobertura por máquina e turno. Máquina normal = 2 passagens; LSR = 1 passagem nos turnos 1 e 2. No 3º turno, LSR não se aplica.</div>
+  <label>Período</label>
+  <select id="periodoRelReal" onchange="ajustarPeriodoRelReal()"><option value="semana">Esta semana</option><option value="semanaAnterior">Semana anterior</option><option value="mes">Este mês</option><option value="mesAnterior">Mês anterior</option><option value="personalizado">Personalizado</option></select>
+  <div id="datasRelReal" style="display:none"><label>De</label><input id="relRealInicio" type="date"><label>Até</label><input id="relRealFim" type="date"></div>
+  <button type="button" onclick="gerarRelatorioReal()">🎯 GERAR RELATÓRIO REAL</button>
+  <div class="status" id="statusRelatorioReal">Selecione o período e gere o Relatório Real.</div>
+  <div id="conteudoRelatorioReal" style="display:none">
+    <div class="meta" id="periodoTextoReal"></div>
+    <div class="report-grid"><div class="kpi"><strong id="rrCobertura">0%</strong><span>Cobertura geral</span></div><div class="kpi"><strong id="rrCompletas">0</strong><span>Máquinas completas</span></div><div class="kpi"><strong id="rrParciais">0</strong><span>Máquinas parciais</span></div><div class="kpi"><strong id="rrPendentes">0</strong><span>Máquinas sem passagem</span></div></div>
+    <div class="chart-card"><h3>Resumo por turno</h3><div id="rrResumoTurnos"></div></div>
+    <div class="chart-card"><h3>Detalhamento por máquina</h3><div id="rrTabelaMaquinas" style="overflow-x:auto"></div></div>
+    <div class="chart-card"><h3>Legenda</h3><div class="meta"><strong>2/2</strong> completa • <strong>1/2</strong> parcial • <strong>0/2</strong> não realizada • <strong>LSR 1/1</strong> completa • LSR não aplicável no 3º turno.</div></div>
+  </div>
+  <button class="gray" type="button" onclick="fecharRelatorioReal()">FECHAR RELATÓRIO REAL</button>
   <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
 </div>
   <div class="admin-section" id="adminBox">
@@ -518,6 +537,41 @@ const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk
 const SP_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=735510297&single=true&output=csv";
 const PF_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=1712938767&single=true&output=csv";
 function csvAtualizado(url){return url+(url.includes('?')?'&':'?')+'_lp='+Date.now();}
+function carregarMatrizPlanilhaCompat(url){
+  return new Promise(async (resolve,reject)=>{
+    // 1) Em HTTPS/servidor normal, mantém o caminho original.
+    try{
+      const r=await fetch(csvAtualizado(url),{cache:'no-store'});
+      if(r.ok){
+        const txt=await r.text();
+        return resolve(parseCSV(txt).filter(row=>row.some(v=>String(v).trim())));
+      }
+    }catch(_e){}
+    // 2) Fallback JSONP para arquivos abertos como content:// no celular.
+    try{
+      const m=String(url).match(/\/spreadsheets\/d\/e\/([^/]+)\/pub\?/i);
+      const gid=(String(url).match(/[?&]gid=([^&]+)/i)||[])[1];
+      if(!m||!gid)throw Error('URL da planilha não permite fallback JSONP.');
+      const cb='__wpaGviz_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+      const script=document.createElement('script');
+      const base='https://docs.google.com/spreadsheets/d/e/'+m[1]+'/gviz/tq';
+      const timer=setTimeout(()=>{cleanup();reject(Error('Tempo esgotado ao acessar a planilha.'));},15000);
+      function cleanup(){clearTimeout(timer);try{delete window[cb]}catch(_){}script.remove();}
+      window[cb]=function(data){
+        try{
+          if(!data||!data.table)throw Error('Resposta da planilha inválida.');
+          const cols=(data.table.cols||[]).map(c=>c.label||c.id||'');
+          const rows=(data.table.rows||[]).map(row=>(row.c||[]).map(c=>c&&c.v!=null?(c.f!=null?c.f:c.v):''));
+          cleanup();resolve([cols,...rows]);
+        }catch(e){cleanup();reject(e)}
+      };
+      script.onerror=()=>{cleanup();reject(Error('Não foi possível acessar a planilha via JSONP.'));};
+      script.src=base+'?gid='+encodeURIComponent(gid)+'&tqx='+encodeURIComponent('out:json;responseHandler:'+cb)+'&_lp='+Date.now();
+      document.head.appendChild(script);
+    }catch(e){reject(e)}
+  });
+}
+
 const MODEL={name_prefixes:["B1"],task:"b1",dpi:203,density:3,label_type:1,speed:1};
 const SIZE={w_px:384,h_px:240,offset_y_px:4};
 let conectado=false, etiquetaURL="";
@@ -1360,6 +1414,42 @@ function abrirDetalheItem(item){
 }
 function fecharDetalheItem(){detalheItemNOK.style.display='none';cardRankItens.style.display='block';cardRankItens.scrollIntoView({behavior:'smooth',block:'start'});}
 
+function faixaRelatorioReal(){
+  const hoje=new Date(); hoje.setHours(0,0,0,0); const tipo=document.getElementById('periodoRelReal').value; let ini=new Date(hoje),fim=new Date(hoje); const dia=hoje.getDay();
+  if(tipo==='semana'){const segunda=new Date(hoje);segunda.setDate(hoje.getDate()-(dia===0?6:dia-1));ini=segunda;fim=new Date(segunda);fim.setDate(segunda.getDate()+6);}
+  else if(tipo==='semanaAnterior'){const segunda=new Date(hoje);segunda.setDate(hoje.getDate()-(dia===0?6:dia-1)-7);ini=segunda;fim=new Date(segunda);fim.setDate(segunda.getDate()+6);}
+  else if(tipo==='mes'){ini=new Date(hoje.getFullYear(),hoje.getMonth(),1);fim=new Date(hoje.getFullYear(),hoje.getMonth()+1,0);}
+  else if(tipo==='mesAnterior'){ini=new Date(hoje.getFullYear(),hoje.getMonth()-1,1);fim=new Date(hoje.getFullYear(),hoje.getMonth(),0);}
+  else {const a=document.getElementById('relRealInicio').value,b=document.getElementById('relRealFim').value;if(!a||!b)throw Error('Informe as duas datas do período personalizado.');ini=new Date(a+'T00:00:00');fim=new Date(b+'T00:00:00');}
+  return {ini,fim};
+}
+function ajustarPeriodoRelReal(){document.getElementById('datasRelReal').style.display=document.getElementById('periodoRelReal').value==='personalizado'?'block':'none';}
+function fecharRelatorioReal(){document.getElementById('conteudoRelatorioReal').style.display='none';document.getElementById('statusRelatorioReal').textContent='Selecione o período e gere o Relatório Real.';}
+function rrMaquinasNormais(){const out=[];['Linha 1','Linha 2','Linha 3','Linha 4','Linha 5'].forEach(l=>(MAQUINAS[l]||[]).forEach(m=>out.push({linha:l,maquina:String(m)})));return out;}
+function rrClassificarTurno(d){const h=d.getHours()+d.getMinutes()/60;if(h>=6&&h<13+50/60)return 1;if(h>=13+50/60&&h<21+50/60)return 2;if(h>=21+50/60||h<5+45/60)return 3;return 0;}
+function rrEsc(s){return esc(String(s??''));}
+async function gerarRelatorioReal(){
+  const status=document.getElementById('statusRelatorioReal'),conteudo=document.getElementById('conteudoRelatorioReal');status.textContent='Montando cobertura real...';conteudo.style.display='none';
+  try{
+    const {ini,fim}=faixaRelatorioReal();if(fim<ini)throw Error('A data final não pode ser anterior à inicial.');
+    const matriz=await carregarMatrizPlanilhaCompat(CSV_URL);
+    let a=matriz.filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
+    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),T=col(h,['Tipo de inspeção','Tipo de atividade']),M=col(h,['Máquina']),V=col(h,['Volante responsável','Responsável']);const val=(r,i)=>i>=0?(r[i]??''):'';
+    const normais=rrMaquinasNormais(),lsr=(MAQUINAS['LSR']||[]).map(m=>({linha:'LSR',maquina:String(m)})),todos=[...normais,...lsr],eventos=[];
+    const fimDia=new Date(fim);fimDia.setHours(23,59,59,999);
+    a.forEach(r=>{if(norm(val(r,T))!=='voleio')return;const raw=String(val(r,DC)).trim()||val(r,D),data=dataBRParaDate(raw);if(!data||data<ini||data>fimDia)return;const turno=rrClassificarTurno(data),maq=String(val(r,M)).trim();if(!turno||!maq)return;const linha=Object.keys(MAQUINAS).find(l=>(MAQUINAS[l]||[]).map(String).includes(maq))||'';if(linha)eventos.push({data,turno,maq,linha,volante:String(val(r,V)).trim()});});
+    const mapa=new Map();for(let dia=new Date(ini);dia<=fim;dia.setDate(dia.getDate()+1)){const chave=dia.toISOString().slice(0,10);todos.forEach(m=>[1,2,3].forEach(t=>{if(m.linha==='LSR'&&t===3)return;mapa.set(`${chave}|${t}|${m.maquina}`,{data:chave,turno:t,linha:m.linha,maquina:m.maquina,req:m.linha==='LSR'?1:2,pas:0});}));}
+    eventos.forEach(e=>{const base=new Date(e.data);if(e.turno===3&&e.data.getHours()<6)base.setDate(base.getDate()-1);const o=mapa.get(`${base.toISOString().slice(0,10)}|${e.turno}|${e.maq}`);if(o)o.pas=Math.min(o.req,o.pas+1);});
+    const detalhes=[...mapa.values()],grupos=[1,2,3].map(t=>{const arr=detalhes.filter(x=>x.turno===t),req=arr.reduce((s,x)=>s+x.req,0),pas=arr.reduce((s,x)=>s+x.pas,0);return{turno:t,req,pas,pct:req?pas/req*100:0,completas:arr.filter(x=>x.pas===x.req).length,parciais:arr.filter(x=>x.pas>0&&x.pas<x.req).length,pendentes:arr.filter(x=>x.pas===0).length};});
+    const reqTotal=grupos.reduce((s,x)=>s+x.req,0),pasTotal=grupos.reduce((s,x)=>s+x.pas,0);document.getElementById('rrCobertura').textContent=(reqTotal?pasTotal/reqTotal*100:0).toFixed(1)+'%';document.getElementById('rrCompletas').textContent=detalhes.filter(x=>x.pas===x.req).length;document.getElementById('rrParciais').textContent=detalhes.filter(x=>x.pas>0&&x.pas<x.req).length;document.getElementById('rrPendentes').textContent=detalhes.filter(x=>x.pas===0).length;document.getElementById('periodoTextoReal').textContent=`Período: ${fmtData(ini)} a ${fmtData(fim)} • ${eventos.length} passagem(ns) de voleio considerada(s)`;
+    document.getElementById('rrResumoTurnos').innerHTML='<div class="report-grid">'+grupos.map(g=>`<div class="kpi"><strong>${g.pas}/${g.req}</strong><span>${g.turno}º turno • ${g.pct.toFixed(1)}% • ${g.completas} completas / ${g.parciais} parciais / ${g.pendentes} pendentes</span></div>`).join('')+'</div>';
+    const por=new Map();detalhes.forEach(x=>{const k=`${x.linha}|${x.maquina}`;if(!por.has(k))por.set(k,{linha:x.linha,maquina:x.maquina,req:0,pas:0,turnos:[]});const o=por.get(k);o.req+=x.req;o.pas+=x.pas;o.turnos.push(x);});
+    let html='<table class="turnos-table"><thead><tr><th>Máquina</th><th>Linha</th><th>1º</th><th>2º</th><th>3º</th><th>Total</th></tr></thead><tbody>';const cell=x=>x?(x.pas===x.req?'🟢':x.pas?'🟡':'🔴')+' '+x.pas+'/'+x.req:'—';
+    for(const o of por.values()){const get=t=>o.turnos.find(x=>x.turno===t);html+=`<tr><td class="turnos-maq">${rrEsc(o.maquina)}</td><td>${rrEsc(o.linha)}</td><td>${cell(get(1))}</td><td>${cell(get(2))}</td><td>${o.linha==='LSR'?'N/A':cell(get(3))}</td><td><strong>${o.pas}/${o.req}</strong></td></tr>`;}html+='</tbody></table>';document.getElementById('rrTabelaMaquinas').innerHTML=html;
+    conteudo.style.display='block';status.textContent=`✓ Relatório Real calculado: ${detalhes.length} metas de máquina/turno.`;
+  }catch(e){status.textContent='Erro no Relatório Real: '+e.message;}
+}
+
 async function compartilharRelatorio(){
   const btn=[...document.querySelectorAll('button')].find(b=>b.getAttribute('onclick')==='compartilharRelatorio()');
   const antigo=btn?.textContent||'';
@@ -1427,21 +1517,21 @@ function entrarAdmin(){
   areaComum.style.display='none';
   adminHome.style.display='block';
   adminMenu.style.display='grid';
-  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function mostrarFerramentaAdmin(id){
   adminMenu.style.display='none';
-  ['consulta','relatorio','adminBox'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
+  ['consulta','relatorio','relatorioReal','adminBox'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function voltarMenuAdmin(){
-  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   adminMenu.style.display='grid';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function sairAdmin(){
-  ['consulta','relatorio','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   adminHome.style.display='none';
   areaComum.style.display='block';
   adminResultado.innerHTML='';adminRegistro=null;

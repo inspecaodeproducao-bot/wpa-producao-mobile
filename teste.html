@@ -1,114 +1,32 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>WPA — Ambiente de Teste 36H</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>WPA — Ambiente de Teste 36H</title>
 <style>
-body{font-family:Arial,sans-serif;background:#0b0f14;color:#f8fafc;margin:0;padding:16px}
-.card{max-width:560px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241}
-h1{font-size:24px;margin:0 0 8px}.sub{color:#a8b3c2}
-.alert{margin:16px 0;padding:16px;border-radius:12px;border:2px solid #f59e0b;background:#451a03;color:#fde68a;font-weight:800;line-height:1.5}
-.status{margin-top:12px;padding:12px;border-radius:10px;background:#0f141b;border:1px solid #334155;line-height:1.5}
-.ok{border-color:#15803d}.err{border-color:#dc2626}
-.info{margin-top:12px;padding:12px;border-radius:10px;background:#0f141b;border:1px solid #334155;line-height:1.6}
-button{margin-top:12px;padding:12px 16px;border:0;border-radius:10px;font-weight:700;cursor:pointer}
-input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #475569;background:#0f141b;color:#fff;margin-top:8px}
-.small{font-size:12px;color:#94a3b8;margin-top:10px;word-break:break-all}
-</style>
-</head>
-<body>
-<div class="card">
-<h1>WPA de Produção</h1>
-<div class="sub">Ambiente de homologação</div>
-
-<div class="alert">
-⚠️ AMBIENTE DE TESTE — 36 HORAS<br>
-<span style="font-weight:600">Registros temporários e isolados da produção oficial.</span>
-</div>
-
-<label for="token"><strong>Token da sessão</strong></label>
-<input id="token" autocomplete="off" placeholder="Cole aqui o token de teste 36H">
-
-<button id="validar">VALIDAR SESSÃO</button>
-
-<div id="status" class="status">
-Informe um token ou abra esta página com <code>?token=SEU_TOKEN</code>.
-</div>
-
-<div class="info">
-<strong>REGRAS DO AMBIENTE</strong><br><br>
-• Validade da sessão: 36 horas<br>
-• Registros isolados por sessão<br>
-• Registros vencidos deixam de aparecer<br>
-• Nenhuma gravação deve atingir a produção oficial
-</div>
-
-<div class="small">Backend: Sandbox WPA 36H</div>
-</div>
-
+body{font-family:Arial,sans-serif;background:#0b0f14;color:#f8fafc;margin:0;padding:16px}.card{max-width:560px;margin:auto;background:#151b23;padding:20px;border-radius:16px;border:1px solid #263241}h1{font-size:24px;margin:0 0 8px}.sub{color:#a8b3c2}h2{font-size:20px}.alert{margin:16px 0;padding:16px;border-radius:12px;border:2px solid #f59e0b;background:#451a03;color:#fde68a;font-weight:800;line-height:1.5}.status,.info,.records{margin-top:12px;padding:12px;border-radius:10px;background:#0f141b;border:1px solid #334155;line-height:1.5}.ok{border-color:#15803d}.err{border-color:#dc2626}button{margin-top:12px;padding:12px 16px;border:0;border-radius:10px;font-weight:700;cursor:pointer}input{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #475569;background:#0f141b;color:#fff;margin-top:8px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.section{margin-top:18px;padding-top:16px;border-top:1px solid #334155}.small{font-size:12px;color:#94a3b8;margin-top:10px;word-break:break-all}.record{padding:10px;margin-top:8px;border:1px solid #334155;border-radius:8px}label{display:block;margin-top:8px;font-weight:700}
+</style></head>
+<body><div class="card">
+<h1>WPA de Produção</h1><div class="sub">Ambiente de homologação</div>
+<div class="alert">⚠️ AMBIENTE DE TESTE — 36 HORAS<br><span style="font-weight:600">Registros temporários e isolados da produção oficial.</span></div>
+<label for="token">Token da sessão</label><input id="token" autocomplete="off" placeholder="Cole aqui o token de teste 36H">
+<button id="validar">VALIDAR SESSÃO</button><div id="status" class="status">Informe um token ou abra esta página com <code>?token=SEU_TOKEN</code>.</div>
+<div id="areaTeste" style="display:none"><div class="section"><h2>🧪 REGISTRO DE TESTE</h2><div class="grid">
+<div><label for="op">OP</label><input id="op" placeholder="TESTE-001"></div><div><label for="item">Item</label><input id="item" placeholder="ITEM-TESTE"></div><div><label for="maquina">Máquina</label><input id="maquina" placeholder="M01"></div><div><label for="observacao">Observação</label><input id="observacao" placeholder="Registro Sandbox 36H"></div></div>
+<button id="gravar">💾 GRAVAR TESTE</button><button id="listar">🔎 CONSULTAR REGISTROS</button><div id="resultado" class="status">Nenhum registro consultado ainda.</div><div id="registros" class="records" style="display:none"></div></div></div>
+<div class="info"><strong>REGRAS DO AMBIENTE</strong><br><br>• Validade da sessão: 36 horas<br>• Registros isolados por sessão<br>• Registros vencidos deixam de aparecer<br>• Nenhuma gravação deve atingir a produção oficial</div>
+<div class="small">Backend: Sandbox WPA 36H — V51 JSONP</div><iframe name="sandboxPostFrame" style="display:none"></iframe></div>
 <script>
-const API_URL = 'https://script.google.com/macros/s/AKfycbzcbKg8jKY08gK0e7_Vl7OyRoWee2TCKnm0kSxMA_JjusgzcK4D8hbMj-5KYAgM2rk/exec';
-
-const tokenInput = document.getElementById('token');
-const statusEl = document.getElementById('status');
-
-const tokenUrl = new URLSearchParams(location.search).get('token') || '';
-if (tokenUrl) tokenInput.value = tokenUrl;
-
-async function validar() {
-  const token = tokenInput.value.trim();
-
-  if (!token) {
-    statusEl.className = 'status err';
-    statusEl.textContent = '❌ Token não informado.';
-    return;
-  }
-
-  statusEl.className = 'status';
-  statusEl.textContent = '⏳ Validando sessão 36H...';
-
-  try {
-    const url =
-      API_URL +
-      '?modo=teste&acao=testePing&token=' +
-      encodeURIComponent(token) +
-      '&_=' + Date.now();
-
-    const resp = await fetch(url, {
-      method: 'GET',
-      cache: 'no-store'
-    });
-
-    const data = await resp.json();
-
-    if (!data.ok) {
-      throw new Error(data.erro || 'Sessão inválida.');
-    }
-
-    const expira = data.expiraEm
-      ? new Date(data.expiraEm).toLocaleString('pt-BR')
-      : 'não informado';
-
-    statusEl.className = 'status ok';
-    statusEl.innerHTML =
-      '<strong>✅ SESSÃO VÁLIDA</strong><br>' +
-      'Ambiente: TESTE<br>' +
-      'Validade: 36 horas<br>' +
-      'Expira em: ' + expira;
-  } catch (err) {
-    statusEl.className = 'status err';
-    statusEl.textContent =
-      '❌ Não foi possível validar a sessão: ' + err.message;
-  }
-}
-
-document.getElementById('validar').addEventListener('click', validar);
-
-if (tokenUrl) {
-  validar();
-}
-</script>
-</body>
-</html>
+const API_URL='https://script.google.com/macros/s/AKfycbzcbKg8jKY08gK0e7_Vl7OyRoWee2TCKnm0kSxMA_JjusgzcK4D8hbMj-5KYAgM2rk/exec';
+const tokenInput=document.getElementById('token'),statusEl=document.getElementById('status'),resultadoEl=document.getElementById('resultado'),registrosEl=document.getElementById('registros'),areaTeste=document.getElementById('areaTeste');
+const tokenUrl=new URLSearchParams(location.search).get('token')||'';if(tokenUrl)tokenInput.value=tokenUrl;
+function getToken(){return tokenInput.value.trim()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function jsonp(params){return new Promise((resolve,reject)=>{const cb='wpa36h_'+Date.now()+'_'+Math.random().toString(36).slice(2);const s=document.createElement('script');const q=new URLSearchParams(params);q.set('callback',cb);q.set('_',Date.now());const timer=setTimeout(()=>{cleanup();reject(new Error('Tempo esgotado ao consultar o Sandbox.'))},15000);window[cb]=d=>{cleanup();resolve(d)};s.onerror=()=>{cleanup();reject(new Error('Não foi possível acessar o Web App Sandbox.'))};s.src=API_URL+'?'+q.toString();document.head.appendChild(s);function cleanup(){clearTimeout(timer);delete window[cb];s.remove()}})}
+async function validar(){const token=getToken();if(!token){statusEl.className='status err';statusEl.textContent='❌ Token não informado.';areaTeste.style.display='none';return false}statusEl.className='status';statusEl.textContent='⏳ Validando sessão 36H...';try{const d=await jsonp({modo:'teste',acao:'testePing',token});if(!d.ok)throw new Error(d.erro||'Sessão inválida.');const e=d.expiraEm?new Date(d.expiraEm).toLocaleString('pt-BR'):'não informado';statusEl.className='status ok';statusEl.innerHTML='<strong>✅ SESSÃO VÁLIDA</strong><br>Ambiente: TESTE<br>Validade: 36 horas<br>Expira em: '+esc(e);areaTeste.style.display='block';return true}catch(e){statusEl.className='status err';statusEl.textContent='❌ Não foi possível validar a sessão: '+e.message;areaTeste.style.display='none';return false}}
+function hidden(form,n,v){const i=document.createElement('input');i.type='hidden';i.name=n;i.value=v;form.appendChild(i)}
+async function gravarTeste(){if(!(await validar()))return;const payload={op:document.getElementById('op').value.trim(),item:document.getElementById('item').value.trim(),maquina:document.getElementById('maquina').value.trim(),observacao:document.getElementById('observacao').value.trim()};resultadoEl.className='status';resultadoEl.textContent='⏳ Gravando no Sandbox 36H...';const f=document.createElement('form');f.method='POST';f.action=API_URL;f.target='sandboxPostFrame';f.style.display='none';hidden(f,'modo','teste');hidden(f,'acao','testeRegistrar');hidden(f,'token',getToken());hidden(f,'payload',JSON.stringify(payload));document.body.appendChild(f);f.submit();f.remove();setTimeout(async()=>{try{const d=await jsonp({modo:'teste',acao:'testeListar',token:getToken()});if(!d.ok)throw new Error(d.erro||'Falha ao consultar após gravação.');const lista=d.registros||[];resultadoEl.className='status ok';resultadoEl.textContent='✅ Gravação enviada. '+lista.length+' registro(s) ativo(s) nesta sessão.';renderLista(lista)}catch(e){resultadoEl.className='status err';resultadoEl.textContent='❌ '+e.message}},1800)}
+function renderLista(lista){registrosEl.style.display='block';if(!lista.length){registrosEl.textContent='Nenhum registro ativo.';return}registrosEl.innerHTML=lista.map(r=>{const p=r.payload||{};return '<div class="record"><strong>OP:</strong> '+esc(p.op)+'<br><strong>Item:</strong> '+esc(p.item)+'<br><strong>Máquina:</strong> '+esc(p.maquina)+'<br><strong>Observação:</strong> '+esc(p.observacao)+'<br><small>Criado em: '+esc(r.criadoEm||'')+'</small></div>'}).join('')}
+async function listarTestes(){const token=getToken();if(!token){resultadoEl.className='status err';resultadoEl.textContent='❌ Token não informado.';return}resultadoEl.className='status';resultadoEl.textContent='⏳ Consultando registros...';try{const d=await jsonp({modo:'teste',acao:'testeListar',token});if(!d.ok)throw new Error(d.erro||'Falha ao consultar.');const lista=d.registros||[];resultadoEl.className='status ok';resultadoEl.textContent='✅ '+lista.length+' registro(s) ativo(s) nesta sessão.';renderLista(lista)}catch(e){resultadoEl.className='status err';resultadoEl.textContent='❌ '+e.message}}
+document.getElementById('validar').addEventListener('click',validar);document.getElementById('gravar').addEventListener('click',gravarTeste);document.getElementById('listar').addEventListener('click',listarTestes);if(tokenUrl)validar();
+</script></body></html>
