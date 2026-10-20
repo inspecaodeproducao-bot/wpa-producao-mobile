@@ -1089,8 +1089,38 @@ async function carregarStatusCSV(url,tipo){
   const h=a.shift(),D=col(h,['Data']),T=col(h,['Turno']),L=col(h,['Linha']),M=col(h,['Máquina','Maquina']),S=col(h,['Status']),v=(r,i)=>i>=0?String(r[i]??'').trim():'';
   return a.map(r=>({data:v(r,D),turno:v(r,T),linha:v(r,L),maquina:v(r,M),status:v(r,S)}));
 }
-async function carregarSP(){try{turnosSP=await carregarStatusCSV(SP_CSV_URL,'SP')}catch(e){turnosSP=[]}}
-async function carregarPF(){try{turnosPF=await carregarStatusCSV(PF_CSV_URL,'PF')}catch(e){turnosPF=[]}}
+// GOLDEN KEY — leitura somente pelo endpoint de TESTE
+const WPA_TURNOS_TESTE_URL='https://script.google.com/macros/s/AKfycbzCJ33Px7RR8gzNcgy9glH1I3bn8GHldXuxJrZ-Ec-T6RiVfZPwmciwY9UvZ0_XvEyK/exec';
+function carregarStatusJSONP(tipo){
+  return new Promise((resolve,reject)=>{
+    const callback='wpaCb_'+Date.now()+'_'+Math.random().toString(36).slice(2,8);
+    const script=document.createElement('script');
+    let concluido=false,timer;
+    const finalizar=(erro,dados)=>{
+      if(concluido)return;
+      concluido=true;clearTimeout(timer);
+      try{delete window[callback]}catch(_e){window[callback]=undefined}
+      script.remove();erro?reject(erro):resolve(dados);
+    };
+    timer=setTimeout(()=>finalizar(Error('Tempo esgotado ao consultar '+tipo)),15000);
+    window[callback]=(dados)=>{
+      if(!dados||dados.ok!==true||!Array.isArray(dados.registros)){
+        finalizar(Error(dados&&dados.erro||'Resposta inválida para '+tipo));return;
+      }
+      finalizar(null,dados.registros.map(r=>({
+        data:String(r.data||'').trim(),turno:String(r.turno||'').trim(),
+        linha:String(r.linha||'').trim(),maquina:String(r.maquina||'').trim(),
+        status:String(r.status||tipo).trim().toUpperCase()
+      })));
+    };
+    script.onerror=()=>finalizar(Error('Falha ao consultar '+tipo));
+    script.src=WPA_TURNOS_TESTE_URL+'?acao=consultaStatusSPPFTeste&tipo='+
+      encodeURIComponent(tipo)+'&callback='+encodeURIComponent(callback)+'&_='+Date.now();
+    document.head.appendChild(script);
+  });
+}
+async function carregarSP(){try{turnosSP=await carregarStatusJSONP('SP')}catch(e){console.error('[WPA TESTE] SP:',e);turnosSP=[]}}
+async function carregarPF(){try{turnosPF=await carregarStatusJSONP('PF')}catch(e){console.error('[WPA TESTE] PF:',e);turnosPF=[]}}
 async function enviarStatus(tipo,maq,n,comando){
   const b=new URLSearchParams({acao:tipo,data:dataISOparaBR(turnosData.value),turno:String(n),linha:turnosLinha.value,maquina:String(maq),comando});
   await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString()});
