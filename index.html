@@ -87,6 +87,10 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
 .sp-handle{width:70px;height:6px;border-radius:99px;background:#64748b;margin:0 auto 18px}.sp-title{font-size:28px;font-weight:900;margin:0}.sp-sub{font-size:18px;color:#94a3b8;margin:3px 0 18px}.sp-label{font-size:17px;font-weight:800;margin:10px 0}.sp-shifts{display:grid;gap:10px}.sp-shift{display:grid;grid-template-columns:52px 1fr;align-items:center;gap:12px;width:100%;text-align:left;background:#0f141b;border:2px solid #475569;border-radius:16px;padding:12px;color:#f8fafc;margin:0}.sp-shift.ativa{border-color:#3b82f6;background:#172033}.sp-num{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#2563eb;font-size:25px;font-weight:900}.sp-shift strong{font-size:18px;display:block}.sp-shift span{color:#b9c6d8;font-size:16px}.sp-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.sp-actions button{margin:0}.sp-confirmar{background:#2563eb}.sp-confirmar.retirar{background:#dc2626}
 .status-tipo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.status-tipo button{background:#0f141b;border:1px solid #475569;color:#e5e7eb;padding:12px 8px;border-radius:12px;font-weight:800}.status-tipo button.ativa{border-color:#60a5fa;background:#172554;color:#dbeafe}
 @media(min-width:600px){.sp-modal-bg{align-items:center}}
+.whatsapp-problema{display:none;margin:14px 0;padding:14px;border:2px solid #22c55e;border-radius:14px;background:#10251a;color:#f0fdf4}
+.whatsapp-problema h3{margin:0 0 8px}.whatsapp-problema .mensagem-preview{white-space:pre-wrap;background:#0b1710;border:1px solid #365a43;border-radius:10px;padding:10px;line-height:1.45}
+.whatsapp-problema .foto-preview{display:none;width:100%;max-height:320px;object-fit:contain;margin-top:10px;border-radius:10px;background:#0b0f14}
+.whatsapp-problema .acoes-whatsapp{display:grid;gap:8px}.whatsapp-problema .acoes-whatsapp button{margin-top:8px}
 </style>
 <style>
 .btn-cadastrar-desvio{
@@ -116,16 +120,53 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
 .desvio-card .desvio-acao{border:0;border-radius:9px;padding:10px 8px;font-weight:800;font-size:13px;cursor:pointer}
 .desvio-card .revalidar{background:#2563eb;color:#fff}
 .desvio-card .encerrar{background:#b91c1c;color:#fff}
+.historico-desvio-card{margin:10px 0;padding:12px;border:1px solid #33465a;border-radius:12px;background:#0e151d;line-height:1.55}
+.historico-desvio-card strong{font-size:17px}.historico-desvio-card .status-desvio{font-weight:800;color:#bfdbfe}
 .desvio-modal .numero-fixo{font-size:22px;font-weight:900;background:#0e151d;border:1px solid #33465a;border-radius:12px;padding:12px}
 
 #msgCadastroDesvio{margin-top:12px;padding:10px;border-radius:10px;display:none}
+.whatsapp-problema{display:none;margin:14px 0;padding:14px;border:2px solid #22c55e;border-radius:14px;background:#10251a;color:#f0fdf4}
+.whatsapp-problema h3{margin:0 0 8px}.whatsapp-problema .mensagem-preview{white-space:pre-wrap;background:#0b1710;border:1px solid #365a43;border-radius:10px;padding:10px;line-height:1.45}
+.whatsapp-problema .foto-preview{display:none;width:100%;max-height:320px;object-fit:contain;margin-top:10px;border-radius:10px;background:#0b0f14}
+.whatsapp-problema .acoes-whatsapp{display:grid;gap:8px}.whatsapp-problema .acoes-whatsapp button{margin-top:8px}
 </style>
 
+
+<style>
+/* Relatório Real: nomes legíveis em telas estreitas, com contraste explícito. */
+.real-volantes-table{width:100%;min-width:0!important;table-layout:fixed;border-spacing:3px!important;font-size:12px!important;color:#f8fafc!important;background:transparent!important}
+.real-volantes-table th{color:#cbd5e1!important;background:#19222e!important}
+.real-volantes-table td{color:#f8fafc!important;background:#0f141b!important;vertical-align:middle!important}
+.real-volantes-table th:first-child,.real-volantes-table td:first-child{width:44%;min-width:0;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.35;padding:7px 6px!important;color:#f8fafc!important;background:#151b23!important}
+.real-volantes-table th:nth-child(2),.real-volantes-table td:nth-child(2){width:27%;white-space:normal;line-height:1.3;padding:7px 3px!important}
+.real-volantes-table th:nth-child(3),.real-volantes-table td:nth-child(3){width:29%;white-space:normal;line-height:1.3;padding:7px 3px!important}
+@media(max-width:420px){.real-volantes-table{font-size:11px!important}.real-volantes-table th:first-child,.real-volantes-table td:first-child{width:42%;padding:6px 4px!important}.real-volantes-table th:nth-child(2),.real-volantes-table td:nth-child(2){width:29%}.real-volantes-table th:nth-child(3),.real-volantes-table td:nth-child(3){width:29%}}
+.real-matriz-wrap{overflow-x:auto;margin-top:10px;-webkit-overflow-scrolling:touch}
+.real-matriz{width:100%;min-width:600px;border-collapse:separate;border-spacing:4px;font-size:12px}
+.real-matriz th{padding:8px 5px;background:#19222e;color:#cbd5e1;text-align:center;white-space:nowrap}
+.real-matriz td{padding:7px 5px;text-align:center;background:#0f141b;color:#f8fafc;border:1px solid #293747;border-radius:7px;white-space:nowrap}
+.real-matriz th:first-child,.real-matriz td:first-child{position:sticky;left:0;z-index:2;background:#19222e;text-align:left}.real-matriz td:first-child{background:#0f141b}.real-matriz th:first-child{z-index:3;background:#19222e}.real-matriz .real-maq{text-align:left;font-weight:800;color:#f8fafc}
+.real-matriz .real-turno{font-weight:800;border-radius:8px;min-width:48px}
+.real-matriz .real-zero{background:#EF4444!important;color:#FFFFFF!important;border-color:#B91C1C!important;font-weight:900}
+.real-matriz .real-um{background:#FACC15!important;color:#422006!important;border-color:#CA8A04!important;font-weight:900}
+.real-matriz .real-dois{background:#22C55E!important;color:#052E16!important;border-color:#15803D!important;font-weight:900}
+.real-matriz .real-inativo{background:#263241;color:#cbd5e1;border-color:#475569}
+.real-matriz .real-cobertura{font-weight:900;color:#fff}
+.real-matriz .real-excedente{color:#fca5a5}
+.real-legenda{display:flex;flex-wrap:wrap;gap:8px;margin:9px 0;color:#94a3b8;font-size:11px}
+.real-legenda span{display:inline-flex;align-items:center;gap:5px}
+.real-legenda i{width:10px;height:10px;border-radius:3px;display:inline-block}.real-legenda .real-um{background:#FACC15!important;border-color:#CA8A04!important}.real-legenda .real-dois{background:#22C55E!important;border-color:#15803D!important}.real-legenda .real-zero{background:#EF4444!important;border-color:#B91C1C!important}
+.whatsapp-problema{display:none;margin:14px 0;padding:14px;border:2px solid #22c55e;border-radius:14px;background:#10251a;color:#f0fdf4}
+.whatsapp-problema h3{margin:0 0 8px}.whatsapp-problema .mensagem-preview{white-space:pre-wrap;background:#0b1710;border:1px solid #365a43;border-radius:10px;padding:10px;line-height:1.45}
+.whatsapp-problema .foto-preview{display:none;width:100%;max-height:320px;object-fit:contain;margin-top:10px;border-radius:10px;background:#0b0f14}
+.whatsapp-problema .acoes-whatsapp{display:grid;gap:8px}.whatsapp-problema .acoes-whatsapp button{margin-top:8px}
+</style>
 </head><body><div class="card" id="areaComum">
 <h1 id="tituloApp">Liberação de Produção</h1><div class="sub">NIIMBOT B1 • 50 × 30 mm • QR Forms</div>
 <button class="green" type="button" onclick="conectarB1()">CONECTAR B1</button><div class="status" id="status">B1 ainda não conectada.</div><div class="fila-status" id="filaStatus">✓ Nenhuma inspeção pendente.</div>
-<form onsubmit="gerar(event)"><label>Item</label><input id="item" inputmode="numeric" required placeholder="Ex.: 869"><label>OP</label><input id="op" inputmode="numeric" required placeholder="Ex.: 577110"><label id="gatilhoTurnos">Linha</label><select id="linha" required onchange="atualizarMaquinas()"><option value="">Selecione a linha</option><option>Linha 1</option><option>Linha 2</option><option>Linha 3</option><option>Linha 4</option><option>Linha 5</option><option>LSR</option></select><label>Máquina</label><select id="maquina" required disabled><option value="">Primeiro selecione a linha</option></select><label>Setor</label><select id="setor" required><option value="">Selecione o setor</option><option>Vulcanização</option><option>Inspeção</option><option>LSR</option><option>Corte</option></select><button type="submit">GERAR ETIQUETA + QR</button><button class="gray" type="button" onclick="novoQR()">LIMPAR / NOVA ETIQUETA</button></form>
+<form onsubmit="gerar(event)"><label>Item</label><input id="item" inputmode="numeric" required placeholder="Ex.: 869"><label>OP</label><input id="op" inputmode="numeric" required placeholder="Ex.: 577110"><label id="gatilhoTurnos">Linha</label><select id="linha" required onchange="atualizarMaquinas()"><option value="">Selecione a linha</option><option>Linha 1</option><option>Linha 2</option><option>Linha 3</option><option>Linha 4</option><option>Linha 5</option><option>LSR</option></select><label>Máquina</label><select id="maquina" required disabled><option value="">Primeiro selecione a linha</option></select><label>Setor</label><select id="setor" required><option value="">Selecione o setor</option><option>Vulcanização</option><option>Inspeção</option><option>LSR</option><option>Corte</option></select><button type="submit">GERAR ETIQUETA + QR</button><button class="green" id="btnInspecaoManual" type="button" onclick="iniciarInspecaoManual()" style="display:none">✍️ INICIAR INSPEÇÃO SEM QR</button><div class="small" id="dicaInspecaoManual" style="display:none">Inspeção manual protegida pelo PIN 000000.</div><button class="gray" type="button" onclick="novoQR()">LIMPAR / NOVA ETIQUETA</button></form>
 <div id="resultado"><canvas id="preview" width="384" height="240"></canvas><button class="orange" id="btnPrint" type="button" onclick="imprimirB1()">IMPRIMIR NA B1</button><div class="small" id="linktxt"></div></div><button class="green" type="button" onclick="abrirLeitor()">📷 LER QR CODE</button><button type="button" id="btnDiarioVolantesVisual" onclick="abrirDiarioVolantesBasico()">📋 DIÁRIO DOS VOLANTES</button>
+<button class="orange" id="btnAdmTurnoArea" type="button" onclick="abrirAdmTurnosArea()">🕒 ADM TURNO — aguardando 1º Voleio</button><div class="small" id="admTurnoAreaInfo">A área será definida pelo primeiro Voleio confirmado neste turno.</div>
 <div class="scanner" id="scanner">
   <h2>Leitor de QR Code</h2>
   <div class="sub">Aponte a câmera para uma etiqueta de Liberação de Produção.</div>
@@ -163,6 +204,19 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
 <button class="green" id="btnEnviarInspecao" type="button" onclick="enviarInspecao()">ENVIAR INSPEÇÃO</button>
   <button class="gray" type="button" onclick="cancelarInspecao()">CANCELAR / LER OUTRO QR</button>
   <div class="status" id="statusInspecao">Preencha os campos obrigatórios.</div>
+  <section class="whatsapp-problema" id="whatsappProblema" aria-live="polite">
+    <h3>📲 Enviar via WhatsApp</h3>
+    <div class="small">Confira a mensagem. Você poderá escolher o grupo ou contato na tela de compartilhamento do aparelho.</div>
+    <p class="mensagem-preview" id="whatsappMensagemPreview"></p>
+    <input id="whatsappFoto" type="file" accept="image/*" capture="environment" hidden>
+    <img class="foto-preview" id="whatsappFotoPreview" alt="Prévia da foto selecionada">
+    <div class="acoes-whatsapp">
+      <button class="gray" type="button" onclick="document.getElementById('whatsappFoto').click()">📷 TIRAR / ESCOLHER FOTO</button>
+      <button class="green" type="button" onclick="compartilharProblemaWhatsApp()">ENVIAR VIA WHATSAPP</button>
+      <button class="gray" type="button" onclick="continuarAposProblema()">CONTINUAR SEM WHATSAPP</button>
+    </div>
+    <div class="small" id="whatsappStatus"></div>
+  </section>
 </div>
 </div>
 <div class="admin-modal-bg" id="adminPinModal">
@@ -186,8 +240,9 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
   <div class="admin-tools" id="adminMenu">
     <button class="green" type="button" onclick="mostrarFerramentaAdmin('consulta')">🔎 CONSULTA</button>
     <button type="button" onclick="mostrarFerramentaAdmin('relatorio')">📊 RELATÓRIO</button>
-    <button class="green" type="button" onclick="mostrarFerramentaAdmin('relatorioReal')">🎯 RELATÓRIO REAL</button>
-    <button class="orange" type="button" onclick="mostrarFerramentaAdmin('adminBox')">🛠️ CORREÇÃO</button>
+    <button class="green" type="button" onclick="abrirRelatorioReal()">🎯 RELATÓRIO REAL</button>
+    <button class="orange" type="button" onclick="mostrarFerramentaAdmin('historicoDesvios')">📋 HISTÓRICO DE DESVIOS</button>
+    <button class="orange" type="button" onclick="window.open(CONFIG_URL+'?acao=qpa','_top')">📊 QPA • CONSULTA E AUDITORIA</button>
   </div>
   <div class="admin-section" id="consulta"><h2>Consultar Produção</h2><div class="sub">Pesquise os registros enviados pelo formulário.</div>
 <label>OP</label><input id="qop" inputmode="numeric" placeholder="Ex.: 577110">
@@ -238,23 +293,50 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
   <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
 </div>
   <div class="admin-section" id="relatorioReal">
-  <h2>🎯 Relatório Real</h2>
-  <div class="sub">Cobertura por máquina e turno. Máquina normal = 2 passagens; LSR = 1 passagem nos turnos 1 e 2. No 3º turno, LSR não se aplica.</div>
-  <label>Período</label>
-  <select id="periodoRelReal" onchange="ajustarPeriodoRelReal()"><option value="semana">Esta semana</option><option value="semanaAnterior">Semana anterior</option><option value="mes">Este mês</option><option value="mesAnterior">Mês anterior</option><option value="personalizado">Personalizado</option></select>
-  <div id="datasRelReal" style="display:none"><label>De</label><input id="relRealInicio" type="date"><label>Até</label><input id="relRealFim" type="date"></div>
-  <button type="button" onclick="gerarRelatorioReal()">🎯 GERAR RELATÓRIO REAL</button>
-  <div class="status" id="statusRelatorioReal">Selecione o período e gere o Relatório Real.</div>
-  <div id="conteudoRelatorioReal" style="display:none">
-    <div class="meta" id="periodoTextoReal"></div>
-    <div class="report-grid"><div class="kpi"><strong id="rrCobertura">0%</strong><span>Cobertura geral</span></div><div class="kpi"><strong id="rrCompletas">0</strong><span>Máquinas completas</span></div><div class="kpi"><strong id="rrParciais">0</strong><span>Máquinas parciais</span></div><div class="kpi"><strong id="rrPendentes">0</strong><span>Máquinas sem passagem</span></div></div>
-    <div class="chart-card"><h3>Resumo por turno</h3><div id="rrResumoTurnos"></div></div>
-    <div class="chart-card"><h3>Detalhamento por máquina</h3><div id="rrTabelaMaquinas" style="overflow-x:auto"></div></div>
-    <div class="chart-card"><h3>Legenda</h3><div class="meta"><strong>2/2</strong> completa • <strong>1/2</strong> parcial • <strong>0/2</strong> não realizada • <strong>LSR 1/1</strong> completa • LSR não aplicável no 3º turno.</div></div>
+  <h2>Relatório Real de Voleios</h2>
+  <div class="sub">Relatório de cobertura por voleios. Meta: 2 voleios por máquina em turno com atividade. Se houver voleio no turno, entram todas as máquinas, exceto SP. Máquina PF com ao menos 1 voleio conta 100% de aproveitamento.</div>
+  <label for="periodoRelatorioReal">Período</label>
+  <select id="periodoRelatorioReal" onchange="ajustarPeriodoRelatorioReal()">
+    <option value="dia">Dia atual</option>
+    <option value="diaPersonalizado">Dia personalizado</option>
+    <option value="semana">Semana atual</option>
+    <option value="mes">Mês atual</option>
+    <option value="personalizado">Personalizado</option>
+  </select>
+  <div id="diaPersonalizadoReal" style="display:none">
+    <label for="dataDiaReal">Escolha o dia</label><input id="dataDiaReal" type="date">
   </div>
-  <button class="gray" type="button" onclick="fecharRelatorioReal()">FECHAR RELATÓRIO REAL</button>
-  <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
-</div>
+  <div id="datasPersonalizadasReal" style="display:none">
+    <label for="dataInicioReal">De</label><input id="dataInicioReal" type="date">
+    <label for="dataFimReal">Até</label><input id="dataFimReal" type="date">
+  </div>
+  <button type="button" onclick="gerarRelatorioReal()">ATUALIZAR RELATÓRIO REAL</button>
+  <div class="status" id="statusRelatorioReal">Escolha a data e atualize para consultar os voleios.</div>
+  <div id="conteudoRelatorioReal" style="display:none">
+    <div class="report-grid">
+      <div class="kpi"><strong id="realDiasAtivos">0</strong><span>Dias com atividade registrada</span></div>
+      <div class="kpi"><strong id="realMaqAtivas">0</strong><span>Máquinas ativas</span></div>
+      <div class="kpi"><strong id="realTurnosAtivos">0</strong><span>Combinações data/máquina/turno ativas</span></div>
+      <div class="kpi"><strong id="realMeta">0</strong><span>Meta de voleios</span></div>
+      <div class="kpi"><strong id="realContados">0</strong><span>Voleios considerados</span></div>
+      <div class="kpi"><strong id="realCobertura">0%</strong><span>Cobertura real</span></div>
+    </div>
+    <div class="chart-card"><h3>Percentual real por volante (máximo 20%)</h3><div class="meta">O crédito acompanha o responsável confirmado na área e no turno da máquina. Só contam até 2 voleios por máquina em cada turno ativo.</div><div id="tabelaVolantesReal"></div><div class="meta" id="realSemResponsavel"></div></div>
+    <div class="chart-card"><h3>📋 Cobertura por máquina e turno</h3><div class="meta">Se houver ao menos um voleio no turno, todas as máquinas entram na meta, exceto SP. PF com voleio registrado conta 100%. Turnos sem voleios não geram meta; sexta só 1º/2º e domingo só 3º turno.</div><div class="real-legenda"><span><i class="real-zero"></i>0 voleios</span><span><i class="real-um"></i>1 registro válido</span><span><i class="real-dois"></i>2 ou mais registros</span><span><i class="real-inativo"></i>Sem voleios: fora da meta</span></div><div class="real-matriz-wrap" id="tabelaMaquinasReal"></div></div>
+    <div class="small">Responsável por área/turno: primeiro par de voleios consecutivos da área feito pelo mesmo volante. Linhas 1–2 = Área A; Linhas 3–5 e LSR = Área B. Em ajuda, o crédito acompanha o responsável da área da máquina.</div>
+  </div>
+  <button class="gray" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
+  </div>
+  <div class="admin-section" id="historicoDesvios">
+    <h2>Histórico de desvios por item</h2>
+    <div class="sub">Consulte desvios ativos e encerrados vinculados ao item.</div>
+    <label for="historicoDesviosItem">Item</label>
+    <input id="historicoDesviosItem" inputmode="numeric" placeholder="Ex.: 869">
+    <button type="button" onclick="consultarHistoricoDesvios()">CONSULTAR DESVIOS</button>
+    <div class="status" id="statusHistoricoDesvios">Informe o item para consultar o histórico.</div>
+    <div id="listaHistoricoDesvios"></div>
+    <button class="admin-back" type="button" onclick="voltarMenuAdmin()">← VOLTAR AO MENU ADMIN</button>
+  </div>
   <div class="admin-section" id="adminBox">
 <h2>Correção administrativa</h2><div class="sub">O horário original é preservado.</div>
 <label>OP</label><input id="adminOP" inputmode="numeric">
@@ -527,55 +609,84 @@ async function carregarConfiguracao(){
     // Se uma linha já estiver selecionada, atualiza o combo sem exigir recarregar a tela.
     if(linha.value) atualizarMaquinas();
     console.log('Configuração de máquinas, volantes e problemas carregada da planilha.');
+    return true;
   }catch(e){
     console.warn('Usando lista local de segurança:',e);
+    return false;
   }
 }
 carregarConfiguracao();
 const FORM="https://docs.google.com/forms/d/e/1FAIpQLScvw1a_FnQeHpqHGH6PFyGK5ORrK6Zf9KYf94RKULwCjcoD_Q/viewform";
+async function fetchWpaRegistrosOficiais(filtros={}){
+  const u=new URL(CONFIG_URL);
+  u.searchParams.set('acao','qpaConsulta');
+  const f=typeof filtros==='string'?{data:filtros}:((filtros&&typeof filtros==='object')?filtros:{});
+  const dataISO=String(f.data||'').trim();
+  if(dataISO)u.searchParams.set('data',dataISO);
+  for(const k of ['op','item','maquina']){const v=String(f[k]||'').trim();if(v)u.searchParams.set(k,v)}
+  const json=await new Promise((resolve,reject)=>{
+    const cb='wpaCb_'+Date.now()+'_'+Math.floor(Math.random()*100000),script=document.createElement('script');
+    let finalizado=false;
+    const limpar=()=>{if(finalizado)return;finalizado=true;clearTimeout(timer);delete window[cb];script.remove()};
+    const timer=setTimeout(()=>{limpar();reject(Error('O backend oficial não respondeu à consulta.'))},20000);
+    window[cb]=dados=>{limpar();resolve(dados)};
+    script.onerror=()=>{limpar();reject(Error('Não foi possível acessar a consulta oficial do WPA. Verifique se a ação qpaConsulta está implantada.'))};
+    u.searchParams.set('callback',cb);script.async=true;script.src=u.toString();document.head.appendChild(script);
+  });
+  if(!json||json.ok!==true||!Array.isArray(json.registros))throw Error(json?.erro||'Resposta inválida da consulta oficial.');
+  const csv=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const headers=['Carimbo de data/hora','Data/Hora corrigida','Máquina','Número da OP','Item','Tipo de atividade','Volante responsável','Situação encontrada','Setor','Observações'];
+  const rows=json.registros.map(r=>{
+    const data=String(r.data||'').trim(),hora=String(r.hora||r.dataHora||'').trim();
+    const partes=data.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    const dataBR=partes?partes[3]+'/'+partes[2]+'/'+partes[1]:data;
+    const carimbo=dataBR?(dataBR+(hora?' '+hora:'')):String(r.dataHora||'');
+    return [carimbo,'',r.maquina||'',r.op||'',r.item||'',r.tipo||'',r.volante||'',r.situacao||'',r.grupo||r.linha||'',[r.descricao,r.acao].filter(Boolean).join(' • ')];
+  });
+  return {ok:true,totalRegistros:json.total||rows.length,truncado:!!json.truncado,text:async()=>[headers,...rows].map(row=>row.map(csv).join(',')).join('\n')};
+}const CHAVE_CACHE_RELATORIO_PRODUCAO='wpaRelatorioProducaoDiaV2';
+const esperarRelatorioProducao=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function carregarRegistrosRelatorioProducao(ini,fim){
+  let cache={};try{cache=JSON.parse(localStorage.getItem(CHAVE_CACHE_RELATORIO_PRODUCAO)||'{}')}catch(_e){}
+  const datas=[],d=new Date(ini);d.setHours(12,0,0,0);const limite=new Date(fim);limite.setHours(12,0,0,0);
+  while(d<=limite){datas.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`);d.setDate(d.getDate()+1)}
+  let cabecalho=['Carimbo de data/hora','Data/Hora corrigida','Máquina','Número da OP','Item','Tipo de atividade','Volante responsável','Situação encontrada','Setor'],ultimaConsulta=0;const registros=[],validade=5*60*1000;
+  for(let i=0;i<datas.length;i++){
+    const data=datas[i],salvo=cache[data];let linhas=Array.isArray(salvo?.linhas)&&Date.now()-Number(salvo.at)<validade?salvo.linhas:null;
+    if(!linhas){
+      statusRelatorio.textContent=`Consultando produção: dia ${i+1} de ${datas.length}...`;
+      if(ultimaConsulta)await esperarRelatorioProducao(Math.max(0,1200-(Date.now()-ultimaConsulta)));
+      let resp=null,erro=null;
+      for(let tentativa=0;tentativa<3;tentativa++){
+        ultimaConsulta=Date.now();
+        try{resp=await fetchWpaRegistrosOficiais(data);erro=null;break}catch(e){erro=e;const msg=String(e.message||e);if(!/quota|exceeded|429|limite de leitura/i.test(msg)||tentativa===2)break;await esperarRelatorioProducao(15000*(tentativa+1))}
+      }
+      if(!resp)throw erro||Error('Não foi possível consultar '+data+'.');
+      const matriz=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));
+      if(!matriz.length)throw Error('A consulta não retornou dados para '+data+'.');
+      linhas=matriz.slice(1);cache[data]={at:Date.now(),linhas};
+      try{const chaves=Object.keys(cache);if(chaves.length>90)chaves.sort((a,b)=>(cache[a]?.at||0)-(cache[b]?.at||0)).slice(0,chaves.length-90).forEach(k=>delete cache[k]);localStorage.setItem(CHAVE_CACHE_RELATORIO_PRODUCAO,JSON.stringify(cache))}catch(_e){}
+    }
+    registros.push(...linhas);
+  }
+  return cabecalho?[cabecalho,...registros]:[];
+}
 const CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=351583205&single=true&output=csv";
 const SP_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=735510297&single=true&output=csv";
 const PF_CSV_URL="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjay5pBBlL1qlLKk-ECMzEktnZ6e9tF62Sw5TsdySsw2Y3ZlJ00VSqJU02FF4hsC4dmxh9yC7T4GKC/pub?gid=1712938767&single=true&output=csv";
 function csvAtualizado(url){return url+(url.includes('?')?'&':'?')+'_lp='+Date.now();}
-function carregarMatrizPlanilhaCompat(url){
-  return new Promise(async (resolve,reject)=>{
-    // 1) Em HTTPS/servidor normal, mantém o caminho original.
-    try{
-      const r=await fetch(csvAtualizado(url),{cache:'no-store'});
-      if(r.ok){
-        const txt=await r.text();
-        return resolve(parseCSV(txt).filter(row=>row.some(v=>String(v).trim())));
-      }
-    }catch(_e){}
-    // 2) Fallback JSONP para arquivos abertos como content:// no celular.
-    try{
-      const m=String(url).match(/\/spreadsheets\/d\/e\/([^/]+)\/pub\?/i);
-      const gid=(String(url).match(/[?&]gid=([^&]+)/i)||[])[1];
-      if(!m||!gid)throw Error('URL da planilha não permite fallback JSONP.');
-      const cb='__wpaGviz_'+Date.now()+'_'+Math.floor(Math.random()*100000);
-      const script=document.createElement('script');
-      const base='https://docs.google.com/spreadsheets/d/e/'+m[1]+'/gviz/tq';
-      const timer=setTimeout(()=>{cleanup();reject(Error('Tempo esgotado ao acessar a planilha.'));},15000);
-      function cleanup(){clearTimeout(timer);try{delete window[cb]}catch(_){}script.remove();}
-      window[cb]=function(data){
-        try{
-          if(!data||!data.table)throw Error('Resposta da planilha inválida.');
-          const cols=(data.table.cols||[]).map(c=>c.label||c.id||'');
-          const rows=(data.table.rows||[]).map(row=>(row.c||[]).map(c=>c&&c.v!=null?(c.f!=null?c.f:c.v):''));
-          cleanup();resolve([cols,...rows]);
-        }catch(e){cleanup();reject(e)}
-      };
-      script.onerror=()=>{cleanup();reject(Error('Não foi possível acessar a planilha via JSONP.'));};
-      script.src=base+'?gid='+encodeURIComponent(gid)+'&tqx='+encodeURIComponent('out:json;responseHandler:'+cb)+'&_lp='+Date.now();
-      document.head.appendChild(script);
-    }catch(e){reject(e)}
-  });
-}
-
 const MODEL={name_prefixes:["B1"],task:"b1",dpi:203,density:3,label_type:1,speed:1};
 const SIZE={w_px:384,h_px:240,offset_y_px:4};
 let conectado=false, etiquetaURL="";
 function atualizarMaquinas(){const l=linha.value,s=maquina;s.innerHTML="";if(!l){s.disabled=true;s.innerHTML='<option value="">Primeiro selecione a linha</option>';return}s.disabled=false;s.innerHTML='<option value="">Selecione a máquina</option>';MAQUINAS[l].forEach(m=>s.add(new Option(m,m)))}
+let lancamentoManualLiberado=false;
+function iniciarInspecaoManual(){
+  if(!lancamentoManualLiberado){abrirLoginTurnos();return}
+  const form=document.querySelector('#areaComum form');if(!form.reportValidity())return;
+  const d={maquina:maquina.value.trim(),op:op.value.trim(),item:item.value.trim(),setor:setor.value.trim()};
+  if(!d.maquina){maquina.focus();setStatus('Selecione a máquina para iniciar a inspeção.');return}
+  lancamentoManualLiberado=false;scanner.style.display='none';abrirInspecao(d);
+}
 function setStatus(t){document.getElementById('status').textContent=t}
 async function conectarB1(){try{if(!window.Niimbot||!Niimbot.isSupported())throw new Error('Web Bluetooth não disponível. Abra pelo Chrome em uma página HTTPS.');setStatus('Procurando B1...');const p=await Niimbot.identify(MODEL);if(!p||p.modelId!==4096)throw new Error('A impressora encontrada não foi identificada como B1 (id 4096).');conectado=true;setStatus('✓ B1 conectada — id '+p.modelId+' • protocolo '+(p.protocolVersion??'detectado'));}catch(e){conectado=false;setStatus('Erro: '+e.message)}}
 async function gerar(e){e.preventDefault();const it=item.value.trim(),o=op.value.trim(),m=maquina.value.trim(),s=setor.value.trim();const p=new URLSearchParams({usp:'pp_url','entry.1859001491':m,'entry.161521641':o,'entry.725397250':it,setor:s});const url=FORM+'?'+p.toString();if(!await confirmarNoApp('OP: '+o+'\nItem: '+it+'\nMáquina: '+m+'\nSetor: '+s))return;desenharEtiqueta(url,o,it,m);linktxt.textContent=url;resultado.style.display='block';resultado.scrollIntoView({behavior:'smooth'});}
@@ -689,7 +800,7 @@ async function verificarReincidenciaItem(d){
   alertaReincidencia.style.display='none';
   alertaReincidenciaTexto.textContent='';
   try{
-    const x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});
+    const x=await fetchWpaRegistrosOficiais({item:d.item});
     if(!x.ok)return;
     const a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));
     const h=a.shift();
@@ -739,7 +850,7 @@ async function abrirInspecao(d){
   inspDados=d;inspMaq.textContent=d.maquina;inspOP.textContent=d.op;inspItem.textContent=d.item;inspSetor.textContent=d.setor||'-';
   montarOpcoesInspecao();inspVolante=localStorage.getItem('ultimoVolante')||'';inspTipo='';
   if(VOLANTES.includes(inspVolante))marcarBotao(opcoesVolante,inspVolante);else inspVolante='';
-  inspInfo.value='';statusInspecao.textContent='Preencha os campos obrigatórios.';btnEnviarInspecao.disabled=false;
+  inspInfo.value='';statusInspecao.textContent='Preencha os campos obrigatórios.';btnEnviarInspecao.disabled=false;document.getElementById('whatsappProblema').style.display='none';document.getElementById('whatsappFoto').value='';document.getElementById('whatsappFotoPreview').style.display='none';document.getElementById('whatsappStatus').textContent='';
   alertaReincidencia.style.display='none';
   inspecao.style.display='block';inspecao.scrollIntoView({behavior:'smooth'});
   verificarReincidenciaItem(d);
@@ -785,7 +896,7 @@ async function tentarEnviarItemFila(item,{aguardar=true}={}){
     // Isso elimina a duplicidade causada pelo atraso de atualização do CSV.
     try{
       if(await confirmarIdInspecao(item.id)){
-        removerDaFila(item.id);return 'confirmado';
+        vincularAreaAoPrimeiroVoleio(item);removerDaFila(item.id);return 'confirmado';
       }
       return 'pendente';
     }catch(e){return 'offline'}
@@ -796,7 +907,7 @@ async function tentarEnviarItemFila(item,{aguardar=true}={}){
     item.tentado=true;item.ultimaTentativa=Date.now();
     const f=lerFila(),i=f.findIndex(x=>x.id===item.id);if(i>=0){f[i]=item;salvarFila(f)}
   }catch(e){return 'offline'}
-  if(aguardar&&await confirmarItemFila(item)){removerDaFila(item.id);return 'confirmado'}
+  if(aguardar&&await confirmarItemFila(item)){vincularAreaAoPrimeiroVoleio(item);removerDaFila(item.id);return 'confirmado'}
   return 'pendente';
 }
 async function sincronizarFila(){
@@ -816,6 +927,47 @@ async function sincronizarFila(){
 function voltarInicioAposInspecao(){
   inspecao.style.display='none';scanner.style.display='none';inspDados=null;inspVolante='';inspTipo='';inspInfo.value='';btnEnviarInspecao.disabled=false;statusInspecao.textContent='Preencha os campos obrigatórios.';window.scrollTo({top:0,behavior:'smooth'});
 }
+let dadosProblemaWhatsApp=null,whatsappFotoUrl='';
+function mostrarEnviarProblemaWhatsApp(dados){
+  dadosProblemaWhatsApp=dados;
+  const contexto=[`Não conformidade encontrada durante o voleio.`,`Situação encontrada: ${dados.situacoes.replace(/\|/g,', ')}`];
+  if(dados.informacoes)contexto.push(`Informações: ${dados.informacoes}`);
+  contexto.push(`Item: ${dados.item||'-'} • OP: ${dados.op||'-'} • Máquina: ${dados.maquina||'-'} • Setor: ${dados.setor||'-'} • Volante: ${dados.volante||'-'}`);
+  document.getElementById('whatsappMensagemPreview').textContent=contexto.join('\n');
+  document.getElementById('whatsappFoto').value='';
+  document.getElementById('whatsappFotoPreview').style.display='none';
+  document.getElementById('whatsappStatus').textContent='';
+  document.getElementById('whatsappProblema').style.display='block';
+  document.getElementById('whatsappProblema').scrollIntoView({behavior:'smooth',block:'center'});
+}
+document.getElementById('whatsappFoto').addEventListener('change',e=>{
+  const file=e.target.files?.[0],preview=document.getElementById('whatsappFotoPreview');
+  if(!file)return;
+  if(!file.type.startsWith('image/')){e.target.value='';document.getElementById('whatsappStatus').textContent='Selecione uma imagem.';return}
+  if(whatsappFotoUrl)URL.revokeObjectURL(whatsappFotoUrl);
+  whatsappFotoUrl=URL.createObjectURL(file);preview.src=whatsappFotoUrl;preview.style.display='block';
+  document.getElementById('whatsappStatus').textContent='Foto pronta para compartilhar.';
+});
+async function compartilharProblemaWhatsApp(){
+  if(!dadosProblemaWhatsApp)return;
+  const texto=document.getElementById('whatsappMensagemPreview').textContent;
+  const foto=document.getElementById('whatsappFoto').files?.[0];
+  const status=document.getElementById('whatsappStatus');
+  try{
+    if(!navigator.share)throw new Error('O compartilhamento não está disponível neste navegador. Abra esta cópia em um celular compatível.');
+    if(foto){
+      if(!navigator.canShare||!navigator.canShare({files:[foto]}))throw new Error('Este navegador não permite anexar a foto ao compartilhamento. Tente em um celular compatível; a foto não foi enviada.');
+      await navigator.share({title:'Inconsistência de voleio',text:texto,files:[foto]});
+    }else{
+      await navigator.share({title:'Inconsistência de voleio',text:texto});
+    }
+    status.textContent='Fluxo de compartilhamento concluído no aparelho. Confira no WhatsApp se a mensagem foi enviada.';
+  }catch(e){
+    if(e?.name==='AbortError')status.textContent='Compartilhamento cancelado. A inspeção continua registrada.';
+    else status.textContent=e.message||'Não foi possível abrir o compartilhamento.';
+  }
+}
+function continuarAposProblema(){dadosProblemaWhatsApp=null;voltarInicioAposInspecao()}
 async function enviarInspecao(){
   if(!inspDados)return;
   const situacoes=[...opcoesSituacao.querySelectorAll('input:checked')].map(x=>x.value);
@@ -825,17 +977,18 @@ async function enviarInspecao(){
   const dados={...inspDados,volante:inspVolante,tipo:inspTipo,situacoes:situacoes.join('|'),informacoes:inspInfo.value.trim()};
   const itemFila={id:criarIdFila(),criadoEm:Date.now(),tentado:false,baseline:0,dados};
   const fila=lerFila();fila.push(itemFila);salvarFila(fila); // primeiro salva no aparelho
+  const abrirWhatsApp=dados.tipo==='Voleio'&&situacoes.some(s=>s!=='Peças OK');
   btnEnviarInspecao.disabled=true;statusInspecao.textContent='Inspeção protegida no aparelho. Tentando enviar...';
   const r=await tentarEnviarItemFila(itemFila,{aguardar:true});
   if(r==='confirmado'){
     statusInspecao.innerHTML='<div class="envio-ok">✓ Inspeção registrada</div>';
     if(navigator.vibrate)navigator.vibrate([80,50,80]);
-    setTimeout(voltarInicioAposInspecao,1100);
+    if(abrirWhatsApp)mostrarEnviarProblemaWhatsApp(dados);else setTimeout(voltarInicioAposInspecao,1100);
   }else{
     statusInspecao.innerHTML='<div class="envio-ok">⏳ Inspeção salva como pendente</div><div class="small">Ela não será perdida. O aplicativo confirmará ou enviará automaticamente quando o Google estiver disponível.</div>';
     atualizarStatusFila('Registro protegido no aparelho.');
     if(navigator.vibrate)navigator.vibrate([120,70,120]);
-    setTimeout(voltarInicioAposInspecao,2200);
+    if(abrirWhatsApp)mostrarEnviarProblemaWhatsApp(dados);else setTimeout(voltarInicioAposInspecao,2200);
   }
 }
 window.addEventListener('online',()=>setTimeout(sincronizarFila,1200));
@@ -1026,9 +1179,44 @@ if(gatilhoTurnos){
   });
 }
 // =========================
-let TURNOS_LINHAS=[],turnosFalhas=0,turnosBloqueadoAte=0,turnosRegistros=[],turnosSP=[],turnosPF=[];
+let TURNOS_LINHAS=[],TURNOS_AREA_ACESSO='',turnosFalhas=0,turnosBloqueadoAte=0,turnosRegistros=[],turnosSP=[],turnosPF=[];
 const TURNOS_LOCK_MS=5*60*1000;
 function hojeLocalISO(){const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
+function turnoAtualAgora(dt=new Date()){
+  const min=dt.getHours()*60+dt.getMinutes();let numero=0,data=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate());
+  if(min>=360&&min<830)numero=1;
+  else if(min>=830&&min<1310)numero=2;
+  else if(min>=1310)numero=3;
+  else if(min<345){numero=3;data.setDate(data.getDate()-1)}
+  if(!numero)return null;
+  const z=n=>String(n).padStart(2,'0');
+  return {numero,data:`${data.getFullYear()}-${z(data.getMonth()+1)}-${z(data.getDate())}`};
+}
+function chaveAreaTurno(t){return `wpa_area_${t.data}_${t.numero}`}
+function areaAtivaDoTurno(){const t=turnoAtualAgora();return t?localStorage.getItem(chaveAreaTurno(t))||'':''}
+function linhasDaArea(area,linhas=Object.keys(MAQUINAS)){return linhas.filter(l=>areaDaLinha(l)===area)}
+function atualizarBotaoAdmTurno(){
+  const b=document.getElementById('btnAdmTurnoArea'),info=document.getElementById('admTurnoAreaInfo');if(!b||!info)return;
+  const turno=turnoAtualAgora(),area=areaAtivaDoTurno();
+  if(turno?.numero===3){b.textContent='🕒 ADM TURNO — Linhas 1 a 5';info.textContent='3º turno: visualização das Linhas 1 a 5, sem LSR.';return}
+  b.textContent=area?`🕒 ADM TURNO — Área ${area}`:'🕒 ADM TURNO — aguardando 1º Voleio';
+  info.textContent=area?`Área ${area}, definida pelo primeiro Voleio confirmado deste turno.`:'A área será definida pelo primeiro Voleio confirmado neste turno.';
+}
+function abrirAdmTurnosArea(){
+  const turno=turnoAtualAgora(),area=areaAtivaDoTurno();
+  if(!turno){alert('ADM Turnos disponível durante os turnos: 06:00–13:50, 13:50–21:50 e 21:50–05:45.');return}
+  if(turno.numero===3){TURNOS_AREA_ACESSO='TODAS';TURNOS_LINHAS=Object.keys(MAQUINAS).filter(l=>/^Linha [1-5]$/.test(String(l).trim()));entrarTurnos();return}
+  if(!area){atualizarBotaoAdmTurno();alert('A área ainda não foi definida. Ela será liberada após o primeiro Voleio confirmado neste turno.');return}
+  TURNOS_AREA_ACESSO=area;TURNOS_LINHAS=linhasDaArea(area,Object.keys(MAQUINAS));entrarTurnos();
+}
+function vincularAreaAoPrimeiroVoleio(item){
+  if(norm(item?.dados?.tipo)!=='voleio')return;
+  const turno=turnoAtualAgora(new Date(Number(item.criadoEm)||Date.now())),area=areaDaMaquina(item.dados.maquina);
+  if(!turno||!area)return;
+  const chave=chaveAreaTurno(turno);if(!localStorage.getItem(chave))localStorage.setItem(chave,area);
+  atualizarBotaoAdmTurno();
+}
+window.addEventListener('load',atualizarBotaoAdmTurno);
 function abrirLoginTurnos(){
   if(Date.now()<turnosBloqueadoAte){const min=Math.ceil((turnosBloqueadoAte-Date.now())/60000);alert(`Acesso temporariamente bloqueado. Tente novamente em ${min} min.`);return}
   turnosPinInput.value='';turnosPinStatus.style.display='none';turnosPinModal.style.display='flex';setTimeout(()=>turnosPinInput.focus(),100);
@@ -1038,6 +1226,9 @@ async function confirmarLoginTurnos(){
   if(Date.now()<turnosBloqueadoAte)return;
   const pin=turnosPinInput.value.trim();
   if(!/^\d{6}$/.test(pin)){turnosPinStatus.textContent='Digite os 6 dígitos do PIN.';turnosPinStatus.style.display='block';return}
+  if(pin==='000000'){
+    lancamentoManualLiberado=true;document.getElementById('btnInspecaoManual').style.display='block';document.getElementById('dicaInspecaoManual').style.display='block';fecharLoginTurnos();iniciarInspecaoManual();return;
+  }
   turnosPinStatus.textContent='Validando acesso...';turnosPinStatus.style.display='block';
   try{
     const r=await fetch(CONFIG_URL+'?acao=loginTurnos&pin='+encodeURIComponent(pin),{cache:'no-store'});const j=await r.json();
@@ -1047,15 +1238,15 @@ async function confirmarLoginTurnos(){
       else turnosPinStatus.textContent=`PIN incorreto. ${5-turnosFalhas} tentativa(s) restante(s).`;
       turnosPinInput.select();return;
     }
-    turnosFalhas=0;TURNOS_LINHAS=j.linhas;fecharLoginTurnos();entrarTurnos();
+    turnosFalhas=0;TURNOS_AREA_ACESSO='';TURNOS_LINHAS=j.linhas;fecharLoginTurnos();entrarTurnos();
   }catch(e){turnosPinStatus.textContent='Não foi possível validar o acesso. Verifique a internet.'}
 }
 document.getElementById('turnosPinInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmarLoginTurnos()});
 function entrarTurnos(){
-  areaComum.style.display='none';adminHome.style.display='none';turnosHome.style.display='block';turnosData.value=hojeLocalISO();
+  areaComum.style.display='none';adminHome.style.display='none';turnosHome.style.display='block';turnosData.value=turnoAtualAgora()?.data||hojeLocalISO();
   turnosLinha.innerHTML=TURNOS_LINHAS.map(l=>`<option>${esc(l)}</option>`).join('');turnosDetalhe.style.display='none';carregarPainelTurnos();window.scrollTo({top:0});
 }
-function sairTurnos(){turnosHome.style.display='none';areaComum.style.display='block';TURNOS_LINHAS=[];turnosTabela.innerHTML='';turnosDetalhe.style.display='none';const a=document.getElementById('turnosAlerta4h');if(a){a.style.display='none';a.innerHTML=''}window.scrollTo({top:0})}
+function sairTurnos(){turnosHome.style.display='none';areaComum.style.display='block';TURNOS_LINHAS=[];TURNOS_AREA_ACESSO='';turnosTabela.innerHTML='';turnosDetalhe.style.display='none';const a=document.getElementById('turnosAlerta4h');if(a){a.style.display='none';a.innerHTML=''}window.scrollTo({top:0})}
 function turnoFaixa(dataISO,n){
   const [y,m,d]=dataISO.split('-').map(Number),base=new Date(y,m-1,d);let ini,fim;
   if(n===1){ini=new Date(y,m-1,d,6,0);fim=new Date(y,m-1,d,13,50)}
@@ -1083,14 +1274,28 @@ function turnoStatusKey(v){const x=String(v||'').trim().toLowerCase();if(x==='1'
 function turnoSPKey(v){return turnoStatusKey(v)}
 function temSP(dataISO,lin,maq,n){const d=dataISOparaBR(dataISO);return turnosSP.some(x=>x.data===d&&x.linha===lin&&x.maquina===maq&&turnoStatusKey(x.turno)===String(n)&&String(x.status).toUpperCase()==='SP')}
 function temPF(dataISO,lin,maq,n){const d=dataISOparaBR(dataISO);return turnosPF.some(x=>x.data===d&&x.linha===lin&&x.maquina===maq&&turnoStatusKey(x.turno)===String(n)&&String(x.status).toUpperCase()==='PF')}
-async function carregarStatusCSV(url,tipo){
-  const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error(tipo+' indisponível');
-  let a=parseCSV(await r.text()).filter(r=>r.some(v=>String(v).trim()));if(!a.length)return [];
-  const h=a.shift(),D=col(h,['Data']),T=col(h,['Turno']),L=col(h,['Linha']),M=col(h,['Máquina','Maquina']),S=col(h,['Status']),v=(r,i)=>i>=0?String(r[i]??'').trim():'';
-  return a.map(r=>({data:v(r,D),turno:v(r,T),linha:v(r,L),maquina:v(r,M),status:v(r,S)}));
+function normalizarDataStatus(v){
+  const s=String(v??'').trim();if(!s)return '';
+  let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:T.*)?$/);
+  if(m)return `${String(m[3]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[1]}`;
+  m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})/);
+  if(m)return `${String(m[1]).padStart(2,'0')}/${String(m[2]).padStart(2,'0')}/${m[3]}`;
+  return s;
 }
-async function carregarSP(){try{turnosSP=await carregarStatusCSV(SP_CSV_URL,'SP')}catch(e){turnosSP=[]}}
-async function carregarPF(){try{turnosPF=await carregarStatusCSV(PF_CSV_URL,'PF')}catch(e){turnosPF=[]}}
+async function carregarStatusCSV(url,tipo){
+  const u=new URL(CONFIG_URL);u.searchParams.set('acao','consultaStatusSPPF');u.searchParams.set('tipo',String(tipo||'').toUpperCase());
+  const json=await new Promise((resolve,reject)=>{
+    const cb='wpaCb_'+Date.now()+'_'+Math.floor(Math.random()*100000),script=document.createElement('script');let finalizado=false;
+    const limpar=()=>{if(finalizado)return;finalizado=true;clearTimeout(timer);delete window[cb];script.remove()};
+    const timer=setTimeout(()=>{limpar();reject(Error('Tempo esgotado ao consultar os status oficiais de turno.'))},20000);
+    window[cb]=dados=>{limpar();resolve(dados)};
+    script.onerror=()=>{limpar();reject(Error('Backend oficial não respondeu à consulta de status SP/PF.'))};
+    u.searchParams.set('callback',cb);script.async=true;script.src=u.toString();document.head.appendChild(script);
+  });
+  if(!json||json.ok!==true||!Array.isArray(json.registros))throw Error(json?.erro||'Resposta inválida de status SP/PF.');
+  return json.registros.map(x=>({data:normalizarDataStatus(x.data),turno:String(x.turno||'').trim(),linha:String(x.linha||'').trim(),maquina:String(x.maquina||'').trim(),status:String(x.status||tipo).trim()})).filter(x=>x.data&&x.turno&&x.linha&&x.maquina&&x.status);
+}async function carregarSP(){try{turnosSP=await carregarStatusCSV(SP_CSV_URL,'SP')}catch(e){console.error('[WPA OFICIAL] SP:',e);turnosSP=[]}}
+async function carregarPF(){try{turnosPF=await carregarStatusCSV(PF_CSV_URL,'PF')}catch(e){console.error('[WPA OFICIAL] PF:',e);turnosPF=[]}}
 async function enviarStatus(tipo,maq,n,comando){
   const b=new URLSearchParams({acao:tipo,data:dataISOparaBR(turnosData.value),turno:String(n),linha:turnosLinha.value,maquina:String(maq),comando});
   await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString()});
@@ -1148,7 +1353,7 @@ async function carregarPainelTurnos(manterStatusLocal=false){
   turnosStatus.textContent='Carregando inspeções...';turnosTabela.innerHTML='';turnosDetalhe.style.display='none';
   try{
     if(!manterStatusLocal)await Promise.all([carregarSP(),carregarPF()]);
-    const resp=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!resp.ok)throw Error('Planilha indisponível');
+    const resp=await fetchWpaRegistrosOficiais({data});if(!resp.ok)throw Error('Planilha indisponível');
     let a=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
     const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']);
     const val=(r,i)=>i>=0?(r[i]??''):'';
@@ -1184,7 +1389,7 @@ async function atualizarPainelTurnosSilencioso(){
   if(!data||!lin||turnosHome.style.display!=='block')return;
   try{
     const [resp]=await Promise.all([
-      fetch(csvAtualizado(CSV_URL),{cache:'no-store'}),
+      fetchWpaRegistrosOficiais({data}),
       carregarSP(),carregarPF()
     ]);
     if(!resp.ok)return;
@@ -1290,8 +1495,22 @@ function norm(s){return String(s??'').trim().toLowerCase().normalize('NFD').repl
 function col(h,n){let x=h.map(norm);for(let z of n){let i=x.findIndex(v=>v===norm(z));if(i>=0)return i}for(let z of n){let i=x.findIndex(v=>v.startsWith(norm(z)));if(i>=0)return i}return -1}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function iso(v){let m=String(v||'').match(/(\d{2})\/(\d{2})\/(\d{4})/);return m?`${m[3]}-${m[2]}-${m[1]}`:''}
-async function consultarProducao(){statusConsulta.textContent='Consultando planilha...';listaConsulta.innerHTML='';try{let x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!x.ok)throw Error('Não foi possível acessar a planilha.');let a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));let h=a.shift();let D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),S=col(h,['Setor']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']),OB=col(h,['Observações','Observacao']);let v=(r,i)=>i>=0?(r[i]??''):'';let dataEfetiva=r=>String(v(r,DC)).trim()||v(r,D);let z=a.filter(r=>(!qop.value||norm(v(r,O)).includes(norm(qop.value)))&&(!qitem.value||norm(v(r,I)).includes(norm(qitem.value)))&&(!qmaq.value||norm(v(r,M)).includes(norm(qmaq.value)))&&(!qdata.value||iso(dataEfetiva(r))===qdata.value)).reverse();statusConsulta.textContent=z.length?z.length+' registro(s) encontrado(s).':'Nenhum registro encontrado.';listaConsulta.innerHTML=z.slice(0,100).map(r=>`<div class="result-card"><strong>OP ${esc(v(r,O)||'-')}</strong> • Item ${esc(v(r,I)||'-')} • Máquina ${esc(v(r,M)||'-')}<div class="meta">${esc(dataEfetiva(r))}${v(r,DC)?' <strong>(corrigida)</strong>':''}${v(r,S)?' • '+esc(v(r,S)):''}</div>${v(r,T)?'<div><strong>Tipo:</strong> '+esc(v(r,T))+'</div>':''}${v(r,V)?'<div><strong>Volante:</strong> '+esc(v(r,V))+'</div>':''}${v(r,SI)?'<div><strong>Situação:</strong> '+esc(v(r,SI))+'</div>':''}${v(r,OB)?'<div><strong>Observações:</strong> '+esc(v(r,OB))+'</div>':''}</div>`).join('')}catch(e){statusConsulta.textContent='Erro na consulta: '+e.message}}
-function limparConsulta(){qop.value='';qitem.value='';qmaq.value='';qdata.value='';listaConsulta.innerHTML='';statusConsulta.textContent='Informe um ou mais filtros e toque em PESQUISAR.'}
+async function consultarProducao(){
+  statusConsulta.textContent='Consultando registros...';listaConsulta.innerHTML='';
+  try{
+    const filtros={op:qop.value.trim(),item:qitem.value.trim(),maquina:qmaq.value.trim(),data:qdata.value};
+    if(!filtros.op&&!filtros.item&&!filtros.maquina&&!filtros.data)throw Error('Informe OP, Item, Máquina ou Data.');
+    const resposta=await fetchWpaRegistrosOficiais(filtros);
+    const a=parseCSV(await resposta.text()).filter(r=>r.some(v=>String(v).trim()));
+    if(!a.length)throw Error('A consulta não retornou dados.');
+    const h=a.shift(),D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),O=col(h,['Número da OP','OP']),I=col(h,['Item']),S=col(h,['Setor']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),SI=col(h,['Situação encontrada','Situação']),OB=col(h,['Observações','Observacao']);
+    const v=(r,i)=>i>=0?(r[i]??''):'';
+    const dataEfetiva=r=>String(v(r,DC)).trim()||v(r,D);
+    const z=a.filter(r=>(!qop.value||norm(v(r,O)).includes(norm(qop.value)))&&(!qitem.value||norm(v(r,I)).includes(norm(qitem.value)))&&(!qmaq.value||norm(v(r,M)).includes(norm(qmaq.value)))&&(!qdata.value||iso(dataEfetiva(r))===qdata.value)).reverse();
+    statusConsulta.textContent=z.length?z.length+' registro(s) encontrado(s).':'Nenhum registro encontrado.';
+    listaConsulta.innerHTML=z.slice(0,100).map(r=>`<div class="result-card"><strong>OP ${esc(v(r,O)||'-')}</strong> • Item ${esc(v(r,I)||'-')} • Máquina ${esc(v(r,M)||'-')}<div class="meta">${esc(dataEfetiva(r))}${v(r,DC)?' <strong>(corrigida)</strong>':''}${v(r,S)?' • '+esc(v(r,S)):''}</div>${v(r,T)?'<div><strong>Tipo:</strong> '+esc(v(r,T))+'</div>':''}${v(r,V)?'<div><strong>Volante:</strong> '+esc(v(r,V))+'</div>':''}${v(r,SI)?'<div><strong>Situação:</strong> '+esc(v(r,SI))+'</div>':''}${v(r,OB)?'<div><strong>Observações:</strong> '+esc(v(r,OB))+'</div>':''}</div>`).join('');
+  }catch(e){statusConsulta.textContent='Erro na consulta: '+e.message}
+}function limparConsulta(){qop.value='';qitem.value='';qmaq.value='';qdata.value='';listaConsulta.innerHTML='';statusConsulta.textContent='Informe um ou mais filtros e toque em PESQUISAR.'}
 
 let chartsRel={};
 let dadosRankingItens={};
@@ -1347,8 +1566,7 @@ async function gerarRelatorio(){
   try{
     if(!window.Chart)throw Error('Biblioteca de gráficos não carregou.');
     const {ini,fim}=faixaRelatorio();
-    const resp=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!resp.ok)throw Error('Não foi possível acessar a planilha.');
-    let a=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
+    let a=await carregarRegistrosRelatorioProducao(ini,fim);if(!a.length)throw Error('A consulta não retornou registros para o período.');const h=a.shift();
     const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),S=col(h,['Setor']),
           T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']),
           SI=col(h,['Situação encontrada','Situação']),I=col(h,['Item']);
@@ -1414,41 +1632,210 @@ function abrirDetalheItem(item){
 }
 function fecharDetalheItem(){detalheItemNOK.style.display='none';cardRankItens.style.display='block';cardRankItens.scrollIntoView({behavior:'smooth',block:'start'});}
 
-function faixaRelatorioReal(){
-  const hoje=new Date(); hoje.setHours(0,0,0,0); const tipo=document.getElementById('periodoRelReal').value; let ini=new Date(hoje),fim=new Date(hoje); const dia=hoje.getDay();
-  if(tipo==='semana'){const segunda=new Date(hoje);segunda.setDate(hoje.getDate()-(dia===0?6:dia-1));ini=segunda;fim=new Date(segunda);fim.setDate(segunda.getDate()+6);}
-  else if(tipo==='semanaAnterior'){const segunda=new Date(hoje);segunda.setDate(hoje.getDate()-(dia===0?6:dia-1)-7);ini=segunda;fim=new Date(segunda);fim.setDate(segunda.getDate()+6);}
-  else if(tipo==='mes'){ini=new Date(hoje.getFullYear(),hoje.getMonth(),1);fim=new Date(hoje.getFullYear(),hoje.getMonth()+1,0);}
-  else if(tipo==='mesAnterior'){ini=new Date(hoje.getFullYear(),hoje.getMonth()-1,1);fim=new Date(hoje.getFullYear(),hoje.getMonth(),0);}
-  else {const a=document.getElementById('relRealInicio').value,b=document.getElementById('relRealFim').value;if(!a||!b)throw Error('Informe as duas datas do período personalizado.');ini=new Date(a+'T00:00:00');fim=new Date(b+'T00:00:00');}
-  return {ini,fim};
+function areaDaLinha(l){return ['Linha 1','Linha 2'].includes(String(l).trim())?'A':['Linha 3','Linha 4','Linha 5','LSR'].includes(String(l).trim())?'B':'';}
+function linhaDaMaquina(maq){const alvo=String(maq||'').trim().replace(/^0+(?=\d)/,'');return Object.keys(MAQUINAS).find(l=>(MAQUINAS[l]||[]).some(m=>String(m).trim().replace(/^0+(?=\d)/,'')===alvo))||'';}
+function abrirRelatorioReal(){
+  mostrarFerramentaAdmin('relatorioReal');
+  if(!dataDiaReal.value)dataDiaReal.value=hojeLocalISO();
+  if(!dataInicioReal.value)dataInicioReal.value=hojeLocalISO();
+  if(!dataFimReal.value)dataFimReal.value=hojeLocalISO();
+  ajustarPeriodoRelatorioReal();
 }
-function ajustarPeriodoRelReal(){document.getElementById('datasRelReal').style.display=document.getElementById('periodoRelReal').value==='personalizado'?'block':'none';}
-function fecharRelatorioReal(){document.getElementById('conteudoRelatorioReal').style.display='none';document.getElementById('statusRelatorioReal').textContent='Selecione o período e gere o Relatório Real.';}
-function rrMaquinasNormais(){const out=[];['Linha 1','Linha 2','Linha 3','Linha 4','Linha 5'].forEach(l=>(MAQUINAS[l]||[]).forEach(m=>out.push({linha:l,maquina:String(m)})));return out;}
-function rrClassificarTurno(d){const h=d.getHours()+d.getMinutes()/60;if(h>=6&&h<13+50/60)return 1;if(h>=13+50/60&&h<21+50/60)return 2;if(h>=21+50/60||h<5+45/60)return 3;return 0;}
-function rrEsc(s){return esc(String(s??''));}
+function ajustarPeriodoRelatorioReal(){
+  diaPersonalizadoReal.style.display=periodoRelatorioReal.value==='diaPersonalizado'?'block':'none';
+  datasPersonalizadasReal.style.display=periodoRelatorioReal.value==='personalizado'?'block':'none';
+}
+function datasDoPeriodoRelatorioReal(){
+  const hoje=hojeLocalISO(),modo=periodoRelatorioReal.value;
+  if(modo==='diaPersonalizado'){
+    const dia=dataDiaReal.value;
+    if(!dia)throw Error('Escolha o dia do relatório.');
+    if(dia>hoje)throw Error('A data do relatório não pode ser futura.');
+    return {inicio:dia,fim:dia,datas:[dia]};
+  }
+  if(modo==='personalizado'){
+    const ini=dataInicioReal.value,fim=dataFimReal.value;
+    if(!ini||!fim)throw Error('Informe as datas inicial e final.');
+    if(ini>fim)throw Error('A data inicial não pode ser posterior à data final.');
+    if(fim>hoje)throw Error('A data final não pode ser futura.');
+    return {inicio:ini,fim,datas:listaDatasRelatorioReal(ini,fim)};
+  }
+  const d=new Date(`${hoje}T12:00:00`);let ini=new Date(d),fim=d;
+  if(modo==='semana'){
+    const diasDesdeSegunda=(d.getDay()+6)%7;ini.setDate(d.getDate()-diasDesdeSegunda);
+  }else if(modo==='mes')ini=new Date(d.getFullYear(),d.getMonth(),1,12);
+  const inicio=isoLocalRelatorioReal(ini),final=isoLocalRelatorioReal(fim);
+  return {inicio,fim:final,datas:listaDatasRelatorioReal(inicio,final)};
+}
+function isoLocalRelatorioReal(d){const z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`}
+function listaDatasRelatorioReal(inicio,fim){
+  const out=[],d=new Date(`${inicio}T12:00:00`),limite=new Date(`${fim}T12:00:00`);
+  while(d<=limite){out.push(isoLocalRelatorioReal(d));d.setDate(d.getDate()+1)}
+  return out;
+}
+const CHAVE_CACHE_RELATORIO_REAL='wpaRelatorioRealPorDiaoficialV2';
+const CABECALHO_RELATORIO_REAL=['Carimbo de data/hora','Data/Hora corrigida','Máquina','Tipo de atividade','Volante responsável'];
+const esperarRelatorioReal=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function buscarRegistrosPeriodoReal(datas){
+  let cache={};try{cache=JSON.parse(localStorage.getItem(CHAVE_CACHE_RELATORIO_REAL)||'{}')}catch(_e){}
+  const resultados=[],validade=5*60*1000;let ultimaConsulta=0;
+  for(let i=0;i<datas.length;i++){
+    const data=datas[i],salvo=cache[data];let linhas=Array.isArray(salvo?.linhas)&&Date.now()-Number(salvo.at)<validade?salvo.linhas:null;
+    if(!linhas){
+      statusRelatorioReal.textContent=`Consultando lançamentos: dia ${i+1} de ${datas.length}...`;
+      const pausa=Math.max(0,1500-(Date.now()-ultimaConsulta));if(ultimaConsulta)await esperarRelatorioReal(pausa);
+      let resp=null,erro=null;
+      for(let tentativa=0;tentativa<3;tentativa++){
+        ultimaConsulta=Date.now();
+        try{resp=await fetchWpaRegistrosOficiais(data);erro=null;break}catch(e){erro=e;const msg=String(e.message||e);if(!/quota|exceeded|429|limite de leitura/i.test(msg)||tentativa===2)break;await esperarRelatorioReal(15000*(tentativa+1))}
+      }
+      if(!resp)throw erro||Error('Não foi possível consultar o dia '+dataISOparaBR(data)+'.');
+      const csv=parseCSV(await resp.text()).filter(r=>r.some(v=>String(v).trim()));
+      if(!csv.length)throw Error('A consulta não retornou cabeçalho para '+dataISOparaBR(data)+'.');
+      const h=csv.shift(),D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']);
+      const val=(r,n)=>n>=0?(r[n]??''):'';
+      if([D,M,T,V].some(n=>n<0))throw Error('A resposta do dia '+dataISOparaBR(data)+' não contém as colunas do relatório.');
+      linhas=csv.map(r=>[val(r,D),val(r,DC),val(r,M),val(r,T),val(r,V)]).filter(r=>r.some(v=>String(v).trim()));
+      cache[data]={at:Date.now(),linhas};
+      try{const chaves=Object.keys(cache);if(chaves.length>120)chaves.sort((a,b)=>(cache[a]?.at||0)-(cache[b]?.at||0)).slice(0,chaves.length-120).forEach(k=>delete cache[k]);localStorage.setItem(CHAVE_CACHE_RELATORIO_REAL,JSON.stringify(cache))}catch(_e){}
+    }
+    resultados.push({data,linhas:[CABECALHO_RELATORIO_REAL,...linhas]});
+  }
+  return resultados;
+}
+function turnoDoRelatorioReal(dt,dataISO){
+  for(let n=1;n<=3;n++)if(emTurno(dt,dataISO,n))return n;
+  return 0;
+}
+function turnoOperacionalRelatorioReal(dt,datasPermitidas){
+  const iso=isoLocalRelatorioReal(dt),d=new Date(`${iso}T12:00:00`),candidatas=[iso];
+  d.setDate(d.getDate()-1);candidatas.push(isoLocalRelatorioReal(d));
+  for(const dataISO of candidatas){
+    if(!datasPermitidas.has(dataISO))continue;
+    const turno=turnoDoRelatorioReal(dt,dataISO);
+    if(turno)return {dataISO,turno};
+  }
+  return null;
+}
+function chaveMaquinaReal(v){return String(v??'').trim().replace(/^0+(?=\d)/,'')}
 async function gerarRelatorioReal(){
-  const status=document.getElementById('statusRelatorioReal'),conteudo=document.getElementById('conteudoRelatorioReal');status.textContent='Montando cobertura real...';conteudo.style.display='none';
+  let periodo;
+  const avisosRelatorio=[];
+  statusRelatorioReal.textContent='Calculando voleios reais...';
+  conteudoRelatorioReal.style.display='none';
   try{
-    const {ini,fim}=faixaRelatorioReal();if(fim<ini)throw Error('A data final não pode ser anterior à inicial.');
-    const matriz=await carregarMatrizPlanilhaCompat(CSV_URL);
-    let a=matriz.filter(r=>r.some(v=>String(v).trim()));const h=a.shift();
-    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),T=col(h,['Tipo de inspeção','Tipo de atividade']),M=col(h,['Máquina']),V=col(h,['Volante responsável','Responsável']);const val=(r,i)=>i>=0?(r[i]??''):'';
-    const normais=rrMaquinasNormais(),lsr=(MAQUINAS['LSR']||[]).map(m=>({linha:'LSR',maquina:String(m)})),todos=[...normais,...lsr],eventos=[];
-    const fimDia=new Date(fim);fimDia.setHours(23,59,59,999);
-    a.forEach(r=>{if(norm(val(r,T))!=='voleio')return;const raw=String(val(r,DC)).trim()||val(r,D),data=dataBRParaDate(raw);if(!data||data<ini||data>fimDia)return;const turno=rrClassificarTurno(data),maq=String(val(r,M)).trim();if(!turno||!maq)return;const linha=Object.keys(MAQUINAS).find(l=>(MAQUINAS[l]||[]).map(String).includes(maq))||'';if(linha)eventos.push({data,turno,maq,linha,volante:String(val(r,V)).trim()});});
-    const mapa=new Map();for(let dia=new Date(ini);dia<=fim;dia.setDate(dia.getDate()+1)){const chave=dia.toISOString().slice(0,10);todos.forEach(m=>[1,2,3].forEach(t=>{if(m.linha==='LSR'&&t===3)return;mapa.set(`${chave}|${t}|${m.maquina}`,{data:chave,turno:t,linha:m.linha,maquina:m.maquina,req:m.linha==='LSR'?1:2,pas:0});}));}
-    eventos.forEach(e=>{const base=new Date(e.data);if(e.turno===3&&e.data.getHours()<6)base.setDate(base.getDate()-1);const o=mapa.get(`${base.toISOString().slice(0,10)}|${e.turno}|${e.maq}`);if(o)o.pas=Math.min(o.req,o.pas+1);});
-    const detalhes=[...mapa.values()],grupos=[1,2,3].map(t=>{const arr=detalhes.filter(x=>x.turno===t),req=arr.reduce((s,x)=>s+x.req,0),pas=arr.reduce((s,x)=>s+x.pas,0);return{turno:t,req,pas,pct:req?pas/req*100:0,completas:arr.filter(x=>x.pas===x.req).length,parciais:arr.filter(x=>x.pas>0&&x.pas<x.req).length,pendentes:arr.filter(x=>x.pas===0).length};});
-    const reqTotal=grupos.reduce((s,x)=>s+x.req,0),pasTotal=grupos.reduce((s,x)=>s+x.pas,0);document.getElementById('rrCobertura').textContent=(reqTotal?pasTotal/reqTotal*100:0).toFixed(1)+'%';document.getElementById('rrCompletas').textContent=detalhes.filter(x=>x.pas===x.req).length;document.getElementById('rrParciais').textContent=detalhes.filter(x=>x.pas>0&&x.pas<x.req).length;document.getElementById('rrPendentes').textContent=detalhes.filter(x=>x.pas===0).length;document.getElementById('periodoTextoReal').textContent=`Período: ${fmtData(ini)} a ${fmtData(fim)} • ${eventos.length} passagem(ns) de voleio considerada(s)`;
-    document.getElementById('rrResumoTurnos').innerHTML='<div class="report-grid">'+grupos.map(g=>`<div class="kpi"><strong>${g.pas}/${g.req}</strong><span>${g.turno}º turno • ${g.pct.toFixed(1)}% • ${g.completas} completas / ${g.parciais} parciais / ${g.pendentes} pendentes</span></div>`).join('')+'</div>';
-    const por=new Map();detalhes.forEach(x=>{const k=`${x.linha}|${x.maquina}`;if(!por.has(k))por.set(k,{linha:x.linha,maquina:x.maquina,req:0,pas:0,turnos:[]});const o=por.get(k);o.req+=x.req;o.pas+=x.pas;o.turnos.push(x);});
-    let html='<table class="turnos-table"><thead><tr><th>Máquina</th><th>Linha</th><th>1º</th><th>2º</th><th>3º</th><th>Total</th></tr></thead><tbody>';const cell=x=>x?(x.pas===x.req?'🟢':x.pas?'🟡':'🔴')+' '+x.pas+'/'+x.req:'—';
-    for(const o of por.values()){const get=t=>o.turnos.find(x=>x.turno===t);html+=`<tr><td class="turnos-maq">${rrEsc(o.maquina)}</td><td>${rrEsc(o.linha)}</td><td>${cell(get(1))}</td><td>${cell(get(2))}</td><td>${o.linha==='LSR'?'N/A':cell(get(3))}</td><td><strong>${o.pas}/${o.req}</strong></td></tr>`;}html+='</tbody></table>';document.getElementById('rrTabelaMaquinas').innerHTML=html;
-    conteudo.style.display='block';status.textContent=`✓ Relatório Real calculado: ${detalhes.length} metas de máquina/turno.`;
-  }catch(e){status.textContent='Erro no Relatório Real: '+e.message;}
+    periodo=datasDoPeriodoRelatorioReal();
+    await carregarConfiguracao();
+    const configuracaoOnline=await carregarConfiguracao();
+    if(!configuracaoOnline)avisosRelatorio.push('máquinas pela lista local de contingência; confirme se ela corresponde às ativas');
+    const [consultas,spResult,pfResult]=await Promise.allSettled([
+      buscarRegistrosPeriodoReal(periodo.datas),
+      carregarStatusCSV(SP_CSV_URL,'SP'),
+      carregarStatusCSV(PF_CSV_URL,'PF')
+    ]);
+    if(consultas.status==='rejected')throw consultas.reason;
+    if(spResult.status==='fulfilled')turnosSP=spResult.value;
+    if(pfResult.status==='fulfilled')turnosPF=pfResult.value;
+    if(spResult.status==='rejected')avisosRelatorio.push(turnosSP.length?`falha ao ler SP (${spResult.reason?.message||'erro desconhecido'}); usando ${turnosSP.length} status em cache neste dispositivo`:`falha ao ler SP (${spResult.reason?.message||'erro desconhecido'}); status SP indisponível`);
+    const linhasCSV=consultas.value.flatMap(x=>x.linhas.filter(r=>r.some(v=>String(v).trim()))).filter((r,i)=>i===0||norm(r[0])!=='carimbo de data/hora');
+    if(!linhasCSV.length)throw Error('A planilha não retornou registros.');
+    const h=linhasCSV.shift();
+    const D=col(h,['Carimbo de data/hora','Data']),DC=col(h,['Data/Hora corrigida']),M=col(h,['Máquina','Maquina']),T=col(h,['Tipo de inspeção','Tipo de atividade']),V=col(h,['Volante responsável','Responsável']);
+    const val=(r,i)=>i>=0?(r[i]??''):'';
+    const datasPermitidas=new Set(periodo.datas);
+    const registrosBrutos=linhasCSV.map(r=>{
+      const maquina=String(val(r,M)).trim(),data=dataBRParaDate(String(val(r,DC)).trim()||val(r,D));
+      const op=data?turnoOperacionalRelatorioReal(data,datasPermitidas):null,linha=linhaDaMaquina(maquina),area=areaDaLinha(linha);
+      return {maquina,chaveMaquina:chaveMaquinaReal(maquina),linha,area,turno:op?.turno||0,data,dataISO:op?.dataISO||'',volante:String(val(r,V)).trim(),tipo:String(val(r,T)).trim()};
+    });
+    const diagnosticoReal={recebidos:registrosBrutos.length,tipoNaoVoleio:registrosBrutos.filter(r=>norm(r.tipo)!=='voleio').length,semData:registrosBrutos.filter(r=>!r.data).length,semMaquina:registrosBrutos.filter(r=>!r.maquina).length,foraDoTurno:registrosBrutos.filter(r=>r.data&&r.maquina&&(!r.turno||!r.dataISO)).length};
+    const registros=registrosBrutos.filter(r=>r.data&&r.maquina&&r.turno&&r.dataISO&&norm(r.tipo)==='voleio').sort((a,b)=>a.data-b.data);
+    const porAreaTurno=new Map();
+    registros.forEach(r=>{
+      if(!r.area)return;
+      const chave=`${r.dataISO}|${r.area}|${r.turno}`;
+      if(!porAreaTurno.has(chave))porAreaTurno.set(chave,[]);
+      porAreaTurno.get(chave).push(r);
+    });
+    const responsaveis=new Map();
+    porAreaTurno.forEach((lista,chave)=>{
+      for(let i=1;i<lista.length;i++){
+        const anterior=lista[i-1].volante,atual=lista[i].volante;
+        if(anterior&&atual&&norm(anterior)===norm(atual)){responsaveis.set(chave,atual);break}
+      }
+    });
+    const maquinasAtivas=[...new Map(Object.entries(MAQUINAS).flatMap(([linha,lista])=>lista.map(m=>[chaveMaquinaReal(m),{linha,maquina:String(m)}]))).values()];
+    if(!maquinasAtivas.length)throw Error('A configuração não possui máquinas ativas.');
+    const porMaquina=new Map(),creditos={},semResponsavel={total:0,porArea:{}};
+    let meta=0,contados=0,excedentes=0,turnosMaquinaAtivos=0;
+    // Escala: 1º/2º de segunda a sexta; 3º de domingo a quinta.
+    // Sábados alternados: 24/10/2026 é a referência de sábado trabalhado.
+    const sabadoAncoraTrabalhado='2026-10-24';
+    const sabadoTrabalhado=d=>{const data=new Date(`${d}T12:00:00`),ancora=new Date(`${sabadoAncoraTrabalhado}T12:00:00`),semanas=Math.round((data-ancora)/86400000/7);return semanas%2===0};
+    const turnoPermitido=(d,n)=>{const dia=new Date(`${d}T12:00:00`).getDay();if(dia>=1&&dia<=4)return n===1||n===2||n===3;if(dia===5)return n===1||n===2;if(dia===0)return n===3;if(dia===6)return sabadoTrabalhado(d)&&(n===1||n===2);return false};
+    // O dia é ativo se houver Voleio válido em turno previsto, mas a meta vale
+    // somente para a combinação data/turno que teve ao menos um Voleio.
+    const turnoComAtividade=new Set(registros.filter(r=>turnoPermitido(r.dataISO,r.turno)).map(r=>`${r.dataISO}|${r.turno}`));
+    maquinasAtivas.forEach(m=>{
+      const lista=registros.filter(r=>r.chaveMaquina===chaveMaquinaReal(m.maquina));
+      const turnos=[1,2,3].map(n=>{
+        const resumo={numero:n,registros:[],considerados:[],ativo:false,statuses:new Set(),meta:0,excedentes:0};
+        periodo.datas.forEach(d=>{
+          if(!turnoPermitido(d,n))return;
+          const doDia=lista.filter(r=>r.turno===n&&r.dataISO===d);
+          const sp=temSP(d,m.linha,m.maquina,n),pf=temPF(d,m.linha,m.maquina,n);
+          const turnoAtivo=turnoComAtividade.has(`${d}|${n}`);
+          if(!turnoAtivo){if(sp)resumo.statuses.add('SP');if(pf)resumo.statuses.add('PF');return}
+          if(sp){resumo.statuses.add('SP');return}
+          // PF vale 100% somente quando existe ao menos um voleio registrado na máquina.
+          // Nesse caso, todos os voleios registrados são considerados e a meta equivale à quantidade registrada.
+          if(pf&&doDia.length>0){
+            const considerados=doDia;
+            resumo.ativo=true;resumo.meta+=considerados.length;resumo.registros.push(...doDia);resumo.considerados.push(...considerados);
+            meta+=considerados.length;turnosMaquinaAtivos++;contados+=considerados.length;
+            considerados.forEach(r=>{const responsavel=responsaveis.get(`${r.dataISO}|${r.area}|${r.turno}`);if(responsavel)creditos[responsavel]=(creditos[responsavel]||0)+1;else{semResponsavel.total++;semResponsavel.porArea[r.area||'Área não identificada']=(semResponsavel.porArea[r.area||'Área não identificada']||0)+1}});
+            resumo.statuses.add('PF');return;
+          }
+          // Em turno ativo, máquina normal entra na meta mesmo que não tenha voleio próprio.
+          const considerados=doDia.slice(0,2);
+          resumo.ativo=true;resumo.meta+=2;resumo.registros.push(...doDia);resumo.considerados.push(...considerados);
+          resumo.excedentes+=Math.max(0,doDia.length-2);meta+=2;turnosMaquinaAtivos++;contados+=considerados.length;excedentes+=Math.max(0,doDia.length-2);
+          considerados.forEach(r=>{
+            const responsavel=responsaveis.get(`${r.dataISO}|${r.area}|${r.turno}`);
+            if(responsavel)creditos[responsavel]=(creditos[responsavel]||0)+1;
+            else{semResponsavel.total++;semResponsavel.porArea[r.area||'Área não identificada']=(semResponsavel.porArea[r.area||'Área não identificada']||0)+1}
+          });
+        });
+        resumo.status=[...resumo.statuses].join('/');
+        return resumo;
+      });
+      const considerados=turnos.flatMap(t=>t.considerados);
+      porMaquina.set(chaveMaquinaReal(m.maquina),{...m,registros:lista,considerados,turnos,meta:turnos.reduce((s,t)=>s+t.meta,0),ativa:turnos.some(t=>t.ativo)});
+    });
+    const pct=Math.min(100,meta?contados/meta*100:0);
+    const diasComAtividade=new Set(registros.filter(r=>turnoPermitido(r.dataISO,r.turno)).map(r=>r.dataISO)).size;
+    realDiasAtivos.textContent=diasComAtividade;
+    realMaqAtivas.textContent=[...porMaquina.values()].filter(m=>m.ativa).length;realTurnosAtivos.textContent=turnosMaquinaAtivos;realMeta.textContent=meta;realContados.textContent=contados;realCobertura.textContent=pct.toFixed(1)+'%';
+    const voluntarios=Object.entries(creditos).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0]));
+    tabelaVolantesReal.innerHTML=voluntarios.length?`<table class="turnos-table real-volantes-table"><thead><tr><th>Volante responsável</th><th>Voleios creditados</th><th>Participação real</th></tr></thead><tbody>${voluntarios.map(([nome,q])=>`<tr><td>${esc(nome)}</td><td>${q}</td><td>${Math.min(20,q/meta*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table>`:'<div class="status">Nenhum responsável confirmado no período.</div>';
+    realSemResponsavel.textContent=semResponsavel.total?`${semResponsavel.total} voleio(s) sem crédito individual: não houve dois voleios consecutivos da mesma pessoa na área/turno.`:'';
+    const celulaTurno=t=>{if(!t.ativo)return `<td class="real-turno real-inativo" title="Sem voleios válidos registrados; fora da meta">${t.status||'—'}</td>`;const n=t.registros.length,classe=n===0?'real-zero':n>=t.meta?'real-dois':'real-um';return `<td class="real-turno ${classe}" title="${t.considerados.length}/${t.meta} voleios considerados no período; ${t.excedentes} excedente(s)">${n}</td>`};
+    tabelaMaquinasReal.innerHTML=`<table class="real-matriz"><thead><tr><th>Máquina</th><th>Linha</th><th>1º turno</th><th>2º turno</th><th>3º turno</th><th>Meta do período</th><th>Excedentes</th></tr></thead><tbody>${maquinasAtivas.map(m=>{const d=porMaquina.get(chaveMaquinaReal(m.maquina));return `<tr><td class="real-maq">${esc(m.maquina)}</td><td>${esc(m.linha)}</td>${d.turnos.map(celulaTurno).join('')}<td class="real-cobertura">${d.considerados.length}/${d.meta}</td><td class="real-excedente">${d.turnos.reduce((s,t)=>s+t.excedentes,0)}</td></tr>`}).join('')}</tbody></table>`;
+    conteudoRelatorioReal.style.display='block';
+    statusRelatorioReal.textContent=`${registros.length} voleio(s) válidos de ${periodo.inicio.split('-').reverse().join('/')} a ${periodo.fim.split('-').reverse().join('/')}. ${diasComAtividade} dia(s) com atividade registrada; ${turnosMaquinaAtivos} combinação(ões) data/máquina/turno ativa(s); meta de ${meta} voleio(s). ${excedentes} excedente(s) não aumentaram a cobertura. Diagnóstico da consulta: ${diagnosticoReal.recebidos} linha(s) recebidas; ${diagnosticoReal.tipoNaoVoleio} com tipo diferente de “Voleio”; ${diagnosticoReal.semData} sem data reconhecida; ${diagnosticoReal.semMaquina} sem máquina; ${diagnosticoReal.foraDoTurno} sem turno/data operacional reconhecidos.`+(avisosRelatorio.length?' ATENÇÃO: '+avisosRelatorio.join('; ')+'.':'');
+  }catch(e){statusRelatorioReal.textContent='Erro no relatório real: '+e.message}
 }
+function escJS(s){return String(s??'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\r?\n/g,' ')}
+function abrirDetalheItem(item){
+  const d=dadosRankingItens[item];if(!d)return;
+  detalheItemTitulo.textContent='Item '+item+' — problemas encontrados';
+  detalheItemPeriodo.textContent=periodoRankingItens;
+  detTotal.textContent=d.total;detNOK.textContent=d.nok;detPct.textContent=d.total?((d.nok/d.total)*100).toFixed(1)+'%':'0%';
+  const z=ordenar(d.problemas);
+  rankProblemasItem.innerHTML=z.length?z.map(([n,q])=>`<li><strong>${esc(n)}</strong> — ${q}</li>`).join(''):'<li>Nenhum problema encontrado.</li>';
+  cardRankItens.style.display='none';detalheItemNOK.style.display='block';detalheItemNOK.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function fecharDetalheItem(){detalheItemNOK.style.display='none';cardRankItens.style.display='block';cardRankItens.scrollIntoView({behavior:'smooth',block:'start'});}
 
 async function compartilharRelatorio(){
   const btn=[...document.querySelectorAll('button')].find(b=>b.getAttribute('onclick')==='compartilharRelatorio()');
@@ -1513,25 +1900,56 @@ async function compartilharRelatorio(){
 }
 
 
+async function consultarHistoricoDesvios(){
+  const item=document.getElementById('historicoDesviosItem').value.trim();
+  const status=document.getElementById('statusHistoricoDesvios');
+  const lista=document.getElementById('listaHistoricoDesvios');
+  lista.innerHTML='';
+  if(!item){status.textContent='Informe o número do item.';return}
+  status.textContent='Consultando histórico...';
+  try{
+    const url=CONFIG_URL+'?acao=desvios&historico=1&item='+encodeURIComponent(item)+'&_='+Date.now();
+    const resp=await fetch(url,{cache:'no-store'});
+    if(!resp.ok)throw Error('Não foi possível consultar o Apps Script.');
+    const dados=await resp.json();
+    if(!dados?.ok)throw Error(dados?.erro||'Resposta inválida do Apps Script.');
+    const registros=Array.isArray(dados.desvios)?dados.desvios.slice().reverse():[];
+    if(!registros.length){status.textContent=`Nenhum desvio encontrado para o item ${item}.`;return}
+    status.textContent=`${registros.length} desvio(s) encontrado(s) para o item ${item}.`;
+    lista.innerHTML=registros.map(d=>{
+      const situacao=String(d.status||'ATIVO').toUpperCase();
+      return `<div class="historico-desvio-card"><strong>Desvio ${escDesvio(d.numero||'-')}</strong> • <span class="status-desvio">${escDesvio(situacao)}</span><br>`+
+        `<b>Item:</b> ${escDesvio(d.item||item)}${d.maquina?` • <b>Máquina:</b> ${escDesvio(d.maquina)}`:''}${d.op?` • <b>OP:</b> ${escDesvio(d.op)}`:''}<br>`+
+        `<b>Descrição:</b> ${escDesvio(d.descricao||'-')}<br>`+
+        `<b>Cadastrado em:</b> ${escDesvio(d.cadastradoEm||'-')} • <b>Validade:</b> ${escDesvio(d.validade||'-')}<br>`+
+        `${d.revalidadoEm?`<b>Revalidado em:</b> ${escDesvio(d.revalidadoEm)}<br>`:''}`+
+        `${d.encerradoEm?`<b>Encerrado em:</b> ${escDesvio(d.encerradoEm)}<br>`:''}`+
+        `${d.responsavel?`<b>Responsável:</b> ${escDesvio(d.responsavel)}<br>`:''}`+
+        `${d.cadastradoPor?`<b>Cadastrado por:</b> ${escDesvio(d.cadastradoPor)}<br>`:''}`+
+        `${d.observacoes?`<b>Observações:</b> ${escDesvio(d.observacoes)}`:''}</div>`;
+    }).join('');
+  }catch(e){status.textContent='Erro na consulta do histórico: '+e.message}
+}
+
 function entrarAdmin(){
   areaComum.style.display='none';
   adminHome.style.display='block';
   adminMenu.style.display='grid';
-  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','historicoDesvios','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function mostrarFerramentaAdmin(id){
   adminMenu.style.display='none';
-  ['consulta','relatorio','relatorioReal','adminBox'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
+  ['consulta','relatorio','relatorioReal','historicoDesvios','adminBox'].forEach(x=>document.getElementById(x).style.display=x===id?'block':'none');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function voltarMenuAdmin(){
-  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','historicoDesvios','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   adminMenu.style.display='grid';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function sairAdmin(){
-  ['consulta','relatorio','relatorioReal','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
+  ['consulta','relatorio','relatorioReal','historicoDesvios','adminBox'].forEach(id=>document.getElementById(id).style.display='none');
   adminHome.style.display='none';
   areaComum.style.display='block';
   adminResultado.innerHTML='';adminRegistro=null;
