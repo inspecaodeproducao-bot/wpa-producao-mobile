@@ -1,8 +1,9 @@
-const CACHE_NAME = 'wpa-producao-v18.13.7-qpa-in-app';
+const CACHE_NAME = 'wpa-producao-v18.13.8-install-guide';
 const APP_SHELL = [
   './',
   './index.html',
   './qpa.html',
+  './instalar.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png'

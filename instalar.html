@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0f14">
+  <title>Instalar WPA Produção</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon-192.png">
+  <style>
+    :root{color-scheme:dark;font-family:Arial,sans-serif;background:#0b0f14;color:#eef4f8;--panel:#151c23;--line:#2a3945;--blue:#2862e8;--green:#167d3c;--muted:#bdc9d2}
+    *{box-sizing:border-box}body{margin:0;padding:16px;min-height:100vh}main{width:min(100%,620px);margin:0 auto}header,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:12px}h1{font-size:1.45rem;margin:0 0 6px}h2{font-size:1.08rem;margin:0 0 10px}p{line-height:1.5;margin:7px 0;color:var(--muted)}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}a,button{display:flex;align-items:center;justify-content:center;min-height:48px;padding:11px 14px;border:0;border-radius:9px;background:var(--blue);color:white;text-decoration:none;text-align:center;font:700 1rem Arial,sans-serif;cursor:pointer}.green{background:var(--green)}.step{display:flex;gap:12px;margin:12px 0;align-items:flex-start}.num{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#26374a;color:white;font-weight:bold}.note{border-left:3px solid #e4a23b;padding:10px 12px;background:#292216;border-radius:5px;color:#ffe0aa;line-height:1.45;margin-top:12px}.small{font-size:.87rem}footer{color:#95a5b1;text-align:center;padding:10px;font-size:.82rem}
+    @media(max-width:420px){body{padding:9px}header,.card{padding:14px}.actions{grid-template-columns:1fr}h1{font-size:1.3rem}}
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Instalar o WPA Produção</h1>
+    <p>Use este mesmo endereço no celular ou computador. A instalação não depende de qual e-mail está conectado ao aparelho.</p>
+    <div class="actions">
+      <a class="green" href="./index.html">ABRIR O WPA</a>
+      <button id="installButton" type="button" hidden>INSTALAR APLICATIVO</button>
+    </div>
+  </header>
+  <section class="card">
+    <h2>Android — Chrome</h2>
+    <div class="step"><span class="num">1</span><p>Abra esta página no Chrome e toque em <b>ABRIR O WPA</b>.</p></div>
+    <div class="step"><span class="num">2</span><p>No menu <b>⋮</b> do Chrome, escolha <b>Instalar app</b> ou <b>Adicionar à tela inicial</b> e confirme.</p></div>
+    <p class="small">Se o botão “Instalar aplicativo” aparecer acima, você também pode usá-lo.</p>
+  </section>
+  <section class="card">
+    <h2>iPhone — Safari</h2>
+    <div class="step"><span class="num">1</span><p>Abra este endereço no Safari e toque em <b>Compartilhar</b> (quadrado com seta).</p></div>
+    <div class="step"><span class="num">2</span><p>Escolha <b>Adicionar à Tela de Início</b> e confirme em <b>Adicionar</b>.</p></div>
+  </section>
+  <section class="card">
+    <h2>Computador — Chrome ou Edge</h2>
+    <p>Abra o WPA e use o ícone <b>Instalar</b> na barra de endereço ou a opção <b>Instalar WPA Produção</b> no menu do navegador.</p>
+  </section>
+  <section class="card">
+    <h2>Vai usar outro e-mail?</h2>
+    <p>Não é preciso copiar nem transferir o app. A pessoa instala pelo mesmo site e pode estar conectada ao e-mail dela.</p>
+    <div class="note"><b>Se o app abrir, mas não carregar os dados:</b> isso depende da permissão da implantação do backend Google Apps Script. O administrador precisa confirmar que a implantação oficial permite o acesso dessa conta. Não compartilhe senha nem código de implantação.</div>
+  </section>
+  <footer>WPA Produção • Instalação oficial pelo GitHub Pages</footer>
+</main>
+<script>
+let installPrompt=null;const installButton=document.getElementById('installButton');
+window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installButton.hidden=false});
+installButton.addEventListener('click',async()=>{if(!installPrompt)return;installButton.disabled=true;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;installButton.hidden=true});
+if('serviceWorker'in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>
