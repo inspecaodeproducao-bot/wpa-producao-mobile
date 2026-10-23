@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wpa-producao-v18.13.6-qpa-mobile';
+const CACHE_NAME = 'wpa-producao-v18.13.7-qpa-in-app';
 const APP_SHELL = [
   './',
   './index.html',
