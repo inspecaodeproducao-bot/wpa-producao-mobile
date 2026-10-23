@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wpa-producao-v18.13.8-install-guide';
+const CACHE_NAME = 'wpa-producao-v18.13.9-rascunho-local';
 const APP_SHELL = [
   './',
   './index.html',
