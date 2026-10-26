@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wpa-producao-v18.13.10-confirmacao-inspecao';
+const CACHE_NAME = 'wpa-producao-v18.13.11-confirmacao-jsonp';
 const APP_SHELL = [
   './',
   './index.html',
