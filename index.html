@@ -62,7 +62,7 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
 .situacoes{display:grid;gap:8px;margin-top:8px}.situacao{display:flex;align-items:center;gap:10px;background:#0f141b;border:1px solid #334155;border-radius:10px;padding:12px;font-weight:700}.situacao input{width:22px;height:22px;margin:0}
 #inspInfo{min-height:80px;width:100%;box-sizing:border-box;padding:13px;margin-top:5px;border:1px solid #3b4758;border-radius:9px;font-size:16px;background:#0f141b;color:#f8fafc;resize:vertical}
 .envio-ok{text-align:center;font-size:20px;font-weight:700;padding:20px}
-.fila-status{margin:12px 0;padding:10px 12px;border-radius:10px;background:#0f141b;border:1px solid #334155;font-size:13px;color:#cbd5e1}.fila-status.pendente{border-color:#d97706;background:#2a1d0b;color:#fde68a}.fila-status.ok{border-color:#15803d;color:#bbf7d0}.fila-status strong{font-size:15px}
+.fila-status{margin:12px 0;padding:10px 12px;border-radius:10px;background:#0f141b;border:1px solid #334155;font-size:13px;color:#cbd5e1}.fila-status.pendente{border-color:#d97706;background:#2a1d0b;color:#fde68a}.fila-status.ok{border-color:#15803d;color:#bbf7d0}.fila-status strong{font-size:15px}.fila-diagnostico{margin-top:8px;padding:9px;font-size:13px;background:#0f141b;border:1px solid #334155;border-radius:8px;word-break:break-word}
 
 .alerta-reincidencia{display:none;margin:14px 0;padding:14px;border:2px solid #dc2626;border-radius:14px;background:#fee2e2;color:#7f1d1d}
 .alerta-reincidencia strong{display:block;font-size:19px;margin-bottom:6px}
@@ -163,7 +163,7 @@ body{font-family:Arial,sans-serif;background:#0b0f14;margin:0;padding:16px;color
 </style>
 </head><body><div class="card" id="areaComum">
 <h1 id="tituloApp">Liberação de Produção</h1><div class="sub">NIIMBOT B1 • 50 × 30 mm • QR Forms</div>
-<button class="green" type="button" onclick="conectarB1()">CONECTAR B1</button><div class="status" id="status">B1 ainda não conectada.</div><div class="fila-status" id="filaStatus">✓ Nenhuma inspeção pendente.</div>
+<button class="green" type="button" onclick="conectarB1()">CONECTAR B1</button><div class="status" id="status">B1 ainda não conectada.</div><div class="fila-status" id="filaStatus">✓ Nenhuma inspeção pendente.</div><div id="filaDiagnostico" aria-live="polite"></div>
 <form onsubmit="gerar(event)"><label>Item</label><input id="item" inputmode="numeric" required placeholder="Ex.: 869"><label>OP</label><input id="op" inputmode="numeric" required placeholder="Ex.: 577110"><label id="gatilhoTurnos">Linha</label><select id="linha" required onchange="atualizarMaquinas()"><option value="">Selecione a linha</option><option>Linha 1</option><option>Linha 2</option><option>Linha 3</option><option>Linha 4</option><option>Linha 5</option><option>LSR</option></select><label>Máquina</label><select id="maquina" required disabled><option value="">Primeiro selecione a linha</option></select><label>Setor</label><select id="setor" required><option value="">Selecione o setor</option><option>Vulcanização</option><option>Inspeção</option><option>LSR</option><option>Corte</option></select><button type="submit">GERAR ETIQUETA + QR</button><button class="green" id="btnInspecaoManual" type="button" onclick="iniciarInspecaoManual()" style="display:none">✍️ INICIAR INSPEÇÃO SEM QR</button><div class="small" id="dicaInspecaoManual" style="display:none">Inspeção manual protegida pelo PIN 000000.</div><button class="gray" type="button" onclick="novoQR()">LIMPAR / NOVA ETIQUETA</button></form>
 <div id="resultado"><canvas id="preview" width="384" height="240"></canvas><button class="orange" id="btnPrint" type="button" onclick="imprimirB1()">IMPRIMIR NA B1</button><div class="small" id="linktxt"></div></div><button class="green" type="button" onclick="abrirLeitor()">📷 LER QR CODE</button><button type="button" id="btnDiarioVolantesVisual" onclick="abrirDiarioVolantesBasico()">📋 DIÁRIO DOS VOLANTES</button>
 <button class="orange" id="btnAdmTurnoArea" type="button" onclick="abrirAdmTurnosArea()">🕒 ADM TURNO — aguardando 1º Voleio</button><div class="small" id="admTurnoAreaInfo">A área será definida pelo primeiro Voleio confirmado neste turno.</div>
@@ -866,7 +866,7 @@ function atualizarStatusFila(msg=''){
   const el=document.getElementById('filaStatus');if(!el)return;
   const n=lerFila().length;
   el.className='fila-status '+(n?'pendente':'ok');
-  el.innerHTML=n?`⏳ <strong>${n} inspeção(ões) pendente(s)</strong>${msg?'<br>'+esc(msg):'<br>Envio automático quando a conexão estiver disponível.'}`:'✓ Nenhuma inspeção pendente.';
+  el.innerHTML=n?`⏳ <strong>${n} inspeção(ões) pendente(s)</strong>${msg?'<br>'+esc(msg):'<br>Envio automático quando a conexão estiver disponível.'}<button class="gray" type="button" onclick="verificarPendenciasAgora()" style="margin-top:8px;padding:10px;font-size:14px">VERIFICAR PENDÊNCIAS AGORA</button>`:'✓ Nenhuma inspeção pendente.';
 }
 async function confirmarIdInspecao(id){
   if(!id)return false;
@@ -909,6 +909,29 @@ async function confirmarItemFila(item,limiteMs=18000){
   return false;
 }
 function removerDaFila(id){salvarFila(lerFila().filter(x=>x.id!==id))}
+async function verificarPendenciasAgora(){
+  const painel=document.getElementById('filaDiagnostico');
+  const botao=document.querySelector('#filaStatus button');
+  const fila=lerFila();
+  if(sincronizandoFila)return;
+  if(!fila.length){atualizarStatusFila();painel.innerHTML='';return}
+  sincronizandoFila=true;
+  if(botao)botao.disabled=true;
+  painel.innerHTML='<div class="fila-diagnostico">Conferindo cada registro no servidor… mantenha esta tela aberta.</div>';
+  const resultados=[];
+  for(const item of fila){
+    const dados=item.dados||{};
+    const resumo=[dados.item&&`Item ${esc(dados.item)}`,dados.op&&`OP ${esc(dados.op)}`,dados.maquina&&`Máquina ${esc(dados.maquina)}`].filter(Boolean).join(' • ');
+    try{
+      const confirmado=await confirmarIdInspecao(item.id);
+      if(confirmado){removerDaFila(item.id);resultados.push(`<div class="fila-diagnostico">✅ Confirmada e retirada da fila${resumo?' — '+resumo:''}<br><small>ID: ${esc(item.id)}</small></div>`)}
+      else resultados.push(`<div class="fila-diagnostico">⏳ Ainda não encontrada na planilha${resumo?' — '+resumo:''}<br><small>ID: ${esc(item.id)}</small></div>`);
+    }catch(err){resultados.push(`<div class="fila-diagnostico">⚠️ Falha ao consultar${resumo?' — '+resumo:''}: ${esc(err.message||err)}<br><small>ID: ${esc(item.id)}</small></div>`)}
+    painel.innerHTML=resultados.join('');
+  }
+  sincronizandoFila=false;
+  atualizarStatusFila();
+}
 async function tentarEnviarItemFila(item,{aguardar=true}={}){
   // Se já houve tentativa, primeiro consulta a planilha. Isso evita reenviar algo que
   // chegou ao Google mas demorou para aparecer no CSV publicado.
