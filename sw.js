@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wpa-producao-v18.13.12-diagnostico-fila';
+const CACHE_NAME = 'wpa-producao-v18.13.13-whatsapp-fila';
 const APP_SHELL = [
   './',
   './index.html',

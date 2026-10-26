@@ -909,6 +909,25 @@ async function confirmarItemFila(item,limiteMs=18000){
   return false;
 }
 function removerDaFila(id){salvarFila(lerFila().filter(x=>x.id!==id))}
+const dadosConfirmadosParaWhatsApp={};
+async function compartilharInspecaoConfirmada(id){
+  const dados=dadosConfirmadosParaWhatsApp[id];
+  const status=document.getElementById('filaShare_'+id);
+  if(!dados)return;
+  const texto=[
+    'Não conformidade encontrada durante o voleio.',
+    `Situação encontrada: ${String(dados.situacoes||'').replace(/\|/g,', ')}`,
+    dados.informacoes&&`Informações: ${dados.informacoes}`,
+    `Item: ${dados.item||'-'} • OP: ${dados.op||'-'} • Máquina: ${dados.maquina||'-'} • Setor: ${dados.setor||'-'} • Volante: ${dados.volante||'-'}`
+  ].filter(Boolean).join('\n');
+  try{
+    if(!navigator.share)throw new Error('O compartilhamento não está disponível neste navegador.');
+    await navigator.share({title:'Inconsistência de voleio',text:texto});
+    if(status)status.textContent='Compartilhamento aberto. Escolha o WhatsApp e confirme o envio.';
+  }catch(err){
+    if(status)status.textContent=err?.name==='AbortError'?'Compartilhamento cancelado. A inspeção continua registrada.':(err.message||'Não foi possível abrir o compartilhamento.');
+  }
+}
 async function verificarPendenciasAgora(){
   const painel=document.getElementById('filaDiagnostico');
   const botao=document.querySelector('#filaStatus button');
@@ -924,7 +943,12 @@ async function verificarPendenciasAgora(){
     const resumo=[dados.item&&`Item ${esc(dados.item)}`,dados.op&&`OP ${esc(dados.op)}`,dados.maquina&&`Máquina ${esc(dados.maquina)}`].filter(Boolean).join(' • ');
     try{
       const confirmado=await confirmarIdInspecao(item.id);
-      if(confirmado){removerDaFila(item.id);resultados.push(`<div class="fila-diagnostico">✅ Confirmada e retirada da fila${resumo?' — '+resumo:''}<br><small>ID: ${esc(item.id)}</small></div>`)}
+      if(confirmado){
+        removerDaFila(item.id);
+        const abrirWhatsApp=dados.tipo==='Voleio'&&String(dados.situacoes||'').split('|').some(s=>s!=='Peças OK');
+        if(abrirWhatsApp)dadosConfirmadosParaWhatsApp[item.id]=dados;
+        resultados.push(`<div class="fila-diagnostico">✅ Confirmada e retirada da fila${resumo?' — '+resumo:''}<br><small>ID: ${esc(item.id)}</small>${abrirWhatsApp?`<button class="green" type="button" onclick="compartilharInspecaoConfirmada('${esc(item.id)}')" style="margin-top:8px;padding:10px;font-size:14px">📲 ABRIR COMPARTILHAMENTO</button><div class="small" id="filaShare_${esc(item.id)}"></div>`:''}</div>`)
+      }
       else resultados.push(`<div class="fila-diagnostico">⏳ Ainda não encontrada na planilha${resumo?' — '+resumo:''}<br><small>ID: ${esc(item.id)}</small></div>`);
     }catch(err){resultados.push(`<div class="fila-diagnostico">⚠️ Falha ao consultar${resumo?' — '+resumo:''}: ${esc(err.message||err)}<br><small>ID: ${esc(item.id)}</small></div>`)}
     painel.innerHTML=resultados.join('');
