@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wpa-producao-v18.13.9-rascunho-local';
+const CACHE_NAME = 'wpa-producao-v18.13.10-confirmacao-inspecao';
 const APP_SHELL = [
   './',
   './index.html',

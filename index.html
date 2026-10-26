@@ -870,13 +870,15 @@ function atualizarStatusFila(msg=''){
 }
 async function confirmarIdInspecao(id){
   if(!id)return false;
-  const x=await fetch(csvAtualizado(CSV_URL),{cache:'no-store'});if(!x.ok)throw Error('Planilha indisponível');
-  const a=parseCSV(await x.text()).filter(r=>r.some(v=>String(v).trim()));
-  if(!a.length)return false;
-  const h=a.shift();
-  const ID=col(h,['ID Inspeção','ID Inspecao','idInspecao']);
-  if(ID<0)throw Error('Coluna ID Inspeção não encontrada');
-  return a.some(r=>norm(r[ID]??'')===norm(id));
+  const url=new URL(CONFIG_URL);
+  url.searchParams.set('acao','confirmarInspecao');
+  url.searchParams.set('idInspecao',id);
+  url.searchParams.set('_',Date.now());
+  const x=await fetch(url.toString(),{cache:'no-store'});
+  if(!x.ok)throw Error('Backend indisponível para confirmar a inspeção');
+  const resposta=await x.json();
+  if(!resposta||resposta.ok!==true)throw Error(resposta?.erro||'Resposta inválida ao confirmar a inspeção');
+  return resposta.confirmado===true;
 }
 async function confirmarItemFila(item,limiteMs=18000){
   const inicio=Date.now();
