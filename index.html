@@ -956,7 +956,7 @@ async function verificarPendenciasAgora(){
   sincronizandoFila=false;
   atualizarStatusFila();
 }
-async function tentarEnviarItemFila(item,{aguardar=true}={}){
+async function tentarEnviarItemFila(item){
   // Se já houve tentativa, primeiro consulta a planilha. Isso evita reenviar algo que
   // chegou ao Google mas demorou para aparecer no CSV publicado.
   if(item.tentado){
@@ -972,12 +972,14 @@ async function tentarEnviarItemFila(item,{aguardar=true}={}){
   }
   try{
     const b=new URLSearchParams({acao:'inspecao',idInspecao:item.id,...item.dados});
-    await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString()});
+    const controller=new AbortController();
+    const limite=setTimeout(()=>controller.abort(),8000);
+    try{await fetch(CONFIG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:b.toString(),signal:controller.signal})}
+    finally{clearTimeout(limite)}
     item.tentado=true;item.ultimaTentativa=Date.now();
     const f=lerFila(),i=f.findIndex(x=>x.id===item.id);if(i>=0){f[i]=item;salvarFila(f)}
   }catch(e){return 'offline'}
-  if(aguardar&&await confirmarItemFila(item)){vincularAreaAoPrimeiroVoleio(item);removerDaFila(item.id);return 'confirmado'}
-  return 'pendente';
+  return 'enviado';
 }
 async function sincronizarFila(){
   if(sincronizandoFila||!navigator.onLine)return;
@@ -986,7 +988,7 @@ async function sincronizarFila(){
     let fila=lerFila();
     for(const item of fila){
       const atual=lerFila().find(x=>x.id===item.id);if(!atual)continue;
-      const r=await tentarEnviarItemFila(atual,{aguardar:false});
+      const r=await tentarEnviarItemFila(atual);
       if(r==='offline')break;
       // V18.1: item já tentado fica somente em confirmação; não há novo POST automático.
       // O idInspecao também já é enviado para permitir idempotência no servidor futuramente.
@@ -1047,17 +1049,24 @@ async function enviarInspecao(){
   const itemFila={id:criarIdFila(),criadoEm:Date.now(),tentado:false,baseline:0,dados};
   const fila=lerFila();fila.push(itemFila);salvarFila(fila); // primeiro salva no aparelho
   const abrirWhatsApp=dados.tipo==='Voleio'&&situacoes.some(s=>s!=='Peças OK');
-  btnEnviarInspecao.disabled=true;statusInspecao.textContent='Inspeção protegida no aparelho. Tentando enviar...';
-  const r=await tentarEnviarItemFila(itemFila,{aguardar:true});
-  if(r==='confirmado'){
-    statusInspecao.innerHTML='<div class="envio-ok">✓ Inspeção registrada</div>';
+  btnEnviarInspecao.disabled=true;
+  statusInspecao.innerHTML='<div class="envio-ok">Inspeção salva no celular. Enviando…</div>';
+  if(abrirWhatsApp)mostrarEnviarProblemaWhatsApp(dados);
+  let r='pendente';
+  if(!sincronizandoFila){
+    sincronizandoFila=true;
+    try{r=await tentarEnviarItemFila(itemFila)}
+    finally{sincronizandoFila=false;atualizarStatusFila()}
+  }
+  if(r==='enviado'){
+    statusInspecao.innerHTML='<div class="envio-ok">✓ Enviada ao servidor</div><div class="small">A confirmação final da planilha acontece em segundo plano.</div>';
     if(navigator.vibrate)navigator.vibrate([80,50,80]);
-    if(abrirWhatsApp)mostrarEnviarProblemaWhatsApp(dados);else setTimeout(voltarInicioAposInspecao,1100);
+    if(!abrirWhatsApp)setTimeout(voltarInicioAposInspecao,1800);
   }else{
-    statusInspecao.innerHTML='<div class="envio-ok">⏳ Inspeção salva como pendente</div><div class="small">Ela não será perdida. O aplicativo confirmará ou enviará automaticamente quando o Google estiver disponível.</div>';
+    statusInspecao.innerHTML='<div class="envio-ok">⏳ Salva no celular; aguardando conexão</div><div class="small">O WPA tentará enviar novamente. A inspeção não foi apagada.</div>';
     atualizarStatusFila('Registro protegido no aparelho.');
     if(navigator.vibrate)navigator.vibrate([120,70,120]);
-    if(abrirWhatsApp)mostrarEnviarProblemaWhatsApp(dados);else setTimeout(voltarInicioAposInspecao,2200);
+    if(!abrirWhatsApp)setTimeout(voltarInicioAposInspecao,2600);
   }
 }
 window.addEventListener('online',()=>setTimeout(sincronizarFila,1200));
